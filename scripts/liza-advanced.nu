@@ -2095,7 +2095,7 @@ def "main quality-gate" [
         let t = get-task $bb2 $task_id
         let gen = $t.generation
         let fid = $"GEN-($gen)-(($t.findings | length) + 1)"
-        let check_cmd = $"cd ($dir) && tokei --output json | nu -c 'let d = ($in | from json); let s = ($d | values | each {|v| if \"code\" in $v { $v.code } else { 0 }} | math sum); if $s > 0 { print \"ok\" } else { exit 1 }'"
+        let check_cmd = "cd " + $dir + " && tokei --output json | nu -c 'let d = ($in | from json); let s = ($d | values | each {|v| if (\"code\" in $v) { $v.code } else { 0 }} | math sum); if $s > 0 { print ok } else { exit 1 }'"
         let check = { cmd: $check_cmd, expect_exit: 0, dimension: "quality-test-coverage", generation: $gen, severity: $severity, finding_id: $fid, added_at: (now-timestamp) }
         let finding = { id: $fid, generation: $gen, dimension: "quality-test-coverage", severity: $severity, title: $"Test-to-code ratio ($metrics.ratio) < 0.5", cmd: $check_cmd, expect_exit: 0, actual_exit: 1, stdout: "", stderr: $"ratio=($metrics.ratio)", found_at: (now-timestamp) }
         let ld = if "quality-test-coverage" in $t.landscape { $t.landscape | get "quality-test-coverage" } else { { tests_run: 0, survivors: 0, zero_gens: 0, last_survivor_gen: -1 } }
