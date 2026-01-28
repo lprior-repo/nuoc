@@ -55,6 +55,10 @@ The evolutionary loop has two kinds of operations:
 | **Record discard** | Liza `gen-discard` (deterministic) | Updates landscape tests_run without adding regression |
 | **Regression check** | Liza `validate` (deterministic) | Runs ALL `done_when` checks, all must pass |
 | **Landscape scoring** | Liza `landscape` (deterministic) | Computes fitness, crown status from blackboard fields |
+| **Mutation testing** | Liza `mutate` (deterministic) | Runs cargo-mutants, missed mutants → survivors |
+| **Spec mining** | Liza `spec-mine` (deterministic) | Extracts testable promises from README, CLI, doctests |
+| **Quality gates** | Liza `quality-gate` (deterministic) | FP gates + DRY + coverage checks, failures → survivors |
+| **Fowler review** | Liza `fowler-review` (deterministic) | AST analysis + test smells + security, violations → survivors |
 
 **AI generates test commands. Everything else is deterministic code.**
 
@@ -109,6 +113,12 @@ DRQ_DETERMINISTIC(target_binary, liza_script):
 
     # CARNAGE: Track kill rate and lethality
     nu $Lcarnage drq-session
+
+    # AUTOMATED WEAPONS: Run deterministic analysis tools
+    nu $Lspec-mine drq-session $TARGET_DIR --bin $BIN
+    nu $Lquality-gate drq-session $TARGET_DIR
+    nu $Lfowler-review drq-session $TARGET_DIR
+    nu $Lmutate drq-session $TARGET_DIR  # Rust only
 
     # ESCALATION: Auto-promote severity for bleeding dimensions
     nu $Lescalate drq-session
@@ -284,6 +294,134 @@ nu $Lvalidate drq-session
 
 The ratchet is entirely in liza's `done_when` list and `validate` command. No AI decides if something regressed — the exit code does.
 
+## Automated Weapons
+
+Four deterministic analysis commands that run real tools (not AI heuristics) and record results as survivors/discards in the landscape. Each requires an active generation (`gen-start` first) except `spec-mine` which uses `task-add-check` directly.
+
+### `mutate` — Rust Mutation Testing
+
+Runs `cargo-mutants` and records uncaught mutants as gen-survivors.
+
+```bash
+nu $L mutate drq-session /path/to/rust/project --file src/lib.rs --function parse --timeout 300
+```
+
+- **Requires**: `cargo-mutants` installed, active generation
+- **MissedMutant** → gen-survivor (dimension: `mutation`), auto-escalates to CRITICAL for pub API (lib.rs, mod.rs)
+- **CaughtMutant** → gen-discard
+- done_when: `cd $dir && cargo mutants -f <file> --re <fn>` expect_exit=0
+- Gracefully handles missing `cargo-mutants` with a warning
+
+### `spec-mine` — Language-Agnostic Promise Extraction
+
+Mines any project for testable promises. Does NOT require an active generation — uses `task-add-check` directly to lock permanent checks.
+
+```bash
+nu $L spec-mine drq-session /path/to/project --bin myapp --readme /path/to/README.md
+```
+
+**What it mines:**
+
+| Source | Method | Dimension |
+|--------|--------|-----------|
+| README.md | Extract fenced bash/shell/sh/console blocks | `spec-readme` |
+| CLI --help | Run `$bin --help`, parse subcommands, add `$bin $subcmd --help` checks | `spec-help` |
+| Rust doctests | Grep `/// # Examples` → `cargo test --doc` | `spec-doctest` |
+| Python doctests | Grep `>>>` → `python -m doctest <file>` | `spec-doctest` |
+| Debt markers | Grep TODO/FIXME/HACK/XXX → observation check | `spec-debt` |
+| Rust type safety | `cargo clippy -- -D clippy::unwrap_used` | `spec-type-safety` |
+
+- **Language detection**: Cargo.toml=rust, gleam.toml=gleam, pyproject.toml=python, package.json=node
+- All checks are permanent ratchet entries
+
+### `quality-gate` — Deterministic Code Quality Checks (from tdd15)
+
+Runs a battery of deterministic quality checks. Each failing check → gen-survivor.
+
+```bash
+nu $L quality-gate drq-session /path/to/project
+```
+
+**FP Gates (Rust):**
+
+| Gate | Command | Dimension |
+|------|---------|-----------|
+| No Panic | `cargo clippy -- -D clippy::unwrap_used -D clippy::expect_used -D clippy::panic` | `fp-gate-no-panic` |
+| Exhaustive Match | `cargo clippy -- -D clippy::wildcard_enum_match_arm` | `fp-gate-exhaustive` |
+| Format | `cargo fmt --check` | `fp-gate-format` |
+| Lint | `cargo clippy -- -D warnings` | `fp-gate-lint` |
+| Tests | `cargo test` | `fp-gate-tests` |
+| Coverage | `cargo tarpaulin --skip-clean --out json` (< 80% → survivor) | `fp-gate-coverage` |
+
+**FP Gates (Gleam):** `gleam format --check`, `gleam build`, `gleam test`
+
+**DRY Check (Rust):** `cargo clippy -- -D clippy::redundant_clone -D clippy::manual_map -D clippy::unnecessary_wraps` → dimension `quality-dry`
+
+**Test Quality:** tokei JSON → test-to-code ratio < 0.5 → survivor (dimension: `quality-test-coverage`)
+
+### `fowler-review` — Martin Fowler Code + Test Quality Review
+
+Tool-based (not grep heuristic) review of source code AND tests. Each violation → gen-survivor.
+
+```bash
+nu $L fowler-review drq-session /path/to/project --complexity-threshold 15 --fn-length-threshold 50 --file-length-threshold 250 --nesting-threshold 4 --coverage-threshold 80.0
+```
+
+**4a. Structural Analysis** — `rust-code-analysis-cli` (Mozilla tree-sitter):
+
+| Metric | Threshold | Dimension |
+|--------|-----------|-----------|
+| Cyclomatic complexity | > 15 | `fowler-complexity` |
+| Function length (SLOC) | > 50 | `fowler-large-fn` |
+| Nesting depth | > 4 | `fowler-deep-nesting` |
+| Cognitive complexity | clippy flag | `fowler-cognitive` |
+
+**4b. AST Pattern Matching** — `ast-grep` (tree-sitter queries):
+
+| Pattern | Dimension |
+|---------|-----------|
+| `.unwrap()` | `fowler-unwrap` |
+| `.expect($MSG)` | `fowler-expect` |
+| `todo!()` / `unimplemented!()` | `fowler-todo` |
+
+**4c. Clippy Extended:**
+
+| Check | Dimension |
+|-------|-----------|
+| Dead code / unused imports | `fowler-dead-code` |
+| DRY violations | `fowler-dry` |
+| Error handling (unwrap/expect) | `fowler-error-handling` |
+| Wildcard enum matches | `fowler-exhaustive` |
+
+**4d. Test Code Review:**
+
+| Smell | Method | Dimension |
+|-------|--------|-----------|
+| No assertions | `rg -c 'assert' <file>` = 0 for test fn | `fowler-test-no-assert` |
+| Test-to-code ratio | tokei JSON, < 0.5 → survivor | `fowler-test-ratio` |
+| Coverage | `cargo llvm-cov --fail-under-lines $threshold` | `fowler-test-coverage` |
+| Happy path only | < 30% of tests cover error paths | `fowler-test-happy-only` |
+| Flaky indicators | sleep calls in tests | `fowler-test-flaky` |
+| Test isolation | static mut / lazy_static / Mutex in tests | `fowler-test-isolation` |
+
+**4e. Security & Supply Chain:**
+
+| Check | Tool | Dimension |
+|-------|------|-----------|
+| Unsafe code | `cargo-geiger` | `fowler-unsafe` |
+| Security vulns | `cargo-audit` | `fowler-security` |
+| Unused deps | `cargo-udeps` | `fowler-unused-deps` |
+| License issues | `cargo-deny` | `fowler-licenses` |
+
+**4f. File Size & Documentation:**
+
+| Check | Method | Dimension |
+|-------|--------|-----------|
+| File > 250 lines | tokei per-file | `fowler-file-size` |
+| Comment ratio < 5% | tokei totals | `fowler-documentation` |
+
+**Required tools (Rust):** `rust-code-analysis-cli`, `ast-grep`/`sg`, `cargo-llvm-cov`, `cargo-geiger`, `cargo-audit`, `cargo-udeps`, `cargo-deny`, `tokei`, `rg`. Missing tools are skipped gracefully.
+
 ## What AI Does vs What Code Does
 
 | Step | AI | Deterministic Code |
@@ -300,6 +438,10 @@ The ratchet is entirely in liza's `done_when` list and `validate` command. No AI
 | Validate full lineage | — | `validate` runs all `done_when` checks |
 | Fix code | Writes code changes | — |
 | Detect regression | — | `validate` fails → regression exists |
+| Mine specs | — | `spec-mine` extracts promises from README, CLI, doctests |
+| Quality gates | — | `quality-gate` runs FP/DRY/coverage checks |
+| Code review | — | `fowler-review` runs AST analysis + test smells + security |
+| Mutation testing | — | `mutate` runs cargo-mutants, missed → survivors |
 | Track state | — | Blackboard YAML (atomic save) |
 
 **AI touches**: test command generation, code fixes, promise discovery.
@@ -469,7 +611,7 @@ git push
 
 ---
 
-**Skill Version**: 6.0.0
+**Skill Version**: 7.0.0
 **Last Updated**: January 2026
 **Status**: Production-Ready
 **Model**: Deterministic Adversarial Evolution — AI generates tests, code decides outcomes
