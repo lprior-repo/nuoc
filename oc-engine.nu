@@ -27,7 +27,7 @@ export def db-init [] {
       bead_id TEXT,
       inputs TEXT,
       defaults TEXT,
-      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','cancelled','completed')),
       position INTEGER DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       scheduled_start_at TEXT,
@@ -656,10 +656,12 @@ export def job-execute [job_id: string] {
 
   if $all_done {
     sql-exec $"UPDATE jobs SET status = 'completed', completed_at = datetime\('now'\) WHERE id = '($jid)'"
+    cancel-job-awakeables $jid
     emit-event $jid "" "job.StateChange" "running" "completed" ""
     { status: "completed" }
   } else {
     sql-exec $"UPDATE jobs SET status = 'failed', completed_at = datetime\('now'\) WHERE id = '($jid)'"
+    cancel-job-awakeables $jid
     emit-event $jid "" "job.StateChange" "running" "failed" ""
     { status: "failed" }
   }
@@ -1149,7 +1151,16 @@ export def job-cancel [job_id: string] {
   let jid = (validate-ident $job_id "job-cancel.job_id")
   sql-exec $"UPDATE jobs SET status = 'cancelled', completed_at = datetime\('now'\) WHERE id = '($jid)'"
   sql-exec $"UPDATE tasks SET status = 'cancelled' WHERE job_id = '($jid)' AND status IN \('pending', 'running', 'scheduled'\)"
+  cancel-job-awakeables $jid
   emit-event $jid "" "job.StateChange" "running" "CANCELLED" ""
+}
+
+# Cancel all pending awakeables for a job
+# Precondition: job_id is a validated identifier
+# Postcondition: all PENDING awakeables marked as CANCELLED
+export def cancel-job-awakeables [job_id: string] {
+  let jid = (validate-ident $job_id "cancel-job-awakeables.job_id")
+  sql-exec $"UPDATE awakeables SET status = 'CANCELLED' WHERE job_id = '($jid)' AND status = 'PENDING'"
 }
 
 # List all jobs

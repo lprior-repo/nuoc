@@ -7903,3 +7903,948 @@ Completion promise: not detected
 
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 14...
+📝 Auto-committed changes
+
+🔄 Iteration 14 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T06:24:11.723Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll work on the next task: nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+
+Let me first read the current task list and then get the bead context.
+| Tools    Read 1
+
+
+○ nuoc-wpi9 · [Awk-11] Implement awakeable cleanup on job completion   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Mark awakeables cancelled when job completes/cancels.
+
+## Acceptance
+- [ ] All job's awakeables cancelled
+- [ ] Late resolutions rejected
+- [ ] Resources freed
+
+DEPENDS ON
+  → ✓ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+
+⏳ working... elapsed 0:30 · last activity 0:10 ago
+⏳ working... elapsed 0:40 · last activity 0:20 ago
+⏳ working... elapsed 0:50 · last activity 0:30 ago
+⏳ working... elapsed 1:00 · last activity 0:40 ago
+⏳ working... elapsed 1:10 · last activity 0:50 ago
+| Tools    Read 1 • Bash 1 • Edit 1
+
+✓ Updated issue: nuoc-wpi9
+
+| Tools    Bash 2 • Read 1 • Edit 1 • Grep 1
+| Tools    Read 2 • Bash 2 • Grep 2 • Edit 1
+⏳ working... elapsed 1:40 · last activity 0:15 ago
+⏳ working... elapsed 1:50 · last activity 0:25 ago
+⏳ working... elapsed 2:00 · last activity 0:35 ago
+⏳ working... elapsed 2:10 · last activity 0:45 ago
+⏳ working... elapsed 2:20 · last activity 0:55 ago
+| Tools    Read 4 • Bash 2 • Grep 2 • Edit 1
+⏳ working... elapsed 2:40 · last activity 0:12 ago
+⏳ working... elapsed 2:50 · last activity 0:22 ago
+⏳ working... elapsed 3:00 · last activity 0:32 ago
+⏳ working... elapsed 3:10 · last activity 0:42 ago
+⏳ working... elapsed 3:20 · last activity 0:52 ago
+⏳ working... elapsed 3:30 · last activity 1:02 ago
+⏳ working... elapsed 3:40 · last activity 1:12 ago
+| Tools    Read 5 • Bash 2 • Grep 2 • Edit 1
+⏳ working... elapsed 4:00 · last activity 0:10 ago
+⏳ working... elapsed 4:10 · last activity 0:20 ago
+| Tools    Read 5 • Bash 2 • Grep 2 • Edit 1 • Glob 1
+⏳ working... elapsed 4:30 · last activity 0:13 ago
+⏳ working... elapsed 4:40 · last activity 0:23 ago
+⏳ working... elapsed 4:50 · last activity 0:33 ago
+| Tools    Read 6 • Bash 2 • Grep 2 • Edit 1 • Glob 1
+⏳ working... elapsed 5:10 · last activity 0:11 ago
+⏳ working... elapsed 5:20 · last activity 0:21 ago
+⏳ working... elapsed 5:30 · last activity 0:31 ago
+⏳ working... elapsed 5:40 · last activity 0:41 ago
+⏳ working... elapsed 5:50 · last activity 0:51 ago
+⏳ working... elapsed 6:00 · last activity 1:01 ago
+⏳ working... elapsed 6:10 · last activity 1:11 ago
+| Tools    Read 6 • Bash 2 • Grep 2 • Edit 1 • Glob 1 • Write 1
+| Tools    Read 6 • Bash 3 • Grep 2 • Edit 1 • Glob 1 • Write 1
+
+Warning: nu::parser::deprecated
+
+  ! Flag deprecated.
+     ,-[/home/lewis/src/nuoc/tests/test-awakeable-cleanup.nu:175:23]
+ 174 | 
+ 175 |     if ($result | get -i error) != null {
+     :                       ^|
+     :                        `-- get --ignore-errors was deprecated in 0.106.0 and will be removed in a future release.
+ 176 |       print $"    [ok] resolve-awakeable rejected CANCELLED awakeable: ($result.error)"
+     `----
+  help: This flag has been renamed to `--optional (-o)` to better reflect its
+        behavior.
+
+Running awakeable cleanup tests...
+Error: unable to open database "/tmp/test-awakeable-cleanup-($env.PID)/journal.db": unable to open database file
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-cleanup.nu:49:5]
+ 48 |     # Complete the job
+ 49 |     sql-exec $"UPDATE jobs SET status = 'completed', completed_at = datetime\('now'\) WHERE id = '($job_id)'"
+    :     ^^^^|^^^
+    :         `-- Command `sql-exec` not found
+ 50 |     cancel-job-awakeables $job_id
+    `----
+  help: Did you mean `exec`?
+
+
+⏳ working... elapsed 6:40 · last activity 0:17 ago
+⏳ working... elapsed 6:50 · last activity 0:27 ago
+⏳ working... elapsed 7:00 · last activity 0:37 ago
+| Tools    Read 6 • Bash 3 • Edit 2 • Grep 2 • Glob 1 • Write 1
+⏳ working... elapsed 7:20 · last activity 0:14 ago
+⏳ working... elapsed 7:30 · last activity 0:24 ago
+⏳ working... elapsed 7:40 · last activity 0:34 ago
+| Tools    Read 6 • Bash 3 • Edit 3 • Grep 2 • Glob 1 • Write 1
+⏳ working... elapsed 8:00 · last activity 0:19 ago
+⏳ working... elapsed 8:10 · last activity 0:29 ago
+| Tools    Read 7 • Edit 4 • Bash 3 • Grep 2 • Glob 1 • Write 1
+⏳ working... elapsed 8:30 · last activity 0:19 ago
+| Tools    Read 7 • Edit 5 • Bash 3 • Grep 2 • Glob 1 • Write 1
+| Tools    Read 7 • Edit 5 • Bash 4 • Grep 2 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+Error: nu::shell::column_not_found
+
+  x Cannot find column 'PID'
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-cleanup.nu:9:52]
+  8 | def test-job-completion-cancels-awakeables [] {
+  9 |   let test_db_dir = $"/tmp/test-awakeable-cleanup-($env.PID)"
+    :                                                    ^^^^|^^^|
+    :                                                        |   `-- value originates here
+    :                                                        `-- cannot find column 'PID'
+ 10 |   let test_db_path = $"($test_db_dir)/journal.db"
+    `----
+
+
+⏳ working... elapsed 8:50 · last activity 0:10 ago
+⏳ working... elapsed 9:00 · last activity 0:20 ago
+| Tools    Read 7 • Edit 6 • Bash 4 • Grep 2 • Glob 1 • Write 1
+⏳ working... elapsed 9:20 · last activity 0:17 ago
+| Tools    Edit 8 • Read 7 • Bash 5 • Grep 2 • Glob 1 • Write 1
+
+Error: nu::parser::extra_positional
+
+  x Extra positional argument.
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-cleanup.nu:9:68]
+  8 | def test-job-completion-cancels-awakeables [] {
+  9 |   let test_db_dir = $"/tmp/test-awakeable-cleanup-(date now | date to-record | get second | into string)"
+    :                                                                    ^^^^|^^^^
+    :                                                                        `-- extra positional argument
+ 10 |   let test_db_path = $"($test_db_dir)/journal.db"
+    `----
+  help: Usage: date
+
+
+⏳ working... elapsed 9:40 · last activity 0:17 ago
+⏳ working... elapsed 9:50 · last activity 0:27 ago
+⏳ working... elapsed 10:00 · last activity 0:37 ago
+⏳ working... elapsed 10:10 · last activity 0:47 ago
+⏳ working... elapsed 10:20 · last activity 0:57 ago
+⏳ working... elapsed 10:30 · last activity 1:07 ago
+| Tools    Edit 9 • Read 7 • Bash 5 • Grep 2 • Glob 1 • Write 1
+| Tools    Edit 11 • Read 7 • Bash 6 • Grep 2 • Glob 1 • Write 1
+
+Error: nu::parser::extra_positional
+
+  x Extra positional argument.
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-cleanup.nu:9:36]
+  8 | def test-job-completion-cancels-awakeables [] {
+  9 |   let timestamp = (date now | date to-record | get second | into string)
+    :                                    ^^^^|^^^^
+    :                                        `-- extra positional argument
+ 10 |   let test_db_dir = $"/tmp/test-awakeable-cleanup-($timestamp)"
+    `----
+  help: Usage: date
+
+
+⏳ working... elapsed 10:50 · last activity 0:11 ago
+| Tools    Edit 12 • Read 7 • Bash 6 • Grep 2 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+⏳ working... elapsed 11:10 · last activity 0:11 ago
+⏳ working... elapsed 11:20 · last activity 0:21 ago
+| Tools    Edit 14 • Bash 8 • Read 7 • Grep 2 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+| Tools    Edit 14 • Read 8 • Bash 8 • Grep 2 • Glob 1 • Write 1
+| Tools    Edit 14 • Read 9 • Bash 8 • Grep 2 • Glob 1 • Write 1
+⏳ working... elapsed 12:00 · last activity 0:14 ago
+| Tools    Edit 14 • Read 9 • Bash 8 • Grep 3 • Glob 1 • Write 1
+| Tools    Edit 14 • Read 10 • Bash 8 • Grep 3 • Glob 1 • Write 1
+| Tools    Edit 14 • Read 11 • Bash 8 • Grep 3 • Glob 1 • Write 1
+⏳ working... elapsed 12:40 · last activity 0:18 ago
+⏳ working... elapsed 12:50 · last activity 0:28 ago
+| Tools    Edit 14 • Read 11 • Bash 9 • Grep 3 • Glob 1 • Write 1
+
+Awakeable created: prom_1dGVzdC1qb2Itc2ltcGxlOjA
+
+⏳ working... elapsed 13:10 · last activity 0:11 ago
+⏳ working... elapsed 13:20 · last activity 0:21 ago
+⏳ working... elapsed 13:30 · last activity 0:31 ago
+⏳ working... elapsed 13:40 · last activity 0:41 ago
+⏳ working... elapsed 13:50 · last activity 0:51 ago
+⏳ working... elapsed 14:00 · last activity 1:01 ago
+⏳ working... elapsed 14:10 · last activity 1:11 ago
+⏳ working... elapsed 14:20 · last activity 1:21 ago
+⏳ working... elapsed 14:30 · last activity 1:31 ago
+⏳ working... elapsed 14:40 · last activity 1:41 ago
+⏳ working... elapsed 14:50 · last activity 1:51 ago
+⏳ working... elapsed 15:00 · last activity 2:01 ago
+⏳ working... elapsed 15:10 · last activity 2:11 ago
+⏳ working... elapsed 15:20 · last activity 2:21 ago
+⏳ working... elapsed 15:30 · last activity 2:31 ago
+⏳ working... elapsed 15:40 · last activity 2:41 ago
+| Tools    Edit 15 • Read 11 • Bash 9 • Grep 3 • Glob 1 • Write 1
+| Tools    Edit 15 • Read 11 • Bash 10 • Grep 3 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+    [error] test-job-completion-cancels-awakeables: External command had a non-zero exit code
+  [ok] job-completion-cancels-awakeables
+Error: unable to open database "/tmp/test-awakeable-cleanup-2/journal.db": unable to open database file
+    [fail] Awakeable not found before job cancellation
+Error: unable to open database "/tmp/test-awakeable-cleanup-3/journal.db": unable to open database file
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Edit 15 • Read 11 • Bash 10 • Grep 4 • Glob 1 • Write 1
+| Tools    Edit 15 • Read 12 • Bash 10 • Grep 4 • Glob 1 • Write 1
+⏳ working... elapsed 16:30 · last activity 0:15 ago
+⏳ working... elapsed 16:40 · last activity 0:25 ago
+⏳ working... elapsed 16:50 · last activity 0:35 ago
+⏳ working... elapsed 17:00 · last activity 0:45 ago
+| Tools    Edit 15 • Read 13 • Bash 10 • Grep 4 • Glob 1 • Write 1
+| Tools    Edit 15 • Read 14 • Bash 10 • Grep 4 • Glob 1 • Write 1
+| Tools    Edit 15 • Read 14 • Bash 10 • Grep 5 • Glob 1 • Write 1
+⏳ working... elapsed 17:30 · last activity 0:13 ago
+⏳ working... elapsed 17:40 · last activity 0:23 ago
+| Tools    Edit 15 • Read 14 • Bash 11 • Grep 5 • Glob 1 • Write 1
+⏳ working... elapsed 18:00 · last activity 0:17 ago
+| Tools    Edit 16 • Read 14 • Bash 11 • Grep 5 • Glob 1 • Write 1
+| Tools    Edit 16 • Read 14 • Bash 12 • Grep 5 • Glob 1 • Write 1
+
+Error: nu::parser::error
+
+  x Error: nu::shell::not_a_constant
+  | 
+  |   x Not a constant.
+  |    ,-[/home/lewis/src/nuoc/oc-engine.nu:5:27]
+  |  4 |
+  |  5 | export const DB_DIR = (if $env.NUOC_DB_DIR? != null
+  | { $env.NUOC_DB_DIR } else { ".oc-workflow" })
+  |    :                           ^^|^
+  |    :                             `-- Value is not a parse-time constant
+  |  6 | export const DB_PATH = $"($DB_DIR)/journal.db"
+  |    `----
+  |   help: Only a subset of expressions are allowed constants during parsing.
+  | Try
+  |         using the 'const' command or typing the value literally.
+  | 
+   ,-[/home/lewis/src/nuoc/oc-engine.nu:5:23]
+ 4 | 
+ 5 | export const DB_DIR = (if $env.NUOC_DB_DIR? != null { $env.NUOC_DB_DIR } else { ".oc-workflow" })
+   :                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   :                                                            `-- Encountered error during parse-time evaluation
+ 6 | export const DB_PATH = $"($DB_DIR)/journal.db"
+   `----
+
+
+⏳ working... elapsed 18:20 · last activity 0:10 ago
+⏳ working... elapsed 18:30 · last activity 0:20 ago
+⏳ working... elapsed 18:40 · last activity 0:30 ago
+⏳ working... elapsed 18:50 · last activity 0:40 ago
+| Tools    Edit 17 • Read 14 • Bash 12 • Grep 5 • Glob 1 • Write 1
+| Tools    Edit 17 • Read 14 • Bash 13 • Grep 5 • Glob 1 • Write 1
+
+Error: nu::parser::error
+
+  x Error: nu::shell::not_a_constant
+  | 
+  |   x Not a constant.
+  |    ,-[/home/lewis/src/nuoc/oc-engine.nu:6:27]
+  |  5 | export const DB_DIR = ".oc-workflow"
+  |  6 | export const DB_PATH = if $env.NUOC_DB_DIR? != null
+  | { $"($env.NUOC_DB_DIR)/journal.db" } else { ".oc-workflow/journal.db" }
+  |    :                           ^^|^
+  |    :                             `-- Value is not a parse-time constant
+  |  7 |
+  |    `----
+  |   help: Only a subset of expressions are allowed constants during parsing.
+  | Try
+  |         using the 'const' command or typing the value literally.
+  | 
+   ,-[/home/lewis/src/nuoc/oc-engine.nu:6:24]
+ 5 | export const DB_DIR = ".oc-workflow"
+ 6 | export const DB_PATH = if $env.NUOC_DB_DIR? != null { $"($env.NUOC_DB_DIR)/journal.db" } else { ".oc-workflow/journal.db" }
+   :                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   :                                                                          `-- Encountered error during parse-time evaluation
+ 7 | 
+   `----
+
+
+| Tools    Edit 17 • Read 14 • Bash 13 • Grep 6 • Glob 1 • Write 1
+| Tools    Edit 17 • Read 15 • Bash 13 • Grep 6 • Glob 1 • Write 1
+| Tools    Edit 17 • Read 16 • Bash 13 • Grep 6 • Glob 1 • Write 1
+| Tools    Edit 17 • Read 16 • Bash 14 • Grep 6 • Glob 1 • Write 1
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+⏳ working... elapsed 19:40 · last activity 0:15 ago
+⏳ working... elapsed 19:50 · last activity 0:25 ago
+| Tools    Edit 17 • Read 16 • Bash 15 • Grep 6 • Glob 1 • Write 1
+
+Error: nu::parser::error
+
+  x Error: nu::shell::not_a_constant
+  | 
+  |   x Not a constant.
+  |    ,-[/home/lewis/src/nuoc/oc-engine.nu:6:27]
+  |  5 | export const DB_DIR = ".oc-workflow"
+  |  6 | export const DB_PATH = if $env.NUOC_DB_DIR? != null
+  | { $"($env.NUOC_DB_DIR)/journal.db" } else { ".oc-workflow/journal.db" }
+  |    :                           ^^|^
+  |    :                             `-- Value is not a parse-time constant
+  |  7 |
+  |    `----
+  |   help: Only a subset of expressions are allowed constants during parsing.
+  | Try
+  |         using the 'const' command or typing the value literally.
+  | 
+   ,-[/home/lewis/src/nuoc/oc-engine.nu:6:24]
+ 5 | export const DB_DIR = ".oc-workflow"
+ 6 | export const DB_PATH = if $env.NUOC_DB_DIR? != null { $"($env.NUOC_DB_DIR)/journal.db" } else { ".oc-workflow/journal.db" }
+   :                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   :                                                                          `-- Encountered error during parse-time evaluation
+ 7 | 
+   `----
+
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (30ms)
+Error: task_runner::run_failed
+
+  × Task nuoc:test failed to run.
+  ╰─▶ Process nu failed: exit code 1
+
+
+| Tools    Edit 18 • Read 16 • Bash 15 • Grep 6 • Glob 1 • Write 1
+| Tools    Edit 18 • Read 16 • Bash 16 • Grep 6 • Glob 1 • Write 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+▪▪▪▪ nuoc:test
+Failed: 0
+▪▪▪▪ nuoc:test (91ms)
+
+
+⏳ working... elapsed 20:20 · last activity 0:11 ago
+⏳ working... elapsed 20:30 · last activity 0:21 ago
+⏳ working... elapsed 20:40 · last activity 0:31 ago
+| Tools    Edit 18 • Bash 17 • Read 16 • Grep 6 • Glob 1 • Write 1
+
+Running GREEN phase tests for awakeable suspension...
+All GREEN tests passed ✓
+
+| Tools    Edit 18 • Read 17 • Bash 17 • Grep 6 • Glob 1 • Write 1
+⏳ working... elapsed 21:00 · last activity 0:13 ago
+⏳ working... elapsed 21:10 · last activity 0:23 ago
+| Tools    Bash 18 • Edit 18 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Error: nu::shell::column_not_found
+
+  x Cannot find column 'PID'
+   ,-[source:1:20]
+ 1 | print $"/tmp/test-($env.PID)"
+   :                    ^^^^|^^^|
+   :                        |   `-- value originates here
+   :                        `-- cannot find column 'PID'
+   `----
+
+
+| Tools    Bash 19 • Edit 18 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Error: nu::shell::column_not_found
+
+  x Cannot find column 'name'
+   ,-[source:1:1]
+ 1 | $env | select name | to md
+   : ^^|^          ^^|^
+   :   |             `-- cannot find column 'name'
+   :   `-- value originates here
+   `----
+
+
+| Tools    Bash 20 • Edit 18 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+| AGENT | BASE_URL | CLAUDECODE | CLAUDE_CODE_ENTRYPOINT | COLORTERM | COREPACK_ENABLE_AUTO_PIN | CUDA_PATH | DATABASE_URL | DBUS_SESSION_BUS_ADDRESS | DEBUGINFOD_URLS | DESKTOP_SESSION | DISPLAY | EDITOR | ELECTRON_OZONE_PLATFORM_HINT | ENCRYPTION_KEY | ENV_CONVERSIONS | FZF_ALT_C_OPTS | FZF_CTRL_R_OPTS | FZF_CTRL_T_OPTS | FZF_DEFAULT_OPTS | GDK_BACKEND | GDK_SCALE | GHOSTTY_BIN_DIR | GHOSTTY_RESOURCES_DIR | GHOSTTY_SHELL_FEATURES | GIT_EDITOR | GOBIN | GOROOT | GUM_CONFIRM_PROMPT_FOREGROUND | GUM_CONFIRM_SELECTED_BACKGROUND | GUM_CONFIRM_SELECTED_FOREGROUND | GUM_CONFIRM_UNSELECTED_BACKGROUND | GUM_CONFIRM_UNSELECTED_FOREGROUND | HATCHET_CLIENT_TLS_STRATEGY | HATCHET_CLIENT_TOKEN | HATCHET_HOST | HL_INITIAL_WORKSPACE_TOKEN | HOME | HYPRCURSOR_SIZE | HYPRLAND_CMD | HYPRLAND_INSTANCE_SIGNATURE | INPUT_METHOD | LANG | LAST_EXIT_CODE | LIBVA_DRIVER_NAME | LOGNAME | LOG_MAX_FILE | LOG_MAX_SIZE | MAIL | MANAGERPID | MANAGERPIDFDID | MCP_AGENT_MAIL_TOKEN | MEMORY_PRESSURE_WATCH | MEMORY_PRESSURE_WRITE | MISE_SHELL | MOTD_SHOWN | MOZ_ENABLE_WAYLAND | NU_LIB_DIRS | NU_PLUGIN_DIRS | NU_VERSION | NVCC_CCBIN | NVD_BACKEND | NoDefaultCurrentDirectoryInExePath | OAUTH_ENCRYPTION_KEY | OLDPWD | OMARCHY_PATH | OPENCODE | OPENCODE_CONFIG | OTEL_EXPORTER_OTLP_METRICS_TEMPORALITY_PREFERENCE | OZONE_PLATFORM | PATH | PROMPT_COMMAND | PROMPT_COMMAND_RIGHT | PWD | QT_IM_MODULE | QT_QPA_PLATFORM | QT_STYLE_OVERRIDE | SBT_HOME | SDKMAN_BROKER_API | SDKMAN_CANDIDATES_API | SDKMAN_CANDIDATES_DIR | SDKMAN_DIR | SDKMAN_PLATFORM | SDL_IM_MODULE | SDL_VIDEODRIVER | SHELL | SHLVL | STARSHIP_SESSION_KEY | STARSHIP_SHELL | SYSTEMD_EXEC_PID | TERM | TERMINAL | TERMINFO | TERM_PROGRAM | TERM_PROGRAM_VERSION | USER | UWSM_FINALIZE_VARNAMES | UWSM_WAIT_VARNAMES | WAYLAND_DISPLAY | WM_IMAGE | XCOMPOSEFILE | XCURSOR_SIZE | XDG_BACKEND | XDG_CACHE_HOME | XDG_CONFIG_DIRS | XDG_CONFIG_HOME | XDG_CURRENT_DESKTOP | XDG_DATA_DIRS | XDG_DATA_HOME | XDG_MENU_PREFIX | XDG_RUNTIME_DIR | XDG_SEAT | XDG_SEAT_PATH | XDG_SESSION_CLASS | XDG_SESSION_DESKTOP | XDG_SESSION_ID | XDG_SESSION_PATH | XDG_SESSION_TYPE | XDG_STATE_HOME | XDG_VTNR | XMODIFIERS | _ | _JAVA_AWT_WM_NONREPARENTING | __GLX_VENDOR_LIBRARY_NAME | __MISE_DIFF | __MISE_ORIG_PATH | __MISE_SESSION | __MISE_ZSH_PRECMD_RUN | config |
+
+| Tools    Bash 21 • Edit 18 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+1498
+
+⏳ working... elapsed 21:50 · last activity 0:19 ago
+⏳ working... elapsed 22:00 · last activity 0:29 ago
+⏳ working... elapsed 22:10 · last activity 0:39 ago
+⏳ working... elapsed 22:20 · last activity 0:49 ago
+⏳ working... elapsed 22:30 · last activity 0:59 ago
+⏳ working... elapsed 22:40 · last activity 1:09 ago
+| Tools    Bash 21 • Edit 19 • Read 17 • Grep 6 • Glob 1 • Write 1
+⏳ working... elapsed 23:00 · last activity 0:19 ago
+| Tools    Bash 22 • Edit 21 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+Error: unable to open database "test-awakeable-cleanup-1/journal.db": unable to open database file
+    [fail] Awakeable not found before job completion
+Error: unable to open database "test-awakeable-cleanup-2/journal.db": unable to open database file
+    [fail] Awakeable not found before job cancellation
+Error: unable to open database "test-awakeable-cleanup-3/journal.db": unable to open database file
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+⏳ working... elapsed 23:20 · last activity 0:19 ago
+⏳ working... elapsed 23:30 · last activity 0:29 ago
+⏳ working... elapsed 23:40 · last activity 0:39 ago
+⏳ working... elapsed 23:50 · last activity 0:49 ago
+⏳ working... elapsed 24:00 · last activity 0:59 ago
+⏳ working... elapsed 24:10 · last activity 1:09 ago
+⏳ working... elapsed 24:20 · last activity 1:19 ago
+⏳ working... elapsed 24:30 · last activity 1:29 ago
+⏳ working... elapsed 24:40 · last activity 1:39 ago
+⏳ working... elapsed 24:50 · last activity 1:49 ago
+⏳ working... elapsed 25:00 · last activity 1:59 ago
+⏳ working... elapsed 25:10 · last activity 2:09 ago
+⏳ working... elapsed 25:20 · last activity 2:19 ago
+⏳ working... elapsed 25:30 · last activity 2:29 ago
+⏳ working... elapsed 25:40 · last activity 2:39 ago
+⏳ working... elapsed 25:50 · last activity 2:49 ago
+⏳ working... elapsed 26:00 · last activity 2:59 ago
+⏳ working... elapsed 26:10 · last activity 3:10 ago
+⏳ working... elapsed 26:21 · last activity 3:20 ago
+⏳ working... elapsed 26:31 · last activity 3:30 ago
+⏳ working... elapsed 26:41 · last activity 3:40 ago
+| Tools    Bash 22 • Edit 22 • Read 17 • Grep 6 • Glob 1 • Write 1
+| Tools    Bash 23 • Edit 22 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Database initialized
+DB_DIR: /tmp/test-simple
+Error: in prepare, no such column: "table" - should this be a string literal in single-quotes?
+  SELECT name FROM sqlite_master WHERE type="table"
+                              error here ---^
+╭────────────╮
+│ empty list │
+╰────────────╯
+
+⏳ working... elapsed 27:11 · last activity 0:13 ago
+⏳ working... elapsed 27:21 · last activity 0:23 ago
+⏳ working... elapsed 27:31 · last activity 0:33 ago
+⏳ working... elapsed 27:41 · last activity 0:43 ago
+⏳ working... elapsed 27:51 · last activity 0:53 ago
+⏳ working... elapsed 28:01 · last activity 1:03 ago
+⏳ working... elapsed 28:11 · last activity 1:13 ago
+⏳ working... elapsed 28:21 · last activity 1:23 ago
+⏳ working... elapsed 28:31 · last activity 1:33 ago
+| Tools    Bash 24 • Edit 22 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Database initialized
+DB_DIR: /tmp/test-simple
+╭────────────╮
+│ empty list │
+╰────────────╯
+
+| Tools    Bash 25 • Edit 22 • Read 17 • Grep 6 • Glob 1 • Write 1
+⏳ working... elapsed 29:01 · last activity 0:19 ago
+⏳ working... elapsed 29:11 · last activity 0:29 ago
+⏳ working... elapsed 29:21 · last activity 0:39 ago
+⏳ working... elapsed 29:31 · last activity 0:49 ago
+⏳ working... elapsed 29:41 · last activity 0:59 ago
+⏳ working... elapsed 29:51 · last activity 1:09 ago
+⏳ working... elapsed 30:01 · last activity 1:19 ago
+⏳ working... elapsed 30:11 · last activity 1:29 ago
+⏳ working... elapsed 30:21 · last activity 1:39 ago
+⏳ working... elapsed 30:31 · last activity 1:49 ago
+⏳ working... elapsed 30:41 · last activity 2:00 ago
+| Tools    Bash 25 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+⏳ working... elapsed 31:01 · last activity 0:12 ago
+⏳ working... elapsed 31:11 · last activity 0:22 ago
+| Tools    Bash 26 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+Error: in prepare, no such table: awakeables
+    [fail] Awakeable not found before job completion
+Error: in prepare, no such table: awakeables
+    [fail] Awakeable not found before job cancellation
+Error: in prepare, no such table: jobs
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 27 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+╭────────────╮
+│ empty list │
+╰────────────╯
+
+| Tools    Bash 28 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:3:18]
+ 2 | use /home/lewis/src/nuoc/oc-engine.nu *
+ 3 | print $'DB_DIR: (DB_DIR)'
+   :                  ^^^|^^
+   :                     `-- Command `DB_DIR` not found
+ 4 | print $'DB_PATH: (DB_PATH)'
+   `----
+  help: `DB_DIR` is neither a Nushell built-in or a known external command
+
+
+⏳ working... elapsed 31:41 · last activity 0:14 ago
+| Tools    Bash 29 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Error: nu::parser::wrong_import_pattern
+
+  x Wrong import pattern structure.
+   ,-[source:2:46]
+ 1 | 
+ 2 | use /home/lewis/src/nuoc/oc-engine.nu DB_DIR DB_PATH
+   :                                              ^^^|^^^
+   :                                                 `-- Trying to import something but the parent `DB_DIR` is not a module, maybe you want to try `use <module> [<name1>, <name2>]`
+ 3 | print $'DB_DIR: ($DB_DIR)'
+   `----
+
+
+| Tools    Bash 30 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+DB_DIR: .oc-workflow
+DB_PATH: .oc-workflow/journal.db
+PWD: /tmp/test-awakeable-cleanup-simple
+
+| Tools    Bash 31 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+╭────────────╮
+│ empty list │
+╰────────────╯
+
+| Tools    Bash 32 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+success
+
+| Tools    Bash 33 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+╭───┬──────────────┬──────┬────────┬──────────┬───────────┬───────────┬─────╮
+│ # │     name     │ type │ target │ readonly │   mode    │ num_links │ ... │
+├───┼──────────────┼──────┼────────┼──────────┼───────────┼───────────┼─────┤
+│ 0 │ .oc-workflow │ dir  │        │ false    │ rwxr-xr-x │         2 │ ... │
+╰───┴──────────────┴──────┴────────┴──────────┴───────────┴───────────┴─────╯
+
+| Tools    Bash 34 • Edit 23 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+total 92
+drwxr-xr-x 2 lewis lewis    60 Jan 29 00:55 .
+drwxr-xr-x 3 lewis lewis    60 Jan 29 00:55 ..
+-rw-r--r-- 1 lewis lewis 94208 Jan 29 00:55 journal.db
+
+⏳ working... elapsed 32:31 · last activity 0:13 ago
+⏳ working... elapsed 32:41 · last activity 0:23 ago
+⏳ working... elapsed 32:51 · last activity 0:33 ago
+⏳ working... elapsed 33:01 · last activity 0:43 ago
+⏳ working... elapsed 33:11 · last activity 0:53 ago
+⏳ working... elapsed 33:21 · last activity 1:03 ago
+⏳ working... elapsed 33:31 · last activity 1:13 ago
+⏳ working... elapsed 33:41 · last activity 1:23 ago
+| Tools    Bash 34 • Edit 24 • Read 17 • Grep 6 • Glob 1 • Write 1
+⏳ working... elapsed 34:01 · last activity 0:15 ago
+| Tools    Bash 35 • Edit 24 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [error] test-job-completion-cancels-awakeables: Directory not found
+  [ok] job-completion-cancels-awakeables
+    [error] test-job-cancellation-cancels-awakeables: Directory not found
+  [ok] job-cancellation-cancels-awakeables
+    [error] test-reject-cancelled-awakeable-resolution: Directory not found
+  [ok] reject-cancelled-awakeable-resolution
+
+⏳ working... elapsed 34:21 · last activity 0:10 ago
+| Tools    Bash 35 • Edit 25 • Read 17 • Grep 6 • Glob 1 • Write 1
+| Tools    Bash 36 • Edit 27 • Read 17 • Grep 6 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [error] test-job-completion-cancels-awakeables: External command failed
+  [ok] job-completion-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-job-cancellation-cancels-awakeables: External command had a non-zero exit code
+  [ok] job-cancellation-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 36 • Edit 27 • Read 18 • Grep 6 • Glob 1 • Write 1
+⏳ working... elapsed 34:51 · last activity 0:13 ago
+⏳ working... elapsed 35:01 · last activity 0:23 ago
+| Tools    Bash 36 • Edit 27 • Read 19 • Grep 6 • Glob 1 • Write 1
+| Tools    Bash 36 • Edit 28 • Read 19 • Grep 6 • Glob 1 • Write 1
+| Tools    Bash 37 • Edit 28 • Read 19 • Grep 6 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [error] test-job-completion-cancels-awakeables: External command failed
+  [ok] job-completion-cancels-awakeables
+    [fail] Awakeable status after job cancellation: got PENDING, expected CANCELLED
+    [error] test-reject-cancelled-awakeable-resolution: External command failed
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 37 • Edit 28 • Read 20 • Grep 6 • Glob 1 • Write 1
+⏳ working... elapsed 35:41 · last activity 0:17 ago
+⏳ working... elapsed 35:51 · last activity 0:27 ago
+⏳ working... elapsed 36:01 · last activity 0:37 ago
+⏳ working... elapsed 36:11 · last activity 0:47 ago
+⏳ working... elapsed 36:21 · last activity 0:57 ago
+⏳ working... elapsed 36:31 · last activity 1:07 ago
+⏳ working... elapsed 36:41 · last activity 1:17 ago
+| Tools    Bash 37 • Edit 28 • Read 20 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 37 • Edit 28 • Read 21 • Grep 7 • Glob 1 • Write 1
+⏳ working... elapsed 37:01 · last activity 0:12 ago
+⏳ working... elapsed 37:11 · last activity 0:22 ago
+⏳ working... elapsed 37:21 · last activity 0:32 ago
+⏳ working... elapsed 37:31 · last activity 0:42 ago
+⏳ working... elapsed 37:41 · last activity 0:52 ago
+⏳ working... elapsed 37:51 · last activity 1:02 ago
+⏳ working... elapsed 38:01 · last activity 1:12 ago
+| Tools    Bash 37 • Edit 29 • Read 21 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 37 • Edit 29 • Read 22 • Grep 7 • Glob 1 • Write 1
+⏳ working... elapsed 38:31 · last activity 0:13 ago
+⏳ working... elapsed 38:41 · last activity 0:23 ago
+| Tools    Bash 37 • Edit 30 • Read 22 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 37 • Edit 30 • Read 23 • Grep 7 • Glob 1 • Write 1
+⏳ working... elapsed 39:01 · last activity 0:12 ago
+⏳ working... elapsed 39:11 · last activity 0:22 ago
+| Tools    Bash 37 • Edit 31 • Read 23 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 38 • Edit 31 • Read 23 • Grep 7 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [ok] Awakeable marked as CANCELLED on job completion
+  [ok] job-completion-cancels-awakeables
+    [ok] Awakeable marked as CANCELLED on job cancellation
+  [ok] job-cancellation-cancels-awakeables
+    [ok] resolve-awakeable rejected CANCELLED awakeable: awakeable not pending, status is 'CANCELLED': prom_1dGVzdC1qb2ItMzow
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 39 • Edit 31 • Read 23 • Grep 7 • Glob 1 • Write 1
+
+[main 49aa8f8] RED: nuoc-wpi9 - failing tests for awakeable cleanup on job completion
+ 9 files changed, 1785 insertions(+), 7 deletions(-)
+ create mode 100755 tests/test-awakeable-cleanup.nu
+
+| Tools    Bash 40 • Edit 31 • Read 23 • Grep 7 • Glob 1 • Write 1
+
+Unstaged changes after reset:
+M	.beads/export-state/8e20e730c5403ecd.json
+M	.beads/issues.jsonl
+M	.ralph/ralph-context.md
+M	.ralph/ralph-loop.state.json
+M	.ralph/ralph-tasks.md
+M	babysit-log.txt
+M	oc-engine.nu
+M	ralph-full-20260128-220713.log
+On branch main
+Your branch is ahead of 'origin/main' by 6 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .beads/export-state/8e20e730c5403ecd.json
+	modified:   .beads/issues.jsonl
+	modified:   .ralph/ralph-context.md
+	modified:   .ralph/ralph-loop.state.json
+	modified:   .ralph/ralph-tasks.md
+	modified:   babysit-log.txt
+	modified:   oc-engine.nu
+	modified:   ralph-full-20260128-220713.log
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	tests/test-awakeable-cleanup.nu
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+| Tools    Bash 41 • Edit 31 • Read 23 • Grep 7 • Glob 1 • Write 1
+
+Updated 1 path from the index
+Running awakeable cleanup tests...
+    [error] test-job-completion-cancels-awakeables: External command failed
+  [ok] job-completion-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-job-cancellation-cancels-awakeables: External command had a non-zero exit code
+  [ok] job-cancellation-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+⏳ working... elapsed 40:01 · last activity 0:13 ago
+⏳ working... elapsed 40:11 · last activity 0:23 ago
+⏳ working... elapsed 40:21 · last activity 0:33 ago
+| Tools    Bash 41 • Edit 31 • Read 24 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 41 • Edit 32 • Read 24 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 41 • Edit 32 • Read 25 • Grep 7 • Glob 1 • Write 1
+⏳ working... elapsed 41:01 · last activity 0:10 ago
+⏳ working... elapsed 41:11 · last activity 0:20 ago
+| Tools    Bash 41 • Edit 33 • Read 25 • Grep 7 • Glob 1 • Write 1
+⏳ working... elapsed 41:31 · last activity 0:16 ago
+⏳ working... elapsed 41:41 · last activity 0:26 ago
+| Tools    Bash 42 • Edit 33 • Read 25 • Grep 7 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [ok] Awakeable marked as CANCELLED on job completion
+  [ok] job-completion-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-job-cancellation-cancels-awakeables: External command had a non-zero exit code
+  [ok] job-cancellation-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+⏳ working... elapsed 42:01 · last activity 0:19 ago
+| Tools    Bash 42 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 43 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 44 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+Error: nu::parser::expected_keyword
+
+  x Expected keyword.
+     ,-[/home/lewis/src/nuoc/tests/test-awakeable-cleanup.nu:188:1]
+ 187 | # Run all tests
+ 188 | print "Running awakeable cleanup tests..."
+     : ^^|^^
+     :   `-- expected def, const, extern, alias, use, module, export or export-env keyword
+ 189 | test-job-completion-cancels-awakeables
+     `----
+
+
+⏳ working... elapsed 42:31 · last activity 0:15 ago
+| Tools    Bash 45 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+zsh:1: no matches found: /tmp/test-awakeable-cleanup-*
+
+⏳ working... elapsed 42:51 · last activity 0:12 ago
+| Tools    Bash 46 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [ok] Awakeable marked as CANCELLED on job completion
+  [ok] job-completion-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-job-cancellation-cancels-awakeables: External command had a non-zero exit code
+  [ok] job-cancellation-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 47 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [ok] Awakeable marked as CANCELLED on job completion
+  [ok] job-completion-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-job-cancellation-cancels-awakeables: External command had a non-zero exit code
+  [ok] job-cancellation-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+⏳ working... elapsed 43:21 · last activity 0:16 ago
+⏳ working... elapsed 43:31 · last activity 0:26 ago
+| Tools    Bash 48 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+CREATE TABLE jobs (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      bead_id TEXT,
+      inputs TEXT,
+      defaults TEXT,
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
+      position INTEGER DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      scheduled_start_at TEXT,
+      started_at TEXT,
+      completed_at TEXT,
+      completion_result TEXT CHECK(completion_result IS NULL OR completion_result IN ('success','failure')),
+      completion_failure TEXT,
+      next_retry_at TEXT,
+      retry_count INTEGER DEFAULT 0,
+      last_failure TEXT,
+      last_failure_code INTEGER,
+      error TEXT,
+      result TEXT
+    );
+
+| Tools    Bash 49 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [ok] Awakeable marked as CANCELLED on job completion
+  [ok] job-completion-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-job-cancellation-cancels-awakeables: External command had a non-zero exit code
+  [ok] job-cancellation-cancels-awakeables
+Error: stepping, CHECK constraint failed: status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed') (19)
+    [error] test-reject-cancelled-awakeable-resolution: External command had a non-zero exit code
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 50 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+/tmp/test-awakeable-cleanup-1:
+total 0
+drwxr-xr-x   3 lewis lewis    60 Jan 29 01:07 .
+drwxrwxrwt 613 root  root  28760 Jan 29 01:07 ..
+drwxr-xr-x   2 lewis lewis    60 Jan 29 01:07 .oc-workflow
+
+/tmp/test-awakeable-cleanup-2:
+total 0
+drwxr-xr-x   3 lewis lewis    60 Jan 29 01:07 .
+drwxrwxrwt 613 root  root  28760 Jan 29 01:07 ..
+drwxr-xr-x   2 lewis lewis    60 Jan 29 01:07 .oc-workflow
+
+/tmp/test-awakeable-cleanup-3:
+total 0
+drwxr-xr-x   3 lewis lewis    60 Jan 29 01:07 .
+drwxrwxrwt 613 root  root  28760 Jan 29 01:07 ..
+drwxr-xr-x   2 lewis lewis    60 Jan 29 01:07 .oc-workflow
+
+| Tools    Bash 51 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+CREATE TABLE jobs (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      bead_id TEXT,
+      inputs TEXT,
+      defaults TEXT,
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
+      position INTEGER DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      scheduled_start_at TEXT,
+      started_at TEXT,
+      completed_at TEXT,
+      completion_result TEXT CHECK(completion_result IS NULL OR completion_result IN ('success','failure')),
+      completion_failure TEXT,
+      next_retry_at TEXT,
+      retry_count INTEGER DEFAULT 0,
+      last_failure TEXT,
+      last_failure_code INTEGER,
+      error TEXT,
+      result TEXT
+    );
+
+| Tools    Bash 52 • Edit 33 • Read 26 • Grep 7 • Glob 1 • Write 1
+
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
+
+| Tools    Bash 52 • Edit 33 • Read 27 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 52 • Edit 34 • Read 27 • Grep 7 • Glob 1 • Write 1
+| Tools    Bash 53 • Edit 34 • Read 27 • Grep 7 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [ok] Awakeable marked as CANCELLED on job completion
+  [ok] job-completion-cancels-awakeables
+    [ok] Awakeable marked as CANCELLED on job cancellation
+  [ok] job-cancellation-cancels-awakeables
+    [ok] resolve-awakeable rejected CANCELLED awakeable: awakeable not pending, status is 'CANCELLED': prom_1dGVzdC1qb2ItMzow
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 54 • Edit 34 • Read 27 • Grep 7 • Glob 1 • Write 1
+
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+▪▪▪▪ nuoc:test
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (94ms)
+
+Tasks: 1 completed
+ Time: 95ms
+
+

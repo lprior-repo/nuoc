@@ -11,5 +11,5 @@ Add your tasks here:
 - [x] nuoc-szrs - [Awk-08] Implement task wake on awakeable resolution
 - [x] nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
 - [x] nuoc-qodw - [Awk-09] Implement awakeable timeout handling
-- [ ] nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+- [/] nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
 - [ ] nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
