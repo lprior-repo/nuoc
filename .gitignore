@@ -7,3 +7,9 @@ Ralph/.ralph/
 Ralph/logs/
 ralph-full-*.log
 babysit-log.txt
+
+# bv (beads viewer) local config and caches
+.bv/
+
+# Rust TUI target directory
+tui/target/
