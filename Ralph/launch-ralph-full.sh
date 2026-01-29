@@ -40,7 +40,7 @@ echo "Starting in 5 seconds... (Ctrl+C to cancel)"
 sleep 5
 
 ralph \
-  --prompt-file ralph-prompt-with-red-queen.md \
+  --prompt-file Ralph/ralph-prompt-with-red-queen.md \
   --max-iterations 6000 \
   --completion-promise "COMPLETE" \
   --tasks \

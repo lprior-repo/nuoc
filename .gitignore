@@ -1,7 +1,7 @@
 .moon/cache
 .moon
 
-# Ralph Wiggum loop files
+# Ralph Wiggum loop files (working directory and logs)
 .ralph/
 .ralph-archive/
 ralph-full-*.log
