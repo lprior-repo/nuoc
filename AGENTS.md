@@ -37,7 +37,7 @@ $record.field? | default "fallback"
 
 ## Model Usage
 
-**Use Moon (Haiku) for all code generation** - 60-70% faster, perfect for Nushell.
+**ALWAYS use Opus for all work** - Maximum quality, full Red Queen coverage, comprehensive analysis.
 
 ## Writing Beads
 
@@ -53,7 +53,7 @@ bd create --title="[Category] verb what" --type=task|bug|feature --priority=0-4
 
 ## Core Rules
 
-1. Use Moon (Haiku) for code
+1. Use Opus for all code
 2. Consult nushell.sh for idioms
 3. No comments - self-documenting code
 4. Immutability preferred
