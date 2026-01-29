@@ -370,16 +370,50 @@
         "Failed: 0",
         "Error: unknown flag: --reason"
       ]
+    },
+    {
+      "iteration": 11,
+      "startedAt": "2026-01-29T05:41:06.740Z",
+      "endedAt": "2026-01-29T05:48:20.720Z",
+      "durationMs": 433933,
+      "toolsUsed": {
+        "Read": 17,
+        "Bash": 10,
+        "Edit": 5,
+        "Grep": 7,
+        "Write": 2
+      },
+      "filesModified": [
+        ".beads/export-state/8e20e730c5403ecd.json",
+        ".oc-workflow/journal.db",
+        ".ralph/ralph-context.md",
+        ".ralph/ralph-tasks.md",
+        "babysit-log.txt",
+        "oc-engine.nu",
+        "ralph-full-20260128-220713.log",
+        "tests/test-awakeable-timeout.nu"
+      ],
+      "exitCode": 1,
+      "completionDetected": false,
+      "errors": [
+        "Failed: 0",
+        "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun timeout tests to see failures",
+        "Error: nu::parser::type_mismatch",
+        "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun timeout tests to see failures (RED phase)",
+        "Error: nu::shell::external_command",
+        "[main 15a4ae7] RED: nuoc-qodw - failing tests for awakeable timeout handling",
+        "\u001b[91m\u001b[1mError: \u001b[0mError: unknown certificate verification error"
+      ]
     }
   ],
-  "totalDurationMs": 5621754,
+  "totalDurationMs": 6055687,
   "struggleIndicators": {
     "repeatedErrors": {
       "Now I'll implement nuoc-9w6 (Create awakeables table schema) using TDD15. Let me start with Phase 0:": 1,
       "RED phase complete. Tests are failing as expected (awakeables table doesn't exist). Committing RED s": 1,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun awakeables tests (should fail)": 1,
       "error: unexpected argument '--filter' found": 7,
-      "Failed: 0": 10,
+      "Failed: 0": 11,
       "Error: nu::parser::expected_keyword": 2,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun all tests (should fail awakeables tests)": 1,
       "Error: in prepare, index idx_journal_replay already exists": 1,
@@ -387,7 +421,7 @@
       "Error: task_runner::run_failed": 1,
       "Error: nu::parser::missing_positional": 1,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun awakeable ID generation tests (should fail)": 1,
-      "Error: nu::shell::external_command": 7,
+      "Error: nu::shell::external_command": 8,
       "Error: nu::parser::module_not_found": 3,
       "Error: nu::shell::pipeline_mismatch": 1,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun tests to see failures (RED phase)": 1,
@@ -428,7 +462,12 @@
       "[error] test-resolve-awakeable-basic failed: External command had a non-zero exit code": 1,
       "Error closing nuoc-szrs: operation failed: cannot close nuoc-szrs: blocked by open issues [nuoc-a7ti": 1,
       "Error: unknown flag: --reason": 2,
-      "[error] test-reject-resolution-on-non-pending failed: External command failed": 1
+      "[error] test-reject-resolution-on-non-pending failed: External command failed": 1,
+      "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun timeout tests to see failures": 1,
+      "Error: nu::parser::type_mismatch": 1,
+      "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun timeout tests to see failures (RED phase)": 1,
+      "[main 15a4ae7] RED: nuoc-qodw - failing tests for awakeable timeout handling": 1,
+      "\u001b[91m\u001b[1mError: \u001b[0mError: unknown certificate verification error": 1
     },
     "noProgressIterations": 0,
     "shortIterations": 0

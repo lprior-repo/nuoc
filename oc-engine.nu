@@ -990,6 +990,29 @@ export def ctx-awakeable [job_id: string, task_name: string, attempt: int]: noth
   { id: $awakeable_id }
 }
 
+# Create an awakeable with timeout and return its ID
+# Precondition: job_id, task_name are validated identifiers, execution context initialized, timeout_sec is positive
+# Postcondition: awakeable record created with timeout_at, ID returned, operation journaled
+# Invariant: awakeable ID is globally unique, record persisted for replay
+export def ctx-awakeable-timeout [job_id: string, task_name: string, attempt: int, timeout_sec: int]: nothing -> record {
+  let jid = (validate-ident $job_id "ctx-awakeable-timeout.job_id")
+  let tname = (validate-ident $task_name "ctx-awakeable-timeout.task_name")
+
+  if $timeout_sec <= 0 {
+    error make { msg: $"timeout_sec must be positive, got ($timeout_sec)" }
+  }
+
+  let entry_index = (next-entry-index $jid $tname $attempt)
+
+  let awakeable_id = (awakeable-id-generate $jid $entry_index)
+
+  sql-exec $"INSERT INTO awakeables \(id, job_id, task_name, entry_index, status, timeout_at\) VALUES \('($awakeable_id)', '($jid)', '($tname)', ($entry_index), 'PENDING', datetime\('now', '+($timeout_sec) seconds'\)\)"
+
+  journal-write $jid $tname $attempt $entry_index "awakeable-create" {} { id: $awakeable_id, timeout_sec: $timeout_sec }
+
+  { id: $awakeable_id }
+}
+
 # Await an awakeable, suspending the task until it's resolved
 # Precondition: job_id, task_name are validated identifiers, execution context initialized, awakeable_id exists
 # Postcondition: task status set to suspended, suspension point journaled
@@ -1005,26 +1028,34 @@ export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int,
   # Check if awakeable is already resolved (task resumed after wake)
   let awakeable_status = (sql $"SELECT status, payload FROM awakeables WHERE id = '($aw_id)'")
 
-  if (not ($awakeable_status | is-empty)) and ($awakeable_status.0.status == "RESOLVED") {
-    # Awakeable already resolved - task has been woken, resume execution
-    if (not $in_replay) {
-      journal-write $jid $tname $attempt $entry_index "awakeable-resume" { awakeable_id: $aw_id } {}
-    }
-    let payload = (try { $awakeable_status.0.payload | from json } catch { {} })
-    { resumed: true, awakeable_id: $aw_id, payload: $payload }
-  } else {
-    # Awakeable not resolved - suspend task
-    if (not $in_replay) {
-      sql-exec $"UPDATE tasks SET status = 'suspended' WHERE job_id = '($jid)' AND name = '($tname)'"
-      emit-event $jid $tname "task.StateChange" "running" "suspended" $"awaiting awakeable ($aw_id)"
-
-      journal-write $jid $tname $attempt $entry_index "awakeable-await" { awakeable_id: $aw_id } {}
-
-      { suspended: true, awakeable_id: $aw_id }
+  if (not ($awakeable_status | is-empty)) {
+    if $awakeable_status.0.status == "RESOLVED" {
+      # Awakeable already resolved - task has been woken, resume execution
+      if (not $in_replay) {
+        journal-write $jid $tname $attempt $entry_index "awakeable-resume" { awakeable_id: $aw_id } {}
+      }
+      let payload = (try { $awakeable_status.0.payload | from json } catch { {} })
+      { resumed: true, awakeable_id: $aw_id, payload: $payload }
+    } else if $awakeable_status.0.status == "TIMEOUT" {
+      # Awakeable timed out - fail the task
+      error make { msg: $"awakeable timed out: ($aw_id)" }
     } else {
-      # In replay mode, return suspended state without side effects
-      { suspended: true, awakeable_id: $aw_id }
+      # Other status - suspend task
+      if (not $in_replay) {
+        sql-exec $"UPDATE tasks SET status = 'suspended' WHERE job_id = '($jid)' AND name = '($tname)'"
+        emit-event $jid $tname "task.StateChange" "running" "suspended" $"awaiting awakeable ($aw_id)"
+
+        journal-write $jid $tname $attempt $entry_index "awakeable-await" { awakeable_id: $aw_id } {}
+
+        { suspended: true, awakeable_id: $aw_id }
+      } else {
+        # In replay mode, return suspended state without side effects
+        { suspended: true, awakeable_id: $aw_id }
+      }
     }
+  } else {
+    # Awakeable not found - error
+    error make { msg: $"awakeable not found: ($aw_id)" }
   }
 }
 
@@ -1062,6 +1093,32 @@ export def resolve-awakeable [awakeable_id: string, payload: any]: nothing -> re
   emit-event $job_id $task_name "task.StateChange" "suspended" "pending" $"awakeable ($aw_id) resolved"
 
   { resolved: true, awakeable_id: $aw_id, payload: $payload }
+}
+
+# Check and process expired awakeables, marking them as TIMEOUT
+# Precondition: database initialized, awakeables table exists
+# Postcondition: expired awakeables marked as TIMEOUT, corresponding tasks marked as failed
+# Invariant: only PENDING awakeables with timeout_at < now are affected
+export def check-awakeable-timeouts []: nothing -> record {
+  # Find all PENDING awakeables that have expired
+  let expired = (sql $"SELECT id, job_id, task_name FROM awakeables WHERE status = 'PENDING' AND timeout_at IS NOT NULL AND timeout_at < datetime\('now'\)")
+
+  # Mark each expired awakeable as TIMEOUT and fail the associated task
+  for aw in $expired {
+    let aw_id = $aw.id
+    let job_id = $aw.job_id
+    let task_name = $aw.task_name
+
+    # Update awakeable status
+    sql-exec $"UPDATE awakeables SET status = 'TIMEOUT' WHERE id = '($aw_id)'"
+
+    # Mark task as failed with timeout error
+    sql-exec $"UPDATE tasks SET status = 'failed', error = 'Awakeable timeout: ($aw_id)' WHERE job_id = '($job_id)' AND name = '($task_name)'"
+
+    emit-event $job_id $task_name "task.StateChange" "pending" "failed" $"awakeable ($aw_id) timed out"
+  }
+
+  { processed: ($expired | length) }
 }
 
 # ── Task Output Retrieval ────────────────────────────────────────────────────

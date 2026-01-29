@@ -6765,3 +6765,255 @@ Completion promise: not detected
 
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 11...
+📝 Auto-committed changes
+
+🔄 Iteration 11 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T05:41:07.070Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+⏳ working... elapsed 0:20 · last activity 0:19 ago
+I'll work on the awakeable timeout handling task. Let me start by marking it as in progress and gathering context.
+| Tools    Read 1
+
+
+○ nuoc-qodw · [Awk-09] Implement awakeable timeout handling   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Fail awakeable if timeout_at passed.
+
+## Acceptance
+- [ ] Scheduler checks timeouts
+- [ ] Status -> TIMEOUT
+- [ ] Task receives timeout error
+
+DEPENDS ON
+  → ✓ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+
+| Tools    Read 1 • Bash 1 • Edit 1
+| Tools    Read 2 • Bash 1 • Edit 1 • Grep 1
+| Tools    Read 3 • Bash 1 • Edit 1 • Grep 1
+| Tools    Read 4 • Grep 2 • Bash 1 • Edit 1
+⏳ working... elapsed 1:00 · last activity 0:13 ago
+⏳ working... elapsed 1:10 · last activity 0:23 ago
+⏳ working... elapsed 1:20 · last activity 0:33 ago
+| Tools    Read 5 • Grep 3 • Bash 1 • Edit 1
+⏳ working... elapsed 1:40 · last activity 0:17 ago
+| Tools    Read 5 • Grep 3 • Bash 2 • Edit 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+▪▪▪▪ nuoc:test
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (93ms)
+
+Tasks: 1 completed
+ Time: 93ms
+
+
+⏳ working... elapsed 2:00 · last activity 0:18 ago
+⏳ working... elapsed 2:10 · last activity 0:28 ago
+⏳ working... elapsed 2:20 · last activity 0:38 ago
+| Tools    Read 5 • Grep 3 • Bash 2 • Edit 1 • Write 1
+| Tools    Read 5 • Bash 3 • Grep 3 • Edit 1 • Write 1
+
+Warning: nu::parser::deprecated
+
+  ! Flag deprecated.
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:97:21]
+ 96 | 
+ 97 |   if ($result | get -i error | is-not-empty) {
+    :                     ^|
+    :                      `-- get --ignore-errors was deprecated in 0.106.0 and will be removed in a future release.
+ 98 |     print "    [ok] ctx-await-awakeable returns error for TIMEOUT awakeable"
+    `----
+  help: This flag has been renamed to `--optional (-o)` to better reflect its
+        behavior.
+
+Error: nu::parser::type_mismatch
+
+  x Type mismatch.
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:36:14]
+ 35 |   # Create job and task
+ 36 |   job-create $job_id {} {}
+    :              ^^^|^^^
+    :                 `-- expected record, found string
+ 37 |   job-task-add $job_id $task_name { run_cmd: "echo 'test'" } {}
+    `----
+
+
+| Tools    Read 6 • Grep 4 • Bash 3 • Edit 1 • Write 1
+| Tools    Read 6 • Grep 5 • Bash 3 • Edit 1 • Write 1
+| Tools    Read 7 • Grep 6 • Bash 3 • Edit 1 • Write 1
+⏳ working... elapsed 3:00 · last activity 0:14 ago
+⏳ working... elapsed 3:10 · last activity 0:24 ago
+⏳ working... elapsed 3:20 · last activity 0:34 ago
+| Tools    Read 8 • Grep 6 • Bash 3 • Write 2 • Edit 1
+⏳ working... elapsed 3:40 · last activity 0:18 ago
+| Tools    Read 8 • Grep 6 • Bash 4 • Write 2 • Edit 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:27:20]
+ 26 |   # Create awakeable with 1 second timeout
+ 27 |   let awakeable = (ctx-awakeable-timeout $job_id $task_name $attempt 1)
+    :                    ^^^^^^^^^^|^^^^^^^^^^
+    :                              `-- Command `ctx-awakeable-timeout` not found
+ 28 |   let awakeable_id = $awakeable.id
+    `----
+  help: Did you mean `ctx-awakeable`?
+
+
+| Tools    Read 8 • Grep 6 • Bash 5 • Write 2 • Edit 1
+
+[main 15a4ae7] RED: nuoc-qodw - failing tests for awakeable timeout handling
+ 1 file changed, 172 insertions(+)
+ create mode 100755 tests/test-awakeable-timeout.nu
+
+| Tools    Read 9 • Grep 6 • Bash 5 • Write 2 • Edit 1
+⏳ working... elapsed 4:00 · last activity 0:11 ago
+⏳ working... elapsed 4:10 · last activity 0:21 ago
+| Tools    Read 9 • Grep 6 • Bash 5 • Edit 2 • Write 2
+| Tools    Read 11 • Grep 6 • Bash 5 • Edit 2 • Write 2
+| Tools    Read 11 • Grep 6 • Bash 5 • Edit 3 • Write 2
+| Tools    Read 11 • Grep 6 • Bash 5 • Edit 4 • Write 2
+⏳ working... elapsed 4:50 · last activity 0:08 ago
+⏳ working... elapsed 5:00 · last activity 0:18 ago
+| Tools    Read 13 • Grep 6 • Bash 5 • Edit 4 • Write 2
+| Tools    Read 14 • Grep 6 • Bash 5 • Edit 4 • Write 2
+| Tools    Read 14 • Grep 6 • Bash 5 • Edit 5 • Write 2
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+    Awakeable ID: prom_1dGVzdC1qb2ItdGltZW91dC0xOjA
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:33:3]
+ 32 |   let awakeable_before = (sqlite3 -json $DB_PATH $"SELECT status, timeout_at FROM awakeables WHERE id = '($awakeable_id)'" | from json).0
+ 33 |   assert equal $awakeable_before.status "PENDING"
+    :   ^^^|^^
+    :      `-- Command `assert` not found
+ 34 |   print $"    [ok] Awakeable status is PENDING before timeout"
+    `----
+  help: Did you mean `ast`?
+
+
+⏳ working... elapsed 5:30 · last activity 0:11 ago
+⏳ working... elapsed 5:40 · last activity 0:21 ago
+| Tools    Read 15 • Bash 6 • Grep 6 • Edit 5 • Write 2
+| Tools    Read 15 • Grep 7 • Bash 6 • Edit 5 • Write 2
+| Tools    Read 16 • Grep 7 • Bash 6 • Edit 5 • Write 2
+| Tools    Read 16 • Bash 7 • Grep 7 • Edit 5 • Write 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:18]
+ 1 | use std testing; assert equal 1 1
+   :                  ^^^|^^
+   :                     `-- Command `assert` not found
+   `----
+  help: Did you mean `ast`?
+
+
+| Tools    Read 16 • Bash 8 • Grep 7 • Edit 5 • Write 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:18]
+ 1 | use std testing; testing assert equal 1 1
+   :                  ^^^|^^^
+   :                     `-- Command `testing` not found
+   `----
+  help: `testing` is neither a Nushell built-in or a known external command
+
+
+| Tools    Read 17 • Bash 8 • Grep 7 • Edit 5 • Write 2
+| Tools    Read 17 • Bash 9 • Grep 7 • Edit 5 • Write 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+⏳ working... elapsed 6:30 · last activity 0:18 ago
+⏳ working... elapsed 6:40 · last activity 0:28 ago
+| Tools    Read 17 • Bash 10 • Grep 7 • Edit 5 • Write 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:20]
+ 1 | use std testing *; assert equal 1 1
+   :                    ^^^|^^
+   :                       `-- Command `assert` not found
+   `----
+  help: Did you mean `ast`?
+
+
+⏳ working... elapsed 7:00 · last activity 0:15 ago
+⏳ working... elapsed 7:10 · last activity 0:25 ago
+[91m[1mError: [0mError: unknown certificate verification error
+| Tools    Read 17 • Bash 10 • Grep 7 • Edit 5 • Write 2
+
+Iteration Summary
+────────────────────────────────────────────────────────────────────
+Iteration: 11
+Elapsed:   7:13
+Tools:     Read 17 • Bash 10 • Grep 7 • Edit 5 • Write 2
+Exit code: 1
+Completion promise: not detected
+
+⚠️  OpenCode exited with code 1. Continuing to next iteration.
+📝 Context was consumed this iteration
