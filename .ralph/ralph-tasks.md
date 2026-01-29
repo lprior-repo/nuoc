@@ -3,7 +3,7 @@
 Add your tasks here:
 - [x] nuoc-9w6 - [Awk-01] Create awakeables table schema
 - [x] nuoc-l4d - [Awk-02] Implement awakeable ID generation
-- [ ] nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing
+- [/] nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing
 - [ ] nuoc-7wmq - [Awk-04] Implement awakeable creation in ctx.awakeable
 - [ ] nuoc-f2pc - [Awk-05] Implement task suspension on awakeable await
 - [ ] nuoc-a7ti - [Awk-06] Implement resolve-awakeable command

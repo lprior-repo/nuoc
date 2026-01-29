@@ -307,6 +307,84 @@ def test-awakeable-id-generate-encodes-inputs [] {
   assert not ($result1 == $result3)
 }
 
+# ── Awakeable ID Parsing Tests ───────────────────────────────────────────────
+
+# Test: awakeable-id-parse extracts invocation_id
+def test-awakeable-id-parse-extract-invocation-id [] {
+  let awakeable_id = (awakeable-id-generate "job-123" 0)
+  let parsed = (awakeable-id-parse $awakeable_id)
+  assert equal $parsed.invocation_id "job-123"
+}
+
+# Test: awakeable-id-parse extracts entry_index
+def test-awakeable-id-parse-extract-entry-index [] {
+  let awakeable_id = (awakeable-id-generate "job-123" 5)
+  let parsed = (awakeable-id-parse $awakeable_id)
+  assert equal $parsed.entry_index 5
+}
+
+# Test: awakeable-id-parse handles zero entry_index
+def test-awakeable-id-parse-zero-entry-index [] {
+  let awakeable_id = (awakeable-id-generate "job-123" 0)
+  let parsed = (awakeable-id-parse $awakeable_id)
+  assert equal $parsed.entry_index 0
+}
+
+# Test: awakeable-id-parse handles large entry_index
+def test-awakeable-id-parse-large-entry-index [] {
+  let awakeable_id = (awakeable-id-generate "job-123" 999)
+  let parsed = (awakeable-id-parse $awakeable_id)
+  assert equal $parsed.entry_index 999
+}
+
+# Test: awakeable-id-parse errors on invalid prefix
+def test-awakeable-id-parse-invalid-prefix [] {
+  let result = (try { awakeable-id-parse "invalid_prefix_base64" } catch {|e| $e.msg })
+  assert ($result | str contains "invalid awakeable ID format")
+}
+
+# Test: awakeable-id-parse errors on empty ID
+def test-awakeable-id-parse-empty-id [] {
+  let result = (try { awakeable-id-parse "" } catch {|e| $e.msg })
+  assert ($result | str contains "invalid awakeable ID format")
+}
+
+# Test: awakeable-id-parse errors on missing base64 content
+def test-awakeable-id-parse-missing-content [] {
+  let result = (try { awakeable-id-parse "prom_1" } catch {|e| $e.msg })
+  assert ($result | str contains "invalid awakeable ID format")
+}
+
+# Test: awakeable-id-parse errors on invalid base64
+def test-awakeable-id-parse-invalid-base64 [] {
+  let result = (try { awakeable-id-parse "prom_1!!!invalid!!!" } catch {|e| $e.msg })
+  assert ($result | str contains "invalid awakeable ID format")
+}
+
+# Test: awakeable-id-parse errors on malformed decoded content (missing colon)
+def test-awakeable-id-parse-malformed-content [] {
+  let result = (try { awakeable-id-parse "prom_1invalid_no_colon" } catch {|e| $e.msg })
+  assert ($result | str contains "invalid awakeable ID format")
+}
+
+# Test: awakeable-id-parse errors on non-numeric entry_index
+def test-awakeable-id-parse-non-numeric-entry-index [] {
+  let result = (try { awakeable-id-parse "prom_1invalid:not_a_number" } catch {|e| $e.msg })
+  assert ($result | str contains "invalid awakeable ID format")
+}
+
+# Test: awakeable-id-parse is inverse of generate
+def test-awakeable-id-parse-generate-roundtrip [] {
+  let job_id = "test-job-123"
+  let entry_index = 42
+  
+  let generated = (awakeable-id-generate $job_id $entry_index)
+  let parsed = (awakeable-id-parse $generated)
+  
+  assert equal $parsed.invocation_id $job_id
+  assert equal $parsed.entry_index $entry_index
+}
+
 # Run awakeables tests
 test test-awakeables-table-created
 test test-awakeables-table-schema
@@ -315,5 +393,16 @@ test test-awakeable-id-generate-prefix
 test test-awakeable-id-generate-unique
 test test-awakeable-id-generate-base64url
 test test-awakeable-id-generate-encodes-inputs
+test test-awakeable-id-parse-extract-invocation-id
+test test-awakeable-id-parse-extract-entry-index
+test test-awakeable-id-parse-zero-entry-index
+test test-awakeable-id-parse-large-entry-index
+test test-awakeable-id-parse-invalid-prefix
+test test-awakeable-id-parse-empty-id
+test test-awakeable-id-parse-missing-content
+test test-awakeable-id-parse-invalid-base64
+test test-awakeable-id-parse-malformed-content
+test test-awakeable-id-parse-non-numeric-entry-index
+test test-awakeable-id-parse-generate-roundtrip
 
 print "[ok] oc-engine.nu tests completed"

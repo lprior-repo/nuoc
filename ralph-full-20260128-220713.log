@@ -2369,3 +2369,319 @@ Completion promise: not detected
 
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 3...
+📝 Auto-committed changes
+
+🔄 Iteration 3 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T04:32:18.803Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll start by reading the current task state and marking the next task as in progress.
+| Tools    Read 1
+
+
+○ nuoc-pvb2 · [Awk-03] Implement awakeable ID parsing   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Parse ID back to invocation + entry_index.
+
+## Acceptance
+- [ ] Extract invocation_id
+- [ ] Extract entry_index
+- [ ] Error on invalid format
+
+DEPENDS ON
+  → ○ nuoc-l4d: [Awk-02] Implement awakeable ID generation ● P0
+
+BLOCKS
+  ← ○ nuoc-7wmq: [Awk-04] Implement awakeable creation in ctx.awakeable ● P0
+  ← ○ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+
+
+| Tools    Read 1 • Bash 1 • Edit 1
+
+✓ Updated issue: nuoc-pvb2
+
+| Tools    Bash 2 • Read 1 • Edit 1 • Glob 1
+| Tools    Read 2 • Bash 2 • Edit 1 • Glob 1
+| Tools    Read 2 • Bash 2 • Glob 2 • Edit 1
+| Tools    Read 3 • Bash 2 • Glob 2 • Edit 1
+⏳ working... elapsed 0:50 · last activity 0:19 ago
+| Tools    Read 3 • Bash 2 • Edit 2 • Glob 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Read 4 • Bash 3 • Edit 2 • Glob 2
+| Tools    Read 4 • Bash 3 • Edit 3 • Glob 2
+| Tools    Read 4 • Bash 4 • Edit 3 • Glob 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 5 • Read 4 • Edit 3 • Glob 2
+
+0.110.0
+
+| Tools    Bash 6 • Read 4 • Edit 3 • Glob 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:21]
+ 1 | use oc-engine.nu *; awakeable-id-parse 'test'
+   :                     ^^^^^^^^^|^^^^^^^^
+   :                              `-- Command `awakeable-id-parse` not found
+   `----
+  help: Did you mean `awakeable-id-generate`?
+
+
+| Tools    Bash 7 • Read 4 • Edit 3 • Glob 2
+
+Error: nu::parser::module_not_found
+
+  x Module not found.
+   ,-[source:1:22]
+ 1 | use std testing; use ../oc-engine.nu *; test test-awakeable-id-parse-extract-invocation-id
+   :                      ^^^^^^^|^^^^^^^
+   :                             `-- module ../oc-engine.nu not found
+   `----
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
+
+
+| Tools    Bash 9 • Read 4 • Edit 3 • Glob 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:41]
+ 1 | use std testing; use ../oc-engine.nu *; awakeable-id-parse 'test'
+   :                                         ^^^^^^^^^|^^^^^^^^
+   :                                                  `-- Command `awakeable-id-parse` not found
+   `----
+  help: Did you mean `awakeable-id-generate`?
+
+
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 11 • Read 4 • Edit 3 • Glob 2
+
+╭───────┬───────────╮
+│ error │ not found │
+╰───────┴───────────╯
+
+| Tools    Bash 12 • Read 4 • Edit 3 • Glob 2
+
+Test passed (should have failed)
+
+⏳ working... elapsed 2:00 · last activity 0:17 ago
+| Tools    Bash 13 • Read 4 • Edit 3 • Glob 2
+
+Test ran
+
+| Tools    Bash 15 • Read 4 • Edit 3 • Glob 2
+
+389:test test-awakeables-table-created
+390:test test-awakeables-table-schema
+391:test test-awakeables-index-created
+392:test test-awakeable-id-generate-prefix
+393:test test-awakeable-id-generate-unique
+394:test test-awakeable-id-generate-base64url
+395:test test-awakeable-id-generate-encodes-inputs
+396:test test-awakeable-id-parse-extract-invocation-id
+397:test test-awakeable-id-parse-extract-entry-index
+398:test test-awakeable-id-parse-zero-entry-index
+399:test test-awakeable-id-parse-large-entry-index
+400:test test-awakeable-id-parse-invalid-prefix
+401:test test-awakeable-id-parse-empty-id
+402:test test-awakeable-id-parse-missing-content
+403:test test-awakeable-id-parse-invalid-base64
+404:test test-awakeable-id-parse-malformed-content
+405:test test-awakeable-id-parse-non-numeric-entry-index
+406:test test-awakeable-id-parse-generate-roundtrip
+
+| Tools    Bash 16 • Read 4 • Edit 3 • Glob 2
+
+Before test definition
+After test definition, before invocation
+After test invocation
+
+| Tools    Bash 17 • Read 4 • Edit 3 • Glob 2
+
+  --testbin <string>: run internal test binary
+  --experimental-options <list<string>>: enable or disable experimental options, use `"all"` to set all active options
+
+Parameters:
+  script file <path>: name of the optional script file to run (optional)
+  ...script args <string>: parameters to the script file
+
+
+Error: nu::shell::io::file_not_found
+
+  x File not found
+   ,-[<commandline>:1:4]
+ 1 | nu test test-oc-engine.nu
+   :    ^^|^
+   :      `-- File not found
+   `----
+  help: 'test' does not exist
+
+
+| Tools    Bash 19 • Read 4 • Edit 3 • Glob 2
+
+Error: nu::parser::not_found
+
+  x Not found.
+   ,-[source:1:23]
+ 1 | use std testing; help test
+   :                       ^^|^
+   :                         `-- did not find anything under this name
+   `----
+
+
+
+╭───┬─────────┬───────────────┬──────────╮
+│ # │ command │     path      │   type   │
+├───┼─────────┼───────────────┼──────────┤
+│ 0 │ test    │ /usr/bin/test │ external │
+╰───┴─────────┴───────────────┴──────────╯
+
+| Tools    Bash 21 • Read 4 • Edit 3 • Glob 2
+
+╭────────────╮
+│ empty list │
+╰────────────╯
+
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:18]
+ 1 | use std testing; .NU_LIB_DIRS | get 0
+   :                  ^^^^^^|^^^^^
+   :                        `-- Command `.NU_LIB_DIRS` not found
+   `----
+  help: `.NU_LIB_DIRS` is neither a Nushell built-in or a known external
+        command
+
+
+| Tools    Bash 23 • Read 4 • Edit 3 • Glob 2
+
+14:def test-validate-ident-valid [] {
+27:def test-validate-ident-empty-rejected [] {
+33:def test-validate-ident-sql-injection-rejected [] {
+60:def test-validate-ident-unicode-rejected [] {
+75:def test-validate-ident-opt-empty-allowed [] {
+
+| Tools    Bash 24 • Read 4 • Edit 3 • Glob 2
+
+Result:
+0
+
+| Tools    Bash 25 • Read 4 • Edit 3 • Glob 2
+
+Result:
+0
+
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:5:1]
+ 4 | 
+ 5 | assert equal 1 2
+   : ^^^|^^
+   :    `-- Command `assert` not found
+ 6 | print 'After assert'
+   `----
+  help: Did you mean `ast`?
+
+
+| Tools    Bash 27 • Read 4 • Edit 3 • Glob 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:3:1]
+ 2 | use std testing
+ 3 | assert equal 1 2
+   : ^^^|^^
+   :    `-- Command `assert` not found
+ 4 | print 'After assert'
+   `----
+  help: Did you mean `ast`?
+
+
+| Tools    Bash 28 • Read 4 • Edit 3 • Glob 2
+
+Run one or many project tasks and their dependent tasks.
+
+Usage: moon run [OPTIONS] <TARGETS>... [-- <PASSTHROUGH>...]
+
+Arguments:
+  <TARGETS>...      List of targets to run
+  [PASSTHROUGH]...  Arguments to pass through to the underlying command
+
+Options:
+      --dependents     Run dependents of the primary targets
+  -f, --force          Force run and ignore touched files and affected status
+  -i, --interactive    Run the target interactively
+      --query <QUERY>  Focus target(s) based on the result of a query
+  -s, --summary        Include a summary of all actions that were processed in the pipeline [env:
+                       MOON_SUMMARY=]
+  -u, --updateCache    Bypass cache and force update any existing items
+      --no-actions     Run the task without including sync and setup related actions in the graph
+                       [env: MOON_NO_ACTIONS=]
+  -n, --no-bail        When a task fails, continue executing other tasks instead of aborting
+                       immediately [env: MOON_NO_BAIL=]
+
+| Tools    Bash 30 • Read 4 • Edit 3 • Glob 2
+
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+▪▪▪▪ nuoc:test
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (94ms)
+
+Tasks: 1 completed
+ Time: 94ms
+
+
+| Tools    Bash 31 • Read 4 • Edit 3 • Glob 2
+
+cat: .moon/tasks/test.yml: No such file or directory
+
+| Tools    Bash 31 • Read 4 • Edit 3 • Glob 3
+
+Iteration Summary
+────────────────────────────────────────────────────────────────────
+Iteration: 3
+Elapsed:   3:32
+Tools:     Bash 31 • Read 4 • Edit 3 • Glob 3
+Exit code: 0
+Completion promise: not detected
