@@ -134,6 +134,58 @@ def test-oc-engine [] {
   } else {
     print $"  [fail] status values lowercase"
   }
+
+  # Test: awakeables table is created by db-init
+  rm -rf $DB_DIR
+  db-init
+  let tables = (sqlite3 $DB_PATH "SELECT name FROM sqlite_master WHERE type='table' AND name='awakeables' ORDER BY name;" | from ssv)
+  if (($tables | length) == 1) and ($tables.0.name == "awakeables") {
+    print "  [ok] awakeables table created"
+  } else {
+    print $"  [fail] awakeables table created: expected 1 table named awakeables, got ($tables | length) tables"
+  }
+
+  # Test: awakeables table has correct schema
+  let schema = (sqlite3 $DB_PATH "PRAGMA table_info(awakeables);" | from ssv)
+  
+  let id_exists = ($schema | where name == "id" | length) == 1
+  let job_id_exists = ($schema | where name == "job_id" | length) == 1
+  let task_name_exists = ($schema | where name == "task_name" | length) == 1
+  let entry_index_exists = ($schema | where name == "entry_index" | length) == 1
+  let status_exists = ($schema | where name == "status" | length) == 1
+  let payload_exists = ($schema | where name == "payload" | length) == 1
+  let timeout_at_exists = ($schema | where name == "timeout_at" | length) == 1
+  let created_at_exists = ($schema | where name == "created_at" | length) == 1
+  let resolved_at_exists = ($schema | where name == "resolved_at" | length) == 1
+  
+  if ($id_exists and $job_id_exists and $task_name_exists and $entry_index_exists and $status_exists and $payload_exists and $timeout_at_exists and $created_at_exists and $resolved_at_exists) {
+    print "  [ok] awakeables table has all columns"
+  } else {
+    print $"  [fail] awakeables table has all columns"
+  }
+  
+  let id_col = ($schema | where name == "id")
+  if ($id_col.0.pk == 1) {
+    print "  [ok] awakeables id is PRIMARY KEY"
+  } else {
+    print $"  [fail] awakeables id is PRIMARY KEY"
+  }
+  
+  let status_col = ($schema | where name == "status")
+  if ($status_col.0.dflt_value == "'PENDING'") {
+    print "  [ok] awakeables status defaults to PENDING"
+  } else {
+    print $"  [fail] awakeables status defaults to PENDING: got ($status_col.0.dflt_value)"
+  }
+
+  # Test: awakeables table has index on (job_id, task_name)
+  let indexes = (sqlite3 $DB_PATH "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='awakeables' ORDER BY name;" | from ssv)
+  let has_index = ($indexes | where name =~ "idx_awakeables_job_task" | length) > 0
+  if $has_index {
+    print "  [ok] awakeables has index on (job_id, task_name)"
+  } else {
+    print $"  [fail] awakeables has index on (job_id, task_name)"
+  }
 }
 
 def test-oc-tdd15 [] {

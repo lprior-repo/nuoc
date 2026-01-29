@@ -1,0 +1,271 @@
+{
+  "meta": {
+    "project": "nuoc - Durable Execution Engine",
+    "goal": "Implement Restate/Temporal-compatible durable execution primitives",
+    "completion_criteria": "All features pass their acceptance tests",
+    "total_features": 10,
+    "priority": "P0 only - foundational features"
+  },
+  "features": [
+    {
+      "bead_id": "nuoc-0zq",
+      "category": "security",
+      "priority": "P0",
+      "type": "bug",
+      "title": "Parameterize all SQL queries to eliminate injection surface",
+      "description": "Replace sql-escape with parameterized queries or strict validation to prevent SQL injection",
+      "acceptance_criteria": [
+        "All ID parameters (job_id, task_name, bead_id) match ^[a-zA-Z0-9_.-]+$",
+        "No SQL query contains unescaped external input",
+        "Malicious input like '; DROP TABLE jobs;-- is rejected with error",
+        "Grep for raw string interpolation in SQL contexts returns zero matches"
+      ],
+      "test_steps": [
+        "Run fuzz test with 100 SQL metacharacter strings",
+        "Verify all malicious inputs rejected",
+        "Verify valid IDs (tdd15-beads-abc123) accepted",
+        "Grep codebase for vulnerable SQL patterns"
+      ],
+      "files": [
+        "oc-engine.nu:93-128",
+        "oc-engine.nu:134-169",
+        "oc-engine.nu:259-331"
+      ],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-3cd",
+      "category": "workflow",
+      "priority": "P0",
+      "type": "bug",
+      "title": "Wire phase-prompt dispatcher into run-task so TDD15 prompts are actually used",
+      "description": "Fix TDD15 workflow so phase-specific prompts are dispatched correctly",
+      "acceptance_criteria": [
+        "run-task dispatches to phase-specific prompt functions",
+        "TDD15 workflow uses correct prompts for each phase (0-15)",
+        "Phase progression works correctly",
+        "Existing TDD15 jobs complete successfully"
+      ],
+      "test_steps": [
+        "Create test job with phase-based workflow",
+        "Verify phase 0 uses phase-0 prompt",
+        "Verify phase transitions work",
+        "Run end-to-end TDD15 workflow"
+      ],
+      "files": [
+        "oc-engine.nu:334-376"
+      ],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-j14",
+      "category": "lifecycle",
+      "priority": "P0",
+      "type": "task",
+      "title": "[Lifecycle-01] Add status enum with 8 states to jobs table",
+      "description": "Update jobs table to support 8-state lifecycle: pending, scheduled, ready, running, suspended, backing-off, paused, completed",
+      "acceptance_criteria": [
+        "jobs table status column accepts all 8 states",
+        "Schema migration applied successfully",
+        "Existing jobs migrated to new schema",
+        "All existing code handles new states without errors"
+      ],
+      "test_steps": [
+        "Apply schema migration",
+        "Create job in each of 8 states",
+        "Query jobs table to verify states stored correctly",
+        "Run existing tests to ensure no regressions"
+      ],
+      "files": [
+        "oc-engine.nu (jobs table schema)"
+      ],
+      "blocks": ["nuoc-bjv", "nuoc-kuy", "nuoc-l71"],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-577",
+      "category": "core",
+      "priority": "P0",
+      "type": "feature",
+      "title": "Implement deterministic replay from journal",
+      "description": "Transform events table into authoritative journal. On resume, replay journal entries returning stored results instead of re-executing",
+      "acceptance_criteria": [
+        "Journal table created with schema (id, job_id, task_name, attempt, op_index, op_type, input_hash, output, created_at)",
+        "task-execute writes journal entries for all operations",
+        "job-resume replays from journal without re-executing completed operations",
+        "Kill process mid-job, resume produces identical end state",
+        "No external side effects occur during replay phase"
+      ],
+      "test_steps": [
+        "Create job that makes API call in task A, writes file in task B",
+        "Let job complete task A, kill process",
+        "Resume job",
+        "Verify task A returns cached result without making API call",
+        "Verify task B executes normally",
+        "Verify end state identical to uninterrupted run"
+      ],
+      "files": [
+        "oc-engine.nu:69-78 (events -> journal schema)",
+        "oc-engine.nu:259-331 (task-execute)",
+        "oc-engine.nu:244-256 (job-resume)",
+        "oc-engine.nu:334-376 (run-task)"
+      ],
+      "blocks": ["nuoc-7mg", "nuoc-20c", "nuoc-76u", "nuoc-7g7", "nuoc-91p", "nuoc-ima", "nuoc-n8o", "nuoc-1eq", "nuoc-2qz", "nuoc-8nn", "nuoc-8v1", "nuoc-n4w", "nuoc-rvh", "nuoc-t7r", "nuoc-x7n", "nuoc-znx", "nuoc-8i2"],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-8wi",
+      "category": "core",
+      "priority": "P0",
+      "type": "feature",
+      "title": "Implement complete journal entry types - exact Restate parity",
+      "description": "Implement all Restate journal entry types for protocol compatibility",
+      "acceptance_criteria": [
+        "All Restate journal entry types implemented",
+        "Entry serialization/deserialization works correctly",
+        "Journal entries survive round-trip encoding",
+        "Protocol compatibility verified with Restate spec"
+      ],
+      "test_steps": [
+        "Create journal entry of each type",
+        "Serialize and deserialize each entry type",
+        "Verify round-trip preserves all fields",
+        "Compare against Restate protocol spec"
+      ],
+      "files": [
+        "oc-engine.nu (journal schema)"
+      ],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-mnw",
+      "category": "lifecycle",
+      "priority": "P0",
+      "type": "feature",
+      "title": "Implement 8-state invocation lifecycle - exact Restate state machine",
+      "description": "Implement complete state machine: pending → scheduled → ready → running → suspended/backing-off/paused → completed",
+      "acceptance_criteria": [
+        "All 8 states implemented with correct transitions",
+        "State machine validates illegal transitions",
+        "Lifecycle events emitted for each state change",
+        "State machine matches Restate spec exactly"
+      ],
+      "test_steps": [
+        "Create job in pending state",
+        "Transition through all valid states",
+        "Attempt invalid transition, verify rejected",
+        "Verify lifecycle events emitted correctly",
+        "Compare state machine to Restate spec"
+      ],
+      "files": [
+        "oc-engine.nu (state machine logic)"
+      ],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-ajp",
+      "category": "core",
+      "priority": "P0",
+      "type": "feature",
+      "title": "Implement Services, Virtual Objects, and Workflows as distinct entity types",
+      "description": "Implement three entity types with different semantics: Services (stateless), Virtual Objects (keyed state), Workflows (durable)",
+      "acceptance_criteria": [
+        "Service type: stateless, concurrent invocations allowed",
+        "Virtual Object type: keyed state store, single concurrent invocation per key",
+        "Workflow type: durable execution, suspend/resume support",
+        "Entity type stored in schema and enforced at runtime"
+      ],
+      "test_steps": [
+        "Create service, verify stateless concurrent execution",
+        "Create virtual object, verify keyed state isolation",
+        "Create workflow, verify durable execution",
+        "Verify entity type enforcement prevents invalid operations"
+      ],
+      "files": [
+        "oc-engine.nu (entity type schema and logic)"
+      ],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-235",
+      "category": "protocol",
+      "priority": "P0",
+      "type": "feature",
+      "title": "Implement Service Invocation Protocol - bidirectional message stream",
+      "description": "Implement Restate's bidirectional streaming protocol for service invocations",
+      "acceptance_criteria": [
+        "Bidirectional stream abstraction implemented",
+        "Message serialization/deserialization works",
+        "StartMessage, InputEntryMessage, OutputEntryMessage handled",
+        "Stream handles replay and processing phases correctly"
+      ],
+      "test_steps": [
+        "Establish bidirectional stream",
+        "Send StartMessage, verify accepted",
+        "Send InputEntryMessage, verify processed",
+        "Receive OutputEntryMessage, verify correct",
+        "Test replay phase vs processing phase behavior"
+      ],
+      "files": [
+        "oc-engine.nu (protocol implementation)"
+      ],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-26t",
+      "category": "api",
+      "priority": "P0",
+      "type": "feature",
+      "title": "Implement complete Context API - ctx.run, ctx.rand, ctx.call, ctx.send, etc.",
+      "description": "Implement all Restate Context API methods as nushell commands",
+      "acceptance_criteria": [
+        "State methods: ctx.get, ctx.set, ctx.clear, ctx.clearAll, ctx.stateKeys",
+        "Communication: ctx.call, ctx.send, ctx.sendDelayed",
+        "Durable execution: ctx.run, ctx.sleep, ctx.sleepUntil",
+        "Coordination: ctx.awakeable, ctx.resolveAwakeable, ctx.rejectAwakeable",
+        "Promises: ctx.promise, ctx.peek, ctx.complete",
+        "Invocation: ctx.cancel, ctx.attach, ctx.getOutput, ctx.invocationId",
+        "Determinism: ctx.rand, ctx.rand.uuidv4",
+        "Each method creates correct journal entry",
+        "Replay returns cached results without re-execution"
+      ],
+      "test_steps": [
+        "Test ctx.run journals side effect and replays correctly",
+        "Test ctx.rand produces deterministic output",
+        "Test ctx.call blocks until completion",
+        "Test ctx.send returns immediately",
+        "Test ctx.sleep is durable across restarts",
+        "Verify all methods implemented and working"
+      ],
+      "files": [
+        "oc-engine.nu (context API implementation)"
+      ],
+      "passes": false
+    },
+    {
+      "bead_id": "nuoc-a1o",
+      "category": "api",
+      "priority": "P0",
+      "type": "task",
+      "title": "[Ctx-20] Implement ctx.cancel for cooperative cancellation",
+      "description": "Implement ctx.cancel(invocationId) to support cooperative cancellation",
+      "acceptance_criteria": [
+        "ctx.cancel sets cancellation flag on target invocation",
+        "Target receives exception at next await point",
+        "ctx.cancel is non-blocking",
+        "Cancellation propagates to child invocations"
+      ],
+      "test_steps": [
+        "Create long-running invocation",
+        "Call ctx.cancel from another invocation",
+        "Verify cancellation flag set",
+        "Verify target receives CancellationException at await",
+        "Verify cancel call returns immediately"
+      ],
+      "files": [
+        "oc-engine.nu (ctx.cancel implementation)"
+      ],
+      "passes": false
+    }
+  ]
+}

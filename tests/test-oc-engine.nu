@@ -198,4 +198,79 @@ def test-bdd-diamond-dependency-accepted [] {
   job-create $job_def
 }
 
+# ── Awakeables Table Tests ─────────────────────────────────────────────────────
+
+# Test: awakeables table is created by db-init
+def test-awakeables-table-created [] {
+  let test_db_dir = "/tmp/test-awakeables-db-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+  
+  rm -rf $test_db_dir
+  
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let tables = (sqlite3 $test_db_path "SELECT name FROM sqlite_master WHERE type='table' AND name='awakeables' ORDER BY name;" | from ssv)
+    assert equal ($tables | length) 1
+    assert equal $tables.0.name "awakeables"
+  }
+  
+  rm -rf $test_db_dir
+}
+
+# Test: awakeables table has correct schema
+def test-awakeables-table-schema [] {
+  let test_db_dir = "/tmp/test-awakeables-db-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+  
+  rm -rf $test_db_dir
+  
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let schema = (sqlite3 $test_db_path "PRAGMA table_info(awakeables);" | from ssv)
+    
+    assert equal ($schema | where name == "id" | length) 1
+    assert equal ($schema | where name == "job_id" | length) 1
+    assert equal ($schema | where name == "task_name" | length) 1
+    assert equal ($schema | where name == "entry_index" | length) 1
+    assert equal ($schema | where name == "status" | length) 1
+    assert equal ($schema | where name == "payload" | length) 1
+    assert equal ($schema | where name == "timeout_at" | length) 1
+    assert equal ($schema | where name == "created_at" | length) 1
+    assert equal ($schema | where name == "resolved_at" | length) 1
+    
+    let id_col = ($schema | where name == "id")
+    assert equal $id_col.0.pk 1
+    
+    let status_col = ($schema | where name == "status")
+    assert equal $status_col.0.dflt_value "'PENDING'"
+  }
+  
+  rm -rf $test_db_dir
+}
+
+# Test: awakeables table has index on (job_id, task_name)
+def test-awakeables-index-created [] {
+  let test_db_dir = "/tmp/test-awakeables-db-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+  
+  rm -rf $test_db_dir
+  
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let indexes = (sqlite3 $test_db_path "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='awakeables' ORDER BY name;" | from ssv)
+    let has_index = ($indexes | where name =~ "idx_awakeables_job_task" | length) > 0
+    assert equal $has_index true
+  }
+  
+  rm -rf $test_db_dir
+}
+
+# Run awakeables tests
+test test-awakeables-table-created
+test test-awakeables-table-schema
+test test-awakeables-index-created
+
 print "[ok] oc-engine.nu tests completed"

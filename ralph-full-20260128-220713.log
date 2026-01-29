@@ -1,0 +1,837 @@
+
+╔══════════════════════════════════════════════════════════════════╗
+║                    Ralph Wiggum Loop                            ║
+║         Iterative AI Development with OpenCode                    ║
+╚══════════════════════════════════════════════════════════════════╝
+
+📋 Created tasks file: /home/lewis/src/nuoc/.ralph/ralph-tasks.md
+Task: ralph-prompt-with-red-queen.md
+Preview: # NUOC - All 186 Beads with TDD15 + Red Queen Self-Healing ## Mission Implement ...
+Completion promise: COMPLETE
+Tasks mode: ENABLED
+Task promise: READY_FOR_NEXT_TASK
+Min iterations: 1
+Max iterations: 6000
+Agent: OpenCode
+Permissions: auto-approve all tools
+
+Starting loop... (Ctrl+C to stop)
+════════════════════════════════════════════════════════════════════
+
+🔄 Iteration 1 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T04:07:13.578Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll start working on the NUOC project. Let me check the current task list and get the first ready bead.
+| Tools    Read 1
+
+○ nuoc-xm7h [● P0] [task] - [Awk-12] Implement ctx.rejectAwakeable
+○ nuoc-wpi9 [● P0] [task] - [Awk-11] Implement awakeable cleanup on job completion
+○ nuoc-bfxa [● P0] [task] - [Awk-10] Implement duplicate resolution rejection
+○ nuoc-qodw [● P0] [task] - [Awk-09] Implement awakeable timeout handling
+○ nuoc-szrs [● P0] [task] - [Awk-08] Implement task wake on awakeable resolution
+○ nuoc-n686 [● P0] [task] - [Awk-07] Implement HTTP endpoint for awakeable resolution
+○ nuoc-a7ti [● P0] [task] - [Awk-06] Implement resolve-awakeable command
+○ nuoc-f2pc [● P0] [task] - [Awk-05] Implement task suspension on awakeable await
+○ nuoc-7wmq [● P0] [task] - [Awk-04] Implement awakeable creation in ctx.awakeable
+○ nuoc-pvb2 [● P0] [task] - [Awk-03] Implement awakeable ID parsing
+○ nuoc-l4d [● P0] [task] - [Awk-02] Implement awakeable ID generation
+○ nuoc-9w6 [● P0] [task] - [Awk-01] Create awakeables table schema
+○ nuoc-1eb [● P0] [task] - [Proto-12] Implement processing phase in stream
+○ nuoc-eep [● P0] [task] - [Proto-11] Implement replay phase in stream
+○ nuoc-c4e [● P0] [task] - [Proto-10] Implement bidirectional stream abstraction
+○ nuoc-pjh [● P0] [task] - [Proto-09] Implement message deserialization
+○ nuoc-csp [● P0] [task] - [Proto-08] Implement message serialization
+○ nuoc-al8 [● P0] [task] - [Proto-07] Implement EndMessage structure
+○ nuoc-ahn [● P0] [task] - [Proto-06] Implement ErrorMessage structure
+○ nuoc-m6s [● P0] [task] - [Proto-05] Implement SuspensionMessage structure
+○ nuoc-cc0 [● P0] [task] - [Proto-04] Implement CompletionMessage structure
+○ nuoc-jtr [● P0] [task] - [Proto-03] Implement StartMessage structure
+○ nuoc-43v [● P0] [task] - [Proto-02] Define message header struct
+○ nuoc-8ax [● P0] [task] - [Proto-01] Define message type constants
+○ nuoc-1yc [● P0] [task] - [Ctx-16] Implement ctx.rand.uuidv4 for deterministic UUID
+○ nuoc-8gu [● P0] [task] - [Ctx-15] Implement ctx.rand for deterministic RNG
+○ nuoc-6dn [● P0] [task] - [Ctx-14] Implement ctx.rejectAwakeable
+○ nuoc-arf [● P0] [task] - [Ctx-13] Implement ctx.resolveAwakeable
+○ nuoc-d56 [● P0] [task] - [Ctx-12] Implement ctx.awakeable to create awaitable
+○ nuoc-thz [● P0] [task] - [Ctx-11] Implement ctx.sleepUntil for timestamp-based sleep
+○ nuoc-0pi [● P0] [task] - [Ctx-10] Implement ctx.sleep for durable delays
+○ nuoc-dk2 [● P0] [task] - [Ctx-09] Implement ctx.run for side effects
+○ nuoc-5w8 [● P0] [task] - [Entity-14] Validate handler exists on invocation
+○ nuoc-5uu [● P0] [task] - [Ctx-08] Implement ctx.sendDelayed for scheduled sends
+○ nuoc-9y8 [● P0] [task] - [Entity-13] Implement workflow signal handlers
+○ nuoc-qll [● P0] [task] - [Ctx-07] Implement ctx.send for async fire-and-forget
+○ nuoc-uvi [● P0] [task] - [Entity-12] Implement shared handler support for virtual objects
+○ nuoc-46w [● P0] [task] - [Entity-11] Route invocation based on entity type
+○ nuoc-feh [● P0] [task] - [Entity-10] Implement service unlimited concurrency
+○ nuoc-1n4 [● P0] [task] - [Entity-09] Implement workflow run deduplication
+○ nuoc-1zd [● P0] [task] - [Entity-08] Create workflow_runs table
+○ nuoc-03s [● P0] [task] - [Entity-07] Implement invocation queuing when lock held
+○ nuoc-zdv [● P0] [task] - [Replay-18] Add concurrent replay prevention (job locking)
+○ nuoc-hdu [● P0] [task] - [Replay-17] Implement journal corruption detection with checksums
+○ nuoc-bdj [● P0] [task] - [Entity-06] Implement lock release for virtual objects
+○ nuoc-zno [● P0] [task] - [Replay-08] Implement replay logic in ctx.run
+○ nuoc-yd8 [● P0] [task] - [Ctx-06] Implement ctx.call for sync invocation
+○ nuoc-pay [● P0] [task] - [Replay-16] Handle large outputs with chunked journaling
+○ nuoc-eml [● P0] [task] - [Entity-05] Implement lock acquisition for virtual objects
+○ nuoc-bsx [● P0] [task] - [Replay-07] Modify run-task to load journal on start
+
+Showing 50 issues (use --limit 0 for all)
+
+| Tools    Bash 2 • Read 1 • Edit 1
+| Tools    Bash 2 • Edit 2 • Read 1
+
+
+○ nuoc-xm7h · [Awk-12] Implement ctx.rejectAwakeable   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Reject awakeable with error instead of value.
+
+## Acceptance
+- [ ] Status -> REJECTED
+- [ ] Error stored
+- [ ] Task receives error
+
+DEPENDS ON
+  → ○ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+
+
+
+✓ Updated issue: nuoc-xm7h
+
+| Tools    Bash 5 • Edit 2 • Read 1
+
+rg: unrecognized file type: nu
+
+
+
+○ nuoc-a7ti · [Awk-06] Implement resolve-awakeable command   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+CLI command to resolve awakeable.
+
+## Command
+```nu
+export def resolve-awakeable [id: string, payload: any] {
+  # Parse ID, update awakeable, wake task
+}
+```
+
+## Acceptance
+- [ ] Awakeable marked resolved
+- [ ] Payload stored
+- [ ] Task woken
+
+DEPENDS ON
+  → ○ nuoc-pvb2: [Awk-03] Implement awakeable ID parsing ● P0
+
+BLOCKS
+  ← ○ nuoc-bfxa: [Awk-10] Implement duplicate resolution rejection ● P0
+  ← ○ nuoc-n686: [Awk-07] Implement HTTP endpoint for awakeable resolution ● P0
+  ← ○ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+  ← ◐ nuoc-xm7h: [Awk-12] Implement ctx.rejectAwakeable ● P0
+
+
+
+zsh:1: command not found: glob
+
+| Tools    Bash 9 • Edit 2 • Read 1
+
+total 368
+drwxr-xr-x 1 lewis lewis   872 Jan 28 22:07 .
+drwxr-xr-x 1 lewis lewis   312 Jan 28 02:16 ..
+-rw-r--r-- 1 lewis lewis  6615 Jan 28 00:38 AGENTS.md
+drwx------ 1 lewis lewis   464 Jan 28 21:46 .beads
+drwxr-xr-x 1 lewis lewis   176 Jan 28 22:07 .git
+-rw-r--r-- 1 lewis lewis    70 Jan 28 00:38 .gitattributes
+-rw-r--r-- 1 lewis lewis    18 Jan 28 00:22 .gitignore
+-rw-r--r-- 1 lewis lewis 47861 Jan 28 00:54 improvements.json
+-rwxr-xr-x 1 lewis lewis  2113 Jan 28 22:06 launch-ralph-full.sh
+-rwxr-xr-x 1 lewis lewis  1090 Jan 28 22:04 launch-ralph.sh
+-rw-r--r-- 1 lewis lewis 50221 Jan 28 00:36 liza-advanced.nu
+-rwxr-xr-x 1 lewis lewis  7738 Jan 28 22:07 monitor-ralph-full.sh
+-rwxr-xr-x 1 lewis lewis  2696 Jan 28 21:57 monitor-ralph.sh
+drwxr-xr-x 1 lewis lewis    36 Jan 28 20:16 .moon
+-rw-r--r-- 1 lewis lewis    51 Jan 27 23:59 moon.pkg.yml
+-rw-r--r-- 1 lewis lewis   739 Jan 28 00:22 moon.yml
+-rw-r--r-- 1 lewis lewis  4369 Jan 28 19:52 oc-agent.nu
+-rw-r--r-- 1 lewis lewis 38332 Jan 28 20:20 oc-engine.nu
+-rw-r--r-- 1 lewis lewis  8762 Jan 27 23:20 oc-orchestrate.nu
+-rw-r--r-- 1 lewis lewis 14356 Jan 28 19:53 oc-tdd15.nu
+drwxr-xr-x 1 lewis lewis    20 Jan 28 20:23 .oc-workflow
+drwxr-xr-x 1 lewis lewis   158 Jan 28 22:07 .ralph
+-rw-r--r-- 1 lewis lewis 11010 Jan 28 21:56 ralph-features.json
+-rw-r--r-- 1 lewis lewis  7167 Jan 28 22:07 ralph-full-20260128-220713.log
+-rw-r--r-- 1 lewis lewis  7897 Jan 28 22:01 ralph-prompt-full.md
+-rw-r--r-- 1 lewis lewis  4723 Jan 28 21:56 ralph-prompt.md
+-rw-r--r-- 1 lewis lewis 10574 Jan 28 22:06 ralph-prompt-with-red-queen.md
+-rw-r--r-- 1 lewis lewis  5642 Jan 28 21:57 RALPH-SETUP.md
+-rw-r--r-- 1 lewis lewis  3092 Jan 28 00:23 README.md
+-rw-r--r-- 1 lewis lewis 10236 Jan 28 22:05 README-RALPH.md
+drwxr-xr-x 1 lewis lewis    68 Jan 28 00:38 scripts
+-rw-r--r-- 1 lewis lewis 47861 Jan 28 00:55 session.json
+-rw-r--r-- 1 lewis lewis 19734 Jan 28 00:36 SKILL-red-queen.md
+drwxr-xr-x 1 lewis lewis   158 Jan 28 19:55 tests
+
+
+liza-advanced.nu
+oc-agent.nu
+oc-engine.nu
+oc-orchestrate.nu
+oc-tdd15.nu
+
+| Tools    Bash 11 • Edit 2 • Read 1
+
+quick-check.nu
+run-all-tests.nu
+test-oc-agent.nu
+test-oc-engine.nu
+test-oc-tdd15.nu
+
+| Tools    Bash 12 • Read 2 • Edit 2
+
+# ── Invocation Status (8-state Restate lifecycle) ────────────────────────────
+export const STATUS_PENDING = "pending"
+export const STATUS_SCHEDULED = "scheduled"
+export const STATUS_READY = "ready"
+export const STATUS_RUNNING = "running"
+export const STATUS_SUSPENDED = "suspended"
+export const STATUS_BACKING_OFF = "backing-off"
+export const STATUS_PAUSED = "paused"
+export const STATUS_COMPLETED = "completed"
+    CREATE TABLE IF NOT EXISTS jobs (
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
+    CREATE TABLE IF NOT EXISTS tasks (
+      status TEXT NOT NULL DEFAULT 'pending',
+      FOREIGN KEY (job_id) REFERENCES jobs(id),
+    CREATE TABLE IF NOT EXISTS task_deps (
+    CREATE TABLE IF NOT EXISTS job_deps (
+    CREATE TABLE IF NOT EXISTS events (
+    CREATE TABLE IF NOT EXISTS journal (
+    CREATE TABLE IF NOT EXISTS execution_context (
+    CREATE TABLE IF NOT EXISTS webhooks (
+# Precondition: tasks is a list of task records with 'name' and 'needs' fields
+def detect-cycles [tasks: list] {
+  for task in $tasks {
+  for start_task in $tasks {
+  let tasks = ($job_def.tasks? | default [])
+  detect-cycles $tasks
+  sql-exec $"INSERT OR REPLACE INTO jobs \(id, name, bead_id, inputs, defaults, status, position\) VALUES \('($job_id)', '($job_id)', '($bead_id)', '($inputs_esc)', '($defaults_esc)', 'pending', ($position)\)"
+  # Insert tasks
+  for task in ($job_def.tasks? | default []) {
+    sql-exec $"INSERT OR REPLACE INTO tasks \(id, job_id, name, var, status, run_cmd, agent_type, agent_model, gate, condition, on_fail_regress, priority, timeout_sec, max_attempts\) VALUES \('($task_id)', '($job_id)', '($task_name)', '($var)', 'pending', '($run_cmd)', '($agent_type)', '($agent_model)', '($gate)', '($condition)', '($on_fail)', ($priority), ($timeout), ($max_attempts)\)"
+
+| Tools    Bash 13 • Read 3 • Edit 2
+| Tools    Bash 15 • Read 3 • Edit 2
+
+
+○ nuoc-9w6 · [Awk-01] Create awakeables table schema   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Schema for awakeable tracking.
+
+## Schema
+```sql
+CREATE TABLE awakeables (
+  id TEXT PRIMARY KEY,
+  job_id TEXT NOT NULL,
+  task_name TEXT NOT NULL,
+  entry_index INTEGER NOT NULL,
+  status TEXT DEFAULT 'PENDING',
+  payload TEXT,
+  timeout_at TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  resolved_at TEXT
+);
+```
+
+## Acceptance
+- [ ] Table created
+- [ ] Index on (job_id, task_name)
+
+BLOCKS
+  ← ○ nuoc-d56: [Ctx-12] Implement ctx.awakeable to create awaitable ● P0
+  ← ○ nuoc-l4d: [Awk-02] Implement awakeable ID generation ● P0
+
+---
+
+○ nuoc-l4d · [Awk-02] Implement awakeable ID generation   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Generate ID in Restate format: prom_1 + base64url(invocation_id + entry_index)
+
+## Acceptance
+- [ ] Prefix is 'prom_1'
+- [ ] Base64-URL encoding
+- [ ] Globally unique
+
+DEPENDS ON
+  → ○ nuoc-9w6: [Awk-01] Create awakeables table schema ● P0
+
+BLOCKS
+  ← ○ nuoc-pvb2: [Awk-03] Implement awakeable ID parsing ● P0
+
+---
+
+○ nuoc-pvb2 · [Awk-03] Implement awakeable ID parsing   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Parse ID back to invocation + entry_index.
+
+## Acceptance
+- [ ] Extract invocation_id
+- [ ] Extract entry_index
+- [ ] Error on invalid format
+
+DEPENDS ON
+  → ○ nuoc-l4d: [Awk-02] Implement awakeable ID generation ● P0
+
+BLOCKS
+  ← ○ nuoc-7wmq: [Awk-04] Implement awakeable creation in ctx.awakeable ● P0
+  ← ○ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+
+
+| Tools    Bash 16 • Read 3 • Edit 2
+
+
+○ nuoc-7wmq · [Awk-04] Implement awakeable creation in ctx.awakeable   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Create awakeable record and return ID.
+
+## Acceptance
+- [ ] Record inserted
+- [ ] ID returned
+- [ ] Journaled for replay
+
+DEPENDS ON
+  → ○ nuoc-pvb2: [Awk-03] Implement awakeable ID parsing ● P0
+
+BLOCKS
+  ← ○ nuoc-f2pc: [Awk-05] Implement task suspension on awakeable await ● P0
+
+---
+
+○ nuoc-f2pc · [Awk-05] Implement task suspension on awakeable await   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Task suspends when awaiting awakeable promise.
+
+## Acceptance
+- [ ] Task status -> suspended
+- [ ] Worker slot freed
+- [ ] Suspension point journaled
+
+DEPENDS ON
+  → ○ nuoc-7wmq: [Awk-04] Implement awakeable creation in ctx.awakeable ● P0
+
+BLOCKS
+  ← ○ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+---
+
+○ nuoc-szrs · [Awk-08] Implement task wake on awakeable resolution   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Resume suspended task when awakeable resolved.
+
+## Acceptance
+- [ ] Task status -> ready
+- [ ] Re-enqueued for execution
+- [ ] Resumes from suspension point
+
+DEPENDS ON
+  → ○ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+  → ○ nuoc-f2pc: [Awk-05] Implement task suspension on awakeable await ● P0
+
+BLOCKS
+  ← ○ nuoc-qodw: [Awk-09] Implement awakeable timeout handling ● P0
+  ← ○ nuoc-wpi9: [Awk-11] Implement awakeable cleanup on job completion ● P0
+
+
+| Tools    Bash 17 • Read 3 • Edit 2
+
+
+○ nuoc-n686 · [Awk-07] Implement HTTP endpoint for awakeable resolution   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+POST /awakeables/{id}/resolve endpoint.
+
+## Acceptance
+- [ ] Accepts JSON payload
+- [ ] Returns success/error
+- [ ] Task woken
+
+DEPENDS ON
+  → ○ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+
+---
+
+○ nuoc-qodw · [Awk-09] Implement awakeable timeout handling   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Fail awakeable if timeout_at passed.
+
+## Acceptance
+- [ ] Scheduler checks timeouts
+- [ ] Status -> TIMEOUT
+- [ ] Task receives timeout error
+
+DEPENDS ON
+  → ○ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+---
+
+○ nuoc-wpi9 · [Awk-11] Implement awakeable cleanup on job completion   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Mark awakeables cancelled when job completes/cancels.
+
+## Acceptance
+- [ ] All job's awakeables cancelled
+- [ ] Late resolutions rejected
+- [ ] Resources freed
+
+DEPENDS ON
+  → ○ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+---
+
+○ nuoc-bfxa · [Awk-10] Implement duplicate resolution rejection   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Reject resolution if already resolved.
+
+## Acceptance
+- [ ] Error if status != PENDING
+- [ ] Original payload preserved
+- [ ] Clear error message
+
+DEPENDS ON
+  → ○ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+
+
+⏳ working... elapsed 1:10 · last activity 0:10 ago
+⏳ working... elapsed 1:20 · last activity 0:20 ago
+Now I understand the bead nuoc-xm7h requires implementing ctx.rejectAwakeable, which rejects an awakeable with an error. This depends on several awakeable-related beads that haven't been implemented yet.
+
+Let me check the current database schema to understand the context better and start implementing using TDD15.
+| Tools    Bash 18 • Read 3 • Edit 2
+
+CREATE TABLE jobs (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      bead_id TEXT,
+      inputs TEXT,
+      defaults TEXT,
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
+      position INTEGER DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      scheduled_start_at TEXT,
+      started_at TEXT,
+      completed_at TEXT,
+      completion_result TEXT CHECK(completion_result IS NULL OR completion_result IN ('success','failure')),
+      completion_failure TEXT,
+      next_retry_at TEXT,
+      retry_count INTEGER DEFAULT 0,
+      last_failure TEXT,
+      last_failure_code INTEGER,
+      error TEXT,
+      result TEXT
+    );
+CREATE TABLE tasks (
+      id TEXT PRIMARY KEY,
+      job_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      var TEXT,
+      status TEXT NOT NULL DEFAULT 'pending',
+      run_cmd TEXT,
+      agent_type TEXT,
+      agent_model TEXT,
+      gate TEXT,
+      condition TEXT,
+      on_fail_regress TEXT,
+      priority INTEGER DEFAULT 0,
+      timeout_sec INTEGER,
+      input TEXT,
+      output TEXT,
+      error TEXT,
+      attempt INTEGER DEFAULT 0,
+      max_attempts INTEGER DEFAULT 3,
+      retry_delay_sec INTEGER DEFAULT 1,
+      retry_scaling INTEGER DEFAULT 2,
+      started_at TEXT,
+      completed_at TEXT,
+      duration_ms INTEGER,
+      FOREIGN KEY (job_id) REFERENCES jobs(id),
+      UNIQUE (job_id, name)
+    );
+CREATE TABLE task_deps (
+      job_id TEXT NOT NULL,
+      task_name TEXT NOT NULL,
+      depends_on TEXT NOT NULL,
+      PRIMARY KEY (job_id, task_name, depends_on)
+    );
+CREATE TABLE job_deps (
+      job_id TEXT NOT NULL,
+      depends_on TEXT NOT NULL,
+      PRIMARY KEY (job_id, depends_on)
+    );
+CREATE TABLE events (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_id TEXT NOT NULL,
+      task_name TEXT,
+      event_type TEXT NOT NULL,
+      old_state TEXT,
+      new_state TEXT,
+      payload TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+CREATE TABLE sqlite_sequence(name,seq);
+CREATE TABLE journal (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_id TEXT NOT NULL,
+      task_name TEXT NOT NULL,
+      attempt INTEGER NOT NULL DEFAULT 1,
+      entry_index INTEGER NOT NULL,
+      op_type TEXT NOT NULL,
+      input_hash TEXT,
+      input TEXT,
+      output TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      UNIQUE (job_id, task_name, attempt, entry_index)
+    );
+CREATE INDEX idx_journal_replay ON journal(job_id, task_name, attempt);
+CREATE TABLE execution_context (
+      job_id TEXT NOT NULL,
+      task_name TEXT NOT NULL,
+      attempt INTEGER NOT NULL,
+      entry_index INTEGER NOT NULL DEFAULT 0,
+      replay_mode INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (job_id, task_name, attempt)
+    );
+CREATE TABLE webhooks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_id TEXT NOT NULL,
+      url TEXT NOT NULL,
+      event TEXT NOT NULL,
+      headers TEXT,
+      condition TEXT
+    );
+
+
+24:    CREATE TABLE IF NOT EXISTS jobs (
+46:    CREATE TABLE IF NOT EXISTS tasks (
+74:    CREATE TABLE IF NOT EXISTS task_deps (
+81:    CREATE TABLE IF NOT EXISTS job_deps (
+87:    CREATE TABLE IF NOT EXISTS events (
+98:    CREATE TABLE IF NOT EXISTS journal (
+113:    CREATE TABLE IF NOT EXISTS execution_context (
+122:    CREATE TABLE IF NOT EXISTS webhooks (
+
+I see that nuoc-xm7h (ctx.rejectAwakeable) has several dependencies that haven't been implemented yet. The dependency chain starts with nuoc-9w6 (create awakeables table schema). Let me update the task list to work through these dependencies in order.
+| Tools    Bash 19 • Read 3 • Edit 3
+
+
+○ nuoc-9w6 · [Awk-01] Create awakeables table schema   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Schema for awakeable tracking.
+
+## Schema
+```sql
+CREATE TABLE awakeables (
+  id TEXT PRIMARY KEY,
+  job_id TEXT NOT NULL,
+  task_name TEXT NOT NULL,
+  entry_index INTEGER NOT NULL,
+  status TEXT DEFAULT 'PENDING',
+  payload TEXT,
+  timeout_at TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  resolved_at TEXT
+);
+```
+
+## Acceptance
+- [ ] Table created
+- [ ] Index on (job_id, task_name)
+
+BLOCKS
+  ← ○ nuoc-d56: [Ctx-12] Implement ctx.awakeable to create awaitable ● P0
+  ← ○ nuoc-l4d: [Awk-02] Implement awakeable ID generation ● P0
+
+
+
+✓ Updated issue: nuoc-xm7h
+
+
+✓ Updated issue: nuoc-9w6
+
+⏳ working... elapsed 1:50 · last activity 0:10 ago
+| Tools    Bash 22 • Read 4 • Edit 3
+Now I'll implement nuoc-9w6 (Create awakeables table schema) using TDD15. Let me start with Phase 0: Understanding, then write failing tests (Phase 1-2: RED).
+| Tools    Bash 22 • Read 5 • Edit 3
+⏳ working... elapsed 2:10 · last activity 0:13 ago
+| Tools    Bash 22 • Read 5 • Edit 4
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+| Tools    Bash 24 • Read 5 • Edit 4
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (69ms)
+
+Tasks: 1 completed
+ Time: 70ms
+
+
+| Tools    Bash 25 • Read 5 • Edit 4
+
+Error: nu::parser::expected_keyword
+
+  x Expected keyword.
+     ,-[/home/lewis/src/nuoc/tests/test-oc-engine.nu:224:5]
+ 223 |     assert equal $tables.0.name "awakeables"
+ 224 |   } finally {
+     :     ^^^|^^^
+     :        `-- expected catch
+ 225 |     # Clean up
+     `----
+
+
+⏳ working... elapsed 2:30 · last activity 0:12 ago
+| Tools    Bash 25 • Read 5 • Edit 5
+| Tools    Bash 27 • Read 5 • Edit 5
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 28 • Read 5 • Edit 5
+
+Module: testing
+
+Exported commands:
+  
+
+Exported aliases:
+  attr after-all (testing attr after-all), attr after-each (testing attr after-each), attr before-all (testing attr before-all), attr before-each (testing attr before-each), attr ignore (testing attr ignore), attr test (testing attr test)
+
+This module does not export environment.
+
+⏳ working... elapsed 3:10 · last activity 0:13 ago
+⏳ working... elapsed 3:20 · last activity 0:23 ago
+| Tools    Bash 28 • Edit 6 • Read 5
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 29 • Read 6 • Edit 6
+| Tools    Bash 29 • Read 7 • Edit 6
+⏳ working... elapsed 3:50 · last activity 0:15 ago
+| Tools    Bash 29 • Read 7 • Edit 7
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+Error: in prepare, index idx_journal_replay already exists
+  [error] oc-engine.nu: External command had a non-zero exit code
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 2
+Failed: 1
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (68ms)
+Error: task_runner::run_failed
+
+  × Task nuoc:test failed to run.
+  ╰─▶ Process nu failed: exit code 1
+
+
+| Tools    Bash 30 • Read 8 • Edit 7
+⏳ working... elapsed 4:10 · last activity 0:10 ago
+| Tools    Bash 30 • Read 8 • Edit 8
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+Error: in prepare, index idx_journal_replay already exists
+  [error] oc-engine.nu: External command had a non-zero exit code
+
+
+| Tools    Bash 31 • Read 9 • Edit 8
+
+111:    CREATE INDEX idx_journal_replay ON journal(job_id, task_name, attempt);
+
+⏳ working... elapsed 4:40 · last activity 0:11 ago
+| Tools    Bash 32 • Read 9 • Edit 9
+
+  [fail] awakeables table has all columns
+  [error] oc-engine.nu: Row number too large (empty content).
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 2
+Failed: 1
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (86ms)
+Error: task_runner::run_failed
+
+  × Task nuoc:test failed to run.
+  ╰─▶ Process nu failed: exit code 1
+
+
+| Tools    Bash 34 • Read 9 • Edit 9
+
+--- Testing oc-engine.nu ---
+  [fail] awakeables table created: expected 1 table named awakeables, got 0 tables
+  [fail] awakeables table has all columns
+
+RED phase complete. Tests are failing as expected (awakeables table doesn't exist). Committing RED state now.
