@@ -969,6 +969,27 @@ export def gate-check [gate_name: string, output: string, job_id: string]: nothi
   }
 }
 
+# ── Awakeable Operations ────────────────────────────────────────────────────────
+
+# Create an awakeable and return its ID
+# Precondition: job_id, task_name are validated identifiers, execution context initialized
+# Postcondition: awakeable record created, ID returned, operation journaled
+# Invariant: awakeable ID is globally unique, record persisted for replay
+export def ctx-awakeable [job_id: string, task_name: string, attempt: int]: nothing -> record {
+  let jid = (validate-ident $job_id "ctx-awakeable.job_id")
+  let tname = (validate-ident $task_name "ctx-awakeable.task_name")
+
+  let entry_index = (get-entry-index $jid $tname $attempt)
+
+  let awakeable_id = (awakeable-id-generate $jid $entry_index)
+
+  sql-exec $"INSERT INTO awakeables \(id, job_id, task_name, entry_index, status\) VALUES \('($awakeable_id)', '($jid)', '($tname)', ($entry_index), 'PENDING'\)"
+
+  journal-write $jid $tname $attempt $entry_index "awakeable-create" {} { id: $awakeable_id }
+
+  { id: $awakeable_id }
+}
+
 # ── Task Output Retrieval ────────────────────────────────────────────────────
 
 # Retrieve cached output by var name (Tork's {{ tasks.X }})
