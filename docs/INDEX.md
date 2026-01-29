@@ -30,6 +30,14 @@
   - Section 4: System integration
   - Section 5: Customization and extensibility
 
+- **[Production-Ready Nushell Guide](./nushell-production-guide.md)** - Production patterns, functional programming, type safety, testing
+  - **Foundation Path**: Core philosophy → Essential syntax → Data manipulation
+  - **Functional Patterns**: Higher-order functions → Composition → Streaming
+  - **Type System & Testing**: Runtime checking → Unit tests → Property testing
+  - **Production Patterns**: Error handling → Performance → Monitoring → Deployment
+  - **Real-World Examples**: API clients, data pipelines, build systems
+  - **Production Checklist**: Complete quality gates checklist
+
 ### Ralph Prompts
 - **[Ralph/ralph-prompt-zjj-opus-full-rq.md](../Ralph/ralph-prompt-zjj-opus-full-rq.md)** - Opus + full TDD15 + full Red Queen (10 gen)
 - **[Ralph/ralph-prompt-fast-zjj.md](../Ralph/ralph-prompt-fast-zjj.md)** - Fast mode (8 phases + 3 gen RQ)
