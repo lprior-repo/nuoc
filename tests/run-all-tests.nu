@@ -119,6 +119,21 @@ def test-oc-engine [] {
   } else {
     print $"  [fail] job-create rejects SQL injection: got ($result)"
   }
+
+  # Test: 8-state status constants exist
+  let states = [$STATUS_PENDING $STATUS_SCHEDULED $STATUS_READY $STATUS_RUNNING $STATUS_SUSPENDED $STATUS_BACKING_OFF $STATUS_PAUSED $STATUS_COMPLETED]
+  if (($states | length) == 8) {
+    print "  [ok] 8-state lifecycle constants"
+  } else {
+    print $"  [fail] 8-state lifecycle constants"
+  }
+
+  # Test: status values are lowercase
+  if (($states | all {|s| $s == ($s | str downcase)})) {
+    print "  [ok] status values lowercase"
+  } else {
+    print $"  [fail] status values lowercase"
+  }
 }
 
 def test-oc-tdd15 [] {

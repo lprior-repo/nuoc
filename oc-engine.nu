@@ -7,6 +7,17 @@ export const DB_PATH = $"($DB_DIR)/journal.db"
 
 # ── Database Initialization ──────────────────────────────────────────────────
 
+# ── Invocation Status (8-state Restate lifecycle) ────────────────────────────
+# Valid states: pending, scheduled, ready, running, suspended, backing-off, paused, completed
+export const STATUS_PENDING = "pending"
+export const STATUS_SCHEDULED = "scheduled"
+export const STATUS_READY = "ready"
+export const STATUS_RUNNING = "running"
+export const STATUS_SUSPENDED = "suspended"
+export const STATUS_BACKING_OFF = "backing-off"
+export const STATUS_PAUSED = "paused"
+export const STATUS_COMPLETED = "completed"
+
 export def db-init [] {
   mkdir $DB_DIR
   sqlite3 $DB_PATH "
@@ -16,11 +27,18 @@ export def db-init [] {
       bead_id TEXT,
       inputs TEXT,
       defaults TEXT,
-      status TEXT NOT NULL DEFAULT 'PENDING',
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
       position INTEGER DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      scheduled_start_at TEXT,
       started_at TEXT,
       completed_at TEXT,
+      completion_result TEXT CHECK(completion_result IS NULL OR completion_result IN ('success','failure')),
+      completion_failure TEXT,
+      next_retry_at TEXT,
+      retry_count INTEGER DEFAULT 0,
+      last_failure TEXT,
+      last_failure_code INTEGER,
       error TEXT,
       result TEXT
     );
@@ -30,7 +48,7 @@ export def db-init [] {
       job_id TEXT NOT NULL,
       name TEXT NOT NULL,
       var TEXT,
-      status TEXT NOT NULL DEFAULT 'PENDING',
+      status TEXT NOT NULL DEFAULT 'pending',
       run_cmd TEXT,
       agent_type TEXT,
       agent_model TEXT,
@@ -212,7 +230,7 @@ export def job-create [job_def: record] {
   let tasks = ($job_def.tasks? | default [])
   detect-cycles $tasks
 
-  sql-exec $"INSERT OR REPLACE INTO jobs \(id, name, bead_id, inputs, defaults, status, position\) VALUES \('($job_id)', '($job_id)', '($bead_id)', '($inputs_esc)', '($defaults_esc)', 'PENDING', ($position)\)"
+  sql-exec $"INSERT OR REPLACE INTO jobs \(id, name, bead_id, inputs, defaults, status, position\) VALUES \('($job_id)', '($job_id)', '($bead_id)', '($inputs_esc)', '($defaults_esc)', 'pending', ($position)\)"
 
   # Insert tasks
   for task in ($job_def.tasks? | default []) {
@@ -232,7 +250,7 @@ export def job-create [job_def: record] {
     let timeout = ($task.timeout_sec? | default 600)
     let max_attempts = ($task.retry?.limit? | default ($job_def.defaults?.retry?.limit? | default 3))
 
-    sql-exec $"INSERT OR REPLACE INTO tasks \(id, job_id, name, var, status, run_cmd, agent_type, agent_model, gate, condition, on_fail_regress, priority, timeout_sec, max_attempts\) VALUES \('($task_id)', '($job_id)', '($task_name)', '($var)', 'PENDING', '($run_cmd)', '($agent_type)', '($agent_model)', '($gate)', '($condition)', '($on_fail)', ($priority), ($timeout), ($max_attempts)\)"
+    sql-exec $"INSERT OR REPLACE INTO tasks \(id, job_id, name, var, status, run_cmd, agent_type, agent_model, gate, condition, on_fail_regress, priority, timeout_sec, max_attempts\) VALUES \('($task_id)', '($job_id)', '($task_name)', '($var)', 'pending', '($run_cmd)', '($agent_type)', '($agent_model)', '($gate)', '($condition)', '($on_fail)', ($priority), ($timeout), ($max_attempts)\)"
 
     # Insert dependencies — validate each dependency name
     for dep in ($task.needs? | default []) {
@@ -241,7 +259,7 @@ export def job-create [job_def: record] {
     }
   }
 
-  emit-event $job_id "" "job.StateChange" "" "PENDING" ""
+  emit-event $job_id "" "job.StateChange" "" "pending" ""
   $job_id
 }
 
@@ -251,8 +269,8 @@ export def job-execute [job_id: string] {
   let jid = (validate-ident $job_id "job-execute.job_id")
 
   # Mark job running
-  sql-exec $"UPDATE jobs SET status = 'RUNNING', started_at = datetime\('now'\) WHERE id = '($jid)'"
-  emit-event $jid "" "job.StateChange" "PENDING" "RUNNING" ""
+  sql-exec $"UPDATE jobs SET status = 'running', started_at = datetime\('now'\) WHERE id = '($jid)'"
+  emit-event $jid "" "job.StateChange" "pending" "running" ""
 
   # Load all tasks
   let all_tasks = (sql $"SELECT name, status, condition, priority, on_fail_regress FROM tasks WHERE job_id = '($jid)'" )
@@ -265,15 +283,15 @@ export def job-execute [job_id: string] {
     # Refresh task statuses
     let tasks = (sql $"SELECT name, status, condition, priority, on_fail_regress FROM tasks WHERE job_id = '($jid)'" )
 
-    # Find tasks with all deps satisfied (COMPLETED or SKIPPED)
-    let pending = ($tasks | where status == "PENDING")
+    # Find tasks with all deps satisfied (completed or skipped)
+    let pending = ($tasks | where status == "pending")
     let ready = ($pending | each {|t|
       let task_deps = ($deps | where task_name == $t.name | get depends_on)
       let deps_met = if ($task_deps | is-empty) {
         true
       } else {
         let dep_statuses = (sql $"SELECT name, status FROM tasks WHERE job_id = '($jid)' AND name IN \(($task_deps | each {|d| $"'($d)'" } | str join ",")\)" )
-        ($dep_statuses | all {|d| $d.status in ["COMPLETED", "SKIPPED"] })
+        ($dep_statuses | all {|d| $d.status in ["completed", "skipped"] })
       }
       if $deps_met { $t } else { null }
     } | compact)
@@ -297,26 +315,26 @@ export def job-execute [job_id: string] {
     }
 
     # Check if any task failed without regression
-    let failed = (sql $"SELECT name FROM tasks WHERE job_id = '($jid)' AND status = 'FAILED'" )
+    let failed = (sql $"SELECT name FROM tasks WHERE job_id = '($jid)' AND status = 'failed'" )
     if ($failed | is-not-empty) {
-      sql-exec $"UPDATE jobs SET status = 'FAILED', completed_at = datetime\('now'\), error = 'Task failed: ($failed.0.name)' WHERE id = '($jid)'"
-      emit-event $jid "" "job.StateChange" "RUNNING" "FAILED" $"Task failed: ($failed.0.name)"
-      return { status: "FAILED", failed_task: $failed.0.name }
+      sql-exec $"UPDATE jobs SET status = 'failed', completed_at = datetime\('now'\), error = 'Task failed: ($failed.0.name)' WHERE id = '($jid)'"
+      emit-event $jid "" "job.StateChange" "running" "failed" $"Task failed: ($failed.0.name)"
+      return { status: "failed", failed_task: $failed.0.name }
     }
   }
 
   # Check final state
   let final_tasks = (sql $"SELECT status FROM tasks WHERE job_id = '($jid)'" )
-  let all_done = ($final_tasks | all {|t| $t.status in ["COMPLETED", "SKIPPED"] })
+  let all_done = ($final_tasks | all {|t| $t.status in ["completed", "skipped"] })
 
   if $all_done {
-    sql-exec $"UPDATE jobs SET status = 'COMPLETED', completed_at = datetime\('now'\) WHERE id = '($jid)'"
-    emit-event $jid "" "job.StateChange" "RUNNING" "COMPLETED" ""
-    { status: "COMPLETED" }
+    sql-exec $"UPDATE jobs SET status = 'completed', completed_at = datetime\('now'\) WHERE id = '($jid)'"
+    emit-event $jid "" "job.StateChange" "running" "completed" ""
+    { status: "completed" }
   } else {
-    sql-exec $"UPDATE jobs SET status = 'FAILED', completed_at = datetime\('now'\) WHERE id = '($jid)'"
-    emit-event $jid "" "job.StateChange" "RUNNING" "FAILED" ""
-    { status: "FAILED" }
+    sql-exec $"UPDATE jobs SET status = 'failed', completed_at = datetime\('now'\) WHERE id = '($jid)'"
+    emit-event $jid "" "job.StateChange" "running" "failed" ""
+    { status: "failed" }
   }
 }
 
@@ -327,11 +345,11 @@ export def job-resume [job_id: string] {
   if ($job | is-empty) {
     error make { msg: $"Job not found: ($jid)" }
   }
-  # Reset RUNNING tasks back to PENDING (they were interrupted)
-  sql-exec $"UPDATE tasks SET status = 'PENDING' WHERE job_id = '($jid)' AND status = 'RUNNING'"
-  # Reset job to RUNNING if it was FAILED
-  sql-exec $"UPDATE jobs SET status = 'RUNNING' WHERE id = '($jid)'"
-  emit-event $jid "" "job.StateChange" $job.0.status "RUNNING" "resumed"
+  # Reset running tasks back to pending (they were interrupted)
+  sql-exec $"UPDATE tasks SET status = 'pending' WHERE job_id = '($jid)' AND status = 'running'"
+  # Reset job to running if it was failed
+  sql-exec $"UPDATE jobs SET status = 'running' WHERE id = '($jid)'"
+  emit-event $jid "" "job.StateChange" $job.0.status "running" "resumed"
   job-execute $jid
 }
 
@@ -344,29 +362,29 @@ export def task-execute [job_id: string, task_name: string]: nothing -> record {
   let task = (sql $"SELECT * FROM tasks WHERE job_id = '($jid)' AND name = '($tname)'" ).0
 
   # Replay check
-  if $task.status == "COMPLETED" {
-    return { name: $tname, status: "COMPLETED", output: $task.output }
+  if $task.status == "completed" {
+    return { name: $tname, status: "completed", output: $task.output }
   }
 
   # Condition check — skip if `if` evaluates false
   if ($task.condition | is-not-empty) {
     let should_run = (eval-condition $jid $task.condition)
     if not $should_run {
-      sql-exec $"UPDATE tasks SET status = 'SKIPPED', completed_at = datetime\('now'\) WHERE job_id = '($jid)' AND name = '($tname)'"
-      emit-event $jid $tname "task.StateChange" $task.status "SKIPPED" "condition false"
-      return { name: $tname, status: "SKIPPED" }
+      sql-exec $"UPDATE tasks SET status = 'skipped', completed_at = datetime\('now'\) WHERE job_id = '($jid)' AND name = '($tname)'"
+      emit-event $jid $tname "task.StateChange" $task.status "skipped" "condition false"
+      return { name: $tname, status: "skipped" }
     }
   }
 
-  # Mark RUNNING
-  sql-exec $"UPDATE tasks SET status = 'RUNNING', started_at = datetime\('now'\), attempt = attempt + 1 WHERE job_id = '($jid)' AND name = '($tname)'"
-  emit-event $jid $tname "task.StateChange" $task.status "RUNNING" ""
+  # Mark running
+  sql-exec $"UPDATE tasks SET status = 'running', started_at = datetime\('now'\), attempt = attempt + 1 WHERE job_id = '($jid)' AND name = '($tname)'"
+  emit-event $jid $tname "task.StateChange" $task.status "running" ""
 
   # Execute with retry loop
   let max = ($task.max_attempts | into int)
   mut attempt = 0
   mut last_error = ""
-  mut result = { status: "FAILED" }
+  mut result = { status: "failed" }
 
   while $attempt < $max {
     $attempt = $attempt + 1
@@ -382,15 +400,15 @@ export def task-execute [job_id: string, task_name: string]: nothing -> record {
     let exec_result = (try {
       run-task $jid $task
     } catch {|e|
-      { status: "FAILED", error: ($e | get msg? | default "unknown error") }
+      { status: "failed", error: ($e | get msg? | default "unknown error") }
     })
 
-    if $exec_result.status == "COMPLETED" {
+    if $exec_result.status == "completed" {
       let output = (sql-escape-text ($exec_result.output? | default ""))
       let start = (sql $"SELECT started_at FROM tasks WHERE job_id = '($jid)' AND name = '($tname)'" ).0.started_at
-      sql-exec $"UPDATE tasks SET status = 'COMPLETED', output = '($output)', completed_at = datetime\('now'\) WHERE job_id = '($jid)' AND name = '($tname)'"
-      emit-event $jid $tname "task.StateChange" "RUNNING" "COMPLETED" ""
-      $result = { name: $tname, status: "COMPLETED", output: ($exec_result.output? | default "") }
+      sql-exec $"UPDATE tasks SET status = 'completed', output = '($output)', completed_at = datetime\('now'\) WHERE job_id = '($jid)' AND name = '($tname)'"
+      emit-event $jid $tname "task.StateChange" "running" "completed" ""
+      $result = { name: $tname, status: "completed", output: ($exec_result.output? | default "") }
       break
     }
 
@@ -398,16 +416,16 @@ export def task-execute [job_id: string, task_name: string]: nothing -> record {
   }
 
   # All retries exhausted — check regression
-  if $result.status == "FAILED" {
+  if $result.status == "failed" {
     let err = (sql-escape-text $last_error)
-    sql-exec $"UPDATE tasks SET status = 'FAILED', error = '($err)', completed_at = datetime\('now'\) WHERE job_id = '($jid)' AND name = '($tname)'"
-    emit-event $jid $tname "task.StateChange" "RUNNING" "FAILED" $last_error
+    sql-exec $"UPDATE tasks SET status = 'failed', error = '($err)', completed_at = datetime\('now'\) WHERE job_id = '($jid)' AND name = '($tname)'"
+    emit-event $jid $tname "task.StateChange" "running" "failed" $last_error
 
     if ($task.on_fail_regress | is-not-empty) {
       emit-event $jid $tname "task.Regression" "" $task.on_fail_regress $last_error
-      $result = { name: $tname, status: "FAILED", regression: $task.on_fail_regress }
+      $result = { name: $tname, status: "failed", regression: $task.on_fail_regress }
     } else {
-      $result = { name: $tname, status: "FAILED", error: $last_error }
+      $result = { name: $tname, status: "failed", error: $last_error }
     }
   }
 
@@ -447,12 +465,12 @@ def run-task [job_id: string, task: record]: nothing -> record {
     if ($task.gate | is-not-empty) {
       let gate_result = (gate-check $task.gate $output $job_id)
       if $gate_result.pass {
-        { status: "COMPLETED", output: $output }
+        { status: "completed", output: $output }
       } else {
-        { status: "FAILED", error: $gate_result.reason, output: $output }
+        { status: "failed", error: $gate_result.reason, output: $output }
       }
     } else {
-      { status: "COMPLETED", output: $output }
+      { status: "completed", output: $output }
     }
   } else {
     # Inline execution
@@ -467,9 +485,9 @@ def run-task [job_id: string, task: record]: nothing -> record {
     })
 
     if ($output.exit_code? | default 0) == 0 {
-      { status: "COMPLETED", output: ($output.stdout? | default "") }
+      { status: "completed", output: ($output.stdout? | default "") }
     } else {
-      { status: "FAILED", error: ($output.stderr? | default "non-zero exit") }
+      { status: "failed", error: ($output.stderr? | default "non-zero exit") }
     }
   }
 }
@@ -477,7 +495,7 @@ def run-task [job_id: string, task: record]: nothing -> record {
 # Gather completed task outputs as a record keyed by var name
 # Note: job_id already validated by caller
 def gather-task-outputs [job_id: string]: nothing -> record {
-  let completed = (sql $"SELECT var, output FROM tasks WHERE job_id = '($job_id)' AND status = 'COMPLETED' AND var IS NOT NULL AND var != ''" )
+  let completed = (sql $"SELECT var, output FROM tasks WHERE job_id = '($job_id)' AND status = 'completed' AND var IS NOT NULL AND var != ''" )
   mut outputs = {}
   for row in $completed {
     $outputs = ($outputs | insert $row.var $row.output)
@@ -487,7 +505,7 @@ def gather-task-outputs [job_id: string]: nothing -> record {
 
 # ── Phase Regression ─────────────────────────────────────────────────────────
 
-# Reset target task + all downstream tasks to PENDING
+# Reset target task + all downstream tasks to pending
 export def task-regress [job_id: string, target_task: string] {
   # Validate identifiers at entry
   let jid = (validate-ident $job_id "task-regress.job_id")
@@ -500,8 +518,8 @@ export def task-regress [job_id: string, target_task: string] {
   for tname in $to_reset {
     # tname comes from DB or was validated above, but validate anyway for safety
     let tname_safe = (validate-ident $tname "task-regress.task_name")
-    sql-exec $"UPDATE tasks SET status = 'PENDING', output = NULL, error = NULL, attempt = 0, started_at = NULL, completed_at = NULL, duration_ms = NULL WHERE job_id = '($jid)' AND name = '($tname_safe)'"
-    emit-event $jid $tname_safe "task.Regression" "" "PENDING" $"regressed from ($target)"
+    sql-exec $"UPDATE tasks SET status = 'pending', output = NULL, error = NULL, attempt = 0, started_at = NULL, completed_at = NULL, duration_ms = NULL WHERE job_id = '($jid)' AND name = '($tname_safe)'"
+    emit-event $jid $tname_safe "task.Regression" "" "pending" $"regressed from ($target)"
   }
 }
 
@@ -526,7 +544,7 @@ def eval-condition [job_id: string, condition: string]: nothing -> bool {
   # Validate the task reference extracted from the condition
   let task_ref = (validate-ident $match.task_ref "eval-condition.task_ref")
   let phase = ($match.phase | str trim | into int)
-  let output = (sql $"SELECT output FROM tasks WHERE job_id = '($job_id)' AND name = '($task_ref)' AND status = 'COMPLETED'" )
+  let output = (sql $"SELECT output FROM tasks WHERE job_id = '($job_id)' AND name = '($task_ref)' AND status = 'completed'" )
 
   if ($output | is-empty) { return false }
 
@@ -623,7 +641,7 @@ export def gate-check [gate_name: string, output: string, job_id: string]: nothi
 export def task-output [job_id: string, var_name: string]: nothing -> string {
   let jid = (validate-ident $job_id "task-output.job_id")
   let vname = (validate-ident $var_name "task-output.var_name")
-  let result = (sql $"SELECT output FROM tasks WHERE job_id = '($jid)' AND var = '($vname)' AND status = 'COMPLETED'" )
+  let result = (sql $"SELECT output FROM tasks WHERE job_id = '($jid)' AND var = '($vname)' AND status = 'completed'" )
   if ($result | is-empty) { "" } else { $result.0.output }
 }
 
@@ -643,9 +661,9 @@ export def job-status [job_id: string]: nothing -> record {
 # Cancel a running job
 export def job-cancel [job_id: string] {
   let jid = (validate-ident $job_id "job-cancel.job_id")
-  sql-exec $"UPDATE jobs SET status = 'CANCELLED', completed_at = datetime\('now'\) WHERE id = '($jid)'"
-  sql-exec $"UPDATE tasks SET status = 'CANCELLED' WHERE job_id = '($jid)' AND status IN \('PENDING', 'RUNNING', 'SCHEDULED'\)"
-  emit-event $jid "" "job.StateChange" "RUNNING" "CANCELLED" ""
+  sql-exec $"UPDATE jobs SET status = 'cancelled', completed_at = datetime\('now'\) WHERE id = '($jid)'"
+  sql-exec $"UPDATE tasks SET status = 'cancelled' WHERE job_id = '($jid)' AND status IN \('pending', 'running', 'scheduled'\)"
+  emit-event $jid "" "job.StateChange" "running" "CANCELLED" ""
 }
 
 # List all jobs
@@ -656,9 +674,9 @@ export def job-list []: nothing -> table {
 # Retry a failed job — reset failed tasks and re-execute
 export def job-retry [job_id: string] {
   let jid = (validate-ident $job_id "job-retry.job_id")
-  sql-exec $"UPDATE tasks SET status = 'PENDING', error = NULL, attempt = 0 WHERE job_id = '($jid)' AND status = 'FAILED'"
-  sql-exec $"UPDATE jobs SET status = 'PENDING', error = NULL WHERE id = '($jid)'"
-  emit-event $jid "" "job.StateChange" "FAILED" "PENDING" "retry"
+  sql-exec $"UPDATE tasks SET status = 'pending', error = NULL, attempt = 0 WHERE job_id = '($jid)' AND status = 'failed'"
+  sql-exec $"UPDATE jobs SET status = 'pending', error = NULL WHERE id = '($jid)'"
+  emit-event $jid "" "job.StateChange" "failed" "pending" "retry"
   job-execute $jid
 }
 
