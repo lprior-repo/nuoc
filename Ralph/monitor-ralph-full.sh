@@ -119,7 +119,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "💡 Useful Commands:"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "  watch -n 10 ./monitor-ralph-full.sh  # Auto-refresh every 10s"
-echo "  tail -f ralph-full-*.log             # Watch live log"
+echo "  tail -f logs/ralph-full-*.log             # Watch live log"
 echo "  ralph --add-context 'hint'           # Add guidance"
 echo "  bd show <bead_id>                    # View bead details"
 echo "  git log --grep='RQ-FIX' -10          # See recent Red Queen fixes"

@@ -27,10 +27,10 @@ bd stats
 bd ready
 
 # Task list
-cat .ralph/ralph-tasks.md
+cat Ralph/.ralph/ralph-tasks.md
 
 # Live log
-tail -f ralph-full-*.log
+tail -f Ralph/logs/ralph-full-*.log
 ```
 
 ## 🛑 Stop Ralph

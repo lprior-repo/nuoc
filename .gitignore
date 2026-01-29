@@ -1,8 +1,9 @@
 .moon/cache
 .moon
 
+
 # Ralph Wiggum loop files (working directory and logs)
-.ralph/
-.ralph-archive/
+Ralph/.ralph/
+Ralph/logs/
 ralph-full-*.log
 babysit-log.txt

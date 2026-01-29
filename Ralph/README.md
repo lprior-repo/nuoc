@@ -22,10 +22,23 @@ Or from this directory:
 
 ## Files
 
+**Scripts:**
 - `launch-ralph-full.sh` - Main launcher
 - `monitor-ralph-full.sh` - Progress monitor
 - `babysit-ralph.sh` - 8-hour auto-monitor
+
+**Configuration:**
 - `ralph-prompt-with-red-queen.md` - TDD15 + Red Queen instructions
+
+**Documentation:**
+- `README.md` - This file
+- `QUICKSTART.md` - Quick reference
+- `TASKS-MODE.md` - Tasks workflow
+- `GUIDE.md` - Complete guide
+
+**Logs:**
+- `logs/` - All execution logs (gitignored)
+- `.ralph/` - Ralph working directory (gitignored)
 
 ## Status
 

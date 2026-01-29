@@ -28,13 +28,13 @@ for ((i=1; i<=TOTAL_CHECKS; i++)); do
     echo "Checking completion status..."
 
     # Check if it completed successfully
-    if tail -100 ralph-full-*.log 2>/dev/null | grep -q "<promise>COMPLETE</promise>"; then
+    if tail -100 logs/ralph-full-*.log 2>/dev/null | grep -q "<promise>COMPLETE</promise>"; then
       echo "✅ Ralph completed successfully!"
       exit 0
     else
       echo "❌ Ralph stopped unexpectedly"
       echo "Last log entries:"
-      tail -20 ralph-full-*.log 2>/dev/null
+      tail -20 logs/ralph-full-*.log 2>/dev/null
       exit 1
     fi
   fi

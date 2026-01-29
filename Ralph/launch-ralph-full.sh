@@ -25,10 +25,10 @@ echo "  3. Self-healing: Fix → Defend → Evolve"
 echo ""
 echo "Progress tracking:"
 echo "  - Status: ralph --status --tasks"
-echo "  - Monitor: ./monitor-ralph-full.sh"
+echo "  - Monitor: ./Ralph/monitor-ralph-full.sh"
 echo "  - Tasks: ralph --list-tasks"
 echo "  - Beads: bd stats"
-echo "  - Logs: tail -f ralph-full-*.log"
+echo "  - Logs: tail -f Ralph/logs/ralph-full-*.log"
 echo ""
 echo "Files:"
 echo "  - Prompt: ralph-prompt-with-red-queen.md"
@@ -46,7 +46,7 @@ ralph \
   --tasks \
   --task-promise "READY_FOR_NEXT_TASK" \
   --allow-all \
-  2>&1 | tee ralph-full-$(date +%Y%m%d-%H%M%S).log
+  2>&1 | tee Ralph/logs/ralph-full-$(date +%Y%m%d-%H%M%S).log
 
 echo ""
 echo "✅ Ralph loop complete or stopped"
@@ -54,4 +54,4 @@ echo ""
 echo "Final status:"
 bd stats
 echo ""
-echo "Check ralph-full-*.log for complete output"
+echo "Check Ralph/logs/ralph-full-*.log for complete output"
