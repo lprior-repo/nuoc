@@ -636,6 +636,10 @@ export def job-create [job_def: record] {
   let defaults = ($job_def.defaults? | default {} | to json -r)
   let position = ($job_def.position? | default 0)
 
+  # Check for delayed invocation (invoke_time in seconds from now or ISO timestamp)
+  let invoke_time = ($job_def.invoke_time? | default null)
+  let initial_status = if ($invoke_time != null) { "scheduled" } else { "pending" }
+
   # Escape free-form JSON text, not identifiers
   let inputs_esc = (sql-escape-text $inputs)
   let defaults_esc = (sql-escape-text $defaults)
@@ -644,7 +648,18 @@ export def job-create [job_def: record] {
   let tasks = ($job_def.tasks? | default [])
   detect-cycles $tasks
 
-  sql-exec $"INSERT OR REPLACE INTO jobs \(id, name, bead_id, inputs, defaults, status, position\) VALUES \('($job_id)', '($job_id)', '($bead_id)', '($inputs_esc)', '($defaults_esc)', 'pending', ($position)\)"
+  # Insert job with scheduled_start_at if invoke_time provided
+  if $invoke_time != null {
+    # Calculate scheduled_start_at from invoke_time (can be seconds from now or ISO timestamp)
+    let scheduled_at = if ($invoke_time | describe) == "int" {
+      sql $"SELECT datetime\('now', '+($invoke_time) seconds'\) as scheduled_at" | get scheduled_at.0
+    } else {
+      $invoke_time
+    }
+    sql-exec $"INSERT OR REPLACE INTO jobs \(id, name, bead_id, inputs, defaults, status, position, scheduled_start_at\) VALUES \('($job_id)', '($job_id)', '($bead_id)', '($inputs_esc)', '($defaults_esc)', '($initial_status)', ($position), '($scheduled_at)'\)"
+  } else {
+    sql-exec $"INSERT OR REPLACE INTO jobs \(id, name, bead_id, inputs, defaults, status, position\) VALUES \('($job_id)', '($job_id)', '($bead_id)', '($inputs_esc)', '($defaults_esc)', '($initial_status)', ($position)\)"
+  }
 
   # Insert tasks
   for task in ($job_def.tasks? | default []) {
@@ -682,9 +697,14 @@ export def job-execute [job_id: string] {
   # Validate at entry point
   let jid = (validate-ident $job_id "job-execute.job_id")
 
-  # Mark job running
-  sql-exec $"UPDATE jobs SET status = 'running', started_at = datetime\('now'\) WHERE id = '($jid)'"
-  emit-event $jid "" "job.StateChange" "pending" "running" ""
+  # Check current state - must be ready to execute
+  let current = (sql $"SELECT status FROM jobs WHERE id = '($jid)'")
+  if ($current | is-empty) {
+    error make { msg: $"Job not found: ($jid)" }
+  }
+
+  # Use transition-state for ready → running
+  transition-state $jid "running" "job execution started"
 
   # Load all tasks
   let all_tasks = (sql $"SELECT name, status, condition, priority, on_fail_regress FROM tasks WHERE job_id = '($jid)'" )
@@ -731,9 +751,22 @@ export def job-execute [job_id: string] {
     # Check if any task failed without regression
     let failed = (sql $"SELECT name FROM tasks WHERE job_id = '($jid)' AND status = 'failed'" )
     if ($failed | is-not-empty) {
-      sql-exec $"UPDATE jobs SET status = 'failed', completed_at = datetime\('now'\), error = 'Task failed: ($failed.0.name)' WHERE id = '($jid)'"
-      emit-event $jid "" "job.StateChange" "running" "failed" $"Task failed: ($failed.0.name)"
-      return { status: "failed", failed_task: $failed.0.name }
+      # Check if job-level retries are available
+      let job_info = (sql $"SELECT retry_count FROM jobs WHERE id = '($jid)'").0
+      let current_retry_count = ($job_info.retry_count | default 0)
+      let max_job_retries = 3  # Default job-level retry limit
+
+      if $current_retry_count < $max_job_retries {
+        # Transition to backing-off for job-level retry
+        transition-state $jid "backing-off" $"Task failed: ($failed.0.name)"
+        cancel-job-awakeables $jid
+        return { status: "backing-off", failed_task: $failed.0.name }
+      } else {
+        # No more retries - mark as completed with failure
+        transition-state $jid "completed" $"failure: Task failed after ($current_retry_count) retries: ($failed.0.name)"
+        cancel-job-awakeables $jid
+        return { status: "failed", failed_task: $failed.0.name }
+      }
     }
   }
 
@@ -742,30 +775,37 @@ export def job-execute [job_id: string] {
   let all_done = ($final_tasks | all {|t| $t.status in ["completed", "skipped"] })
 
   if $all_done {
-    sql-exec $"UPDATE jobs SET status = 'completed', completed_at = datetime\('now'\) WHERE id = '($jid)'"
+    transition-state $jid "completed" "success"
     cancel-job-awakeables $jid
-    emit-event $jid "" "job.StateChange" "running" "completed" ""
     { status: "completed" }
   } else {
-    sql-exec $"UPDATE jobs SET status = 'failed', completed_at = datetime\('now'\) WHERE id = '($jid)'"
+    transition-state $jid "completed" "failure: some tasks did not complete"
     cancel-job-awakeables $jid
-    emit-event $jid "" "job.StateChange" "running" "failed" ""
     { status: "failed" }
   }
 }
 
 # Resume a job from its last checkpoint (skip completed tasks)
+# Works for paused, failed, or suspended jobs
 export def job-resume [job_id: string] {
   let jid = (validate-ident $job_id "job-resume.job_id")
   let job = (sql $"SELECT status FROM jobs WHERE id = '($jid)'" )
   if ($job | is-empty) {
     error make { msg: $"Job not found: ($jid)" }
   }
+  let current_status = $job.0.status
+
+  # Check if job can be resumed
+  if not ($current_status in ["paused", "failed", "suspended"]) {
+    error make { msg: $"Job cannot be resumed from status '($current_status)'" }
+  }
+
   # Reset running tasks back to pending (they were interrupted)
   sql-exec $"UPDATE tasks SET status = 'pending' WHERE job_id = '($jid)' AND status = 'running'"
-  # Reset job to running if it was failed
-  sql-exec $"UPDATE jobs SET status = 'running' WHERE id = '($jid)'"
-  emit-event $jid "" "job.StateChange" $job.0.status "running" "resumed"
+
+  # Use transition-state for resume
+  transition-state $jid "running" "manually resumed"
+
   job-execute $jid
 }
 
