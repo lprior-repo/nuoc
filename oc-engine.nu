@@ -1027,7 +1027,7 @@ export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int,
   let entry_index = (next-entry-index $jid $tname $attempt)
   let in_replay = (is-replay-mode $jid $tname $attempt)
 
-  # Check if awakeable is already resolved (task resumed after wake)
+  # Check if awakeable is already resolved/rejected (task resumed after wake)
   let awakeable_status = (sql $"SELECT status, payload FROM awakeables WHERE id = '($aw_id)'")
 
   if (not ($awakeable_status | is-empty)) {
@@ -1038,6 +1038,10 @@ export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int,
       }
       let payload = (try { $awakeable_status.0.payload | from json } catch { {} })
       { resumed: true, awakeable_id: $aw_id, payload: $payload }
+    } else if $awakeable_status.0.status == "REJECTED" {
+      # Awakeable was rejected - fail the task with the error message
+      let error_msg = (try { $awakeable_status.0.payload | from json } catch { "unknown error" })
+      error make { msg: $"awakeable rejected: ($error_msg)" }
     } else if $awakeable_status.0.status == "TIMEOUT" {
       # Awakeable timed out - fail the task
       error make { msg: $"awakeable timed out: ($aw_id)" }
@@ -1095,6 +1099,42 @@ export def resolve-awakeable [awakeable_id: string, payload: any]: nothing -> re
   emit-event $job_id $task_name "task.StateChange" "suspended" "pending" $"awakeable ($aw_id) resolved"
 
   { resolved: true, awakeable_id: $aw_id, payload: $payload }
+}
+
+# Reject an awakeable with an error message, waking the suspended task
+# Precondition: awakeable_id is a valid awakeable ID, error is a string
+# Postcondition: awakeable marked REJECTED with error message, task woken from suspension
+# Invariant: only PENDING awakeables can be rejected, task status transitions to pending
+export def reject-awakeable [awakeable_id: string, error_msg: string]: nothing -> record {
+  let aw_id = (validate-ident $awakeable_id "reject-awakeable.awakeable_id")
+
+  # Get awakeable record
+  let awakeable_record = (sql $"SELECT job_id, task_name, status FROM awakeables WHERE id = '($aw_id)'")
+  if ($awakeable_record | is-empty) {
+    error make { msg: $"awakeable not found: ($aw_id)" }
+  }
+
+  let job_id = $awakeable_record.0.job_id
+  let task_name = $awakeable_record.0.task_name
+  let status = $awakeable_record.0.status
+
+  # Reject if not pending (duplicate resolution or invalid state)
+  if $status != "PENDING" {
+    error make { msg: $"awakeable not pending, status is '($status)': ($aw_id)" }
+  }
+
+  # Serialize error to JSON and escape for SQL
+  let error_json = ($error_msg | to json -r)
+  let error_esc = (sql-escape-text $error_json)
+
+  # Update awakeable: mark REJECTED, store error message, set timestamp
+  sql-exec $"UPDATE awakeables SET status = 'REJECTED', payload = '($error_esc)', resolved_at = datetime\('now'\) WHERE id = '($aw_id)'"
+
+  # Wake the suspended task
+  sql-exec $"UPDATE tasks SET status = 'pending' WHERE job_id = '($job_id)' AND name = '($task_name)'"
+  emit-event $job_id $task_name "task.StateChange" "suspended" "pending" $"awakeable ($aw_id) rejected"
+
+  { rejected: true, awakeable_id: $aw_id, error: $error_msg }
 }
 
 # Check and process expired awakeables, marking them as TIMEOUT

@@ -12,4 +12,4 @@ Add your tasks here:
 - [x] nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
 - [x] nuoc-qodw - [Awk-09] Implement awakeable timeout handling
 - [x] nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
-- [ ] nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
+- [/] nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
