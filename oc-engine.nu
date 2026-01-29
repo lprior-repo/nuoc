@@ -593,8 +593,9 @@ export def gate-check [gate_name: string, output: string, job_id: string]: nothi
       { pass: $ok, reason: (if $ok { "tests pass" } else { "tests failing" }) }
     }
     "martin_fowler_1" | "martin_fowler_2" => {
-      # Check agent output for PASS/FAIL verdict
-      let pass = ($output | str downcase | str contains "pass") and (not ($output | str downcase | str contains "fail"))
+      # Check agent output for PASS/FAIL verdict using word boundaries
+      let output_lower = ($output | str downcase)
+      let pass = ((($output_lower | str contains "pass") or ($output_lower | str contains "passing")) and (not (($output_lower | str contains "fail") or ($output_lower | str contains "failing"))))
       { pass: $pass, reason: (if $pass { "review passed" } else { "review found issues" }) }
     }
     "implementation_complete" => {
