@@ -1135,3 +1135,46 @@ Columns:
 Passed: 3
 Failed: 0
 
+GREEN phase complete. All tests passing. Committing now.
+| Tools    Bash 60 • Edit 16 • Read 11 • Write 2
+
+[main fb62e72] GREEN: nuoc-9w6 - awakeables table schema implemented
+ 7 files changed, 342 insertions(+), 14 deletions(-)
+ create mode 100644 check-db.nu
+
+REFACTOR phase complete. Code is minimal and clean. Moving to VERIFY phase - checking acceptance criteria.
+| Tools    Bash 61 • Edit 16 • Read 11 • Write 2
+
+
+◐ nuoc-9w6 · [Awk-01] Create awakeables table schema   [● P0 · IN_PROGRESS]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Schema for awakeable tracking.
+
+## Schema
+```sql
+CREATE TABLE awakeables (
+  id TEXT PRIMARY KEY,
+  job_id TEXT NOT NULL,
+  task_name TEXT NOT NULL,
+  entry_index INTEGER NOT NULL,
+  status TEXT DEFAULT 'PENDING',
+  payload TEXT,
+  timeout_at TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  resolved_at TEXT
+);
+```
+
+## Acceptance
+- [ ] Table created
+- [ ] Index on (job_id, task_name)
+
+BLOCKS
+  ← ○ nuoc-d56: [Ctx-12] Implement ctx.awakeable to create awaitable ● P0
+  ← ○ nuoc-l4d: [Awk-02] Implement awakeable ID generation ● P0
+
+
