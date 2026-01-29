@@ -11,4 +11,183 @@ Closed:/186 [Check    5/480] ⏰ 0h04m elapsed | 📊 Iter:1 | ✅ Beads:0
 Closed:/186 [Check    6/480] ⏰ 0h05m elapsed | 📊 Iter:1 | ✅ Beads:0
 Closed:/186 [Check    7/480] ⏰ 0h06m elapsed | 📊 Iter:1 | ✅ Beads:0
 Closed:/186 [Check    8/480] ⏰ 0h07m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check    9/480] ⏰ 0h08m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [H[2J[3J━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 Ralph Babysitter - Check 10 / 480
+./babysit-ralph.sh: line 47: bc: command not found
+⏰ Elapsed: h 9m
+./babysit-ralph.sh: line 48: bc: command not found
+⏱️  Remaining: h 50m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[H[2J[3J╔════════════════════════════════════════════════════════════════╗
+║      Ralph Wiggum + Red Queen - Live Progress Monitor         ║
+╚════════════════════════════════════════════════════════════════╝
+
+2026-01-28 22:17:40
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Ralph Loop Status:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+╔══════════════════════════════════════════════════════════════════╗
+║                    Ralph Wiggum Status                           ║
+╚══════════════════════════════════════════════════════════════════╝
+
+🔄 ACTIVE LOOP
+   Iteration:    1 / 6000
+   Started:      2026-01-29T04:07:13.196Z
+   Elapsed:      10m 27s
+   Promise:      COMPLETE
+   Agent:        OpenCode
+   Tasks Mode:   ENABLED
+   Task Promise: READY_FOR_NEXT_TASK
+   Prompt:       # NUOC - All 186 Beads with TDD15 + Red Queen Self-Healing
+
+...
+
+📋 CURRENT TASKS:
+   1. ✅ nuoc-9w6 - [Awk-01] Create awakeables table schema
+   2. ⏸️ nuoc-l4d - [Awk-02] Implement awakeable ID generation
+   3. ⏸️ nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing
+   4. ⏸️ nuoc-7wmq - [Awk-04] Implement awakeable creation in ctx.awakeable
+   5. ⏸️ nuoc-f2pc - [Awk-05] Implement task suspension on awakeable await
+   6. ⏸️ nuoc-a7ti - [Awk-06] Implement resolve-awakeable command
+   7. ⏸️ nuoc-n686 - [Awk-07] Implement HTTP endpoint for awakeable resolution
+   8. ⏸️ nuoc-szrs - [Awk-08] Implement task wake on awakeable resolution
+   9. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+   10. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+   11. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+   12. ⏸️ nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
+   13. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+   14. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+   15. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+
+   Progress: 1/15 complete, 0 in progress
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Ralph Tasks:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Current tasks:
+1. ✅ nuoc-9w6 - [Awk-01] Create awakeables table schema
+2. ⏸️ nuoc-l4d - [Awk-02] Implement awakeable ID generation
+3. ⏸️ nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing
+4. ⏸️ nuoc-7wmq - [Awk-04] Implement awakeable creation in ctx.awakeable
+5. ⏸️ nuoc-f2pc - [Awk-05] Implement task suspension on awakeable await
+6. ⏸️ nuoc-a7ti - [Awk-06] Implement resolve-awakeable command
+7. ⏸️ nuoc-n686 - [Awk-07] Implement HTTP endpoint for awakeable resolution
+8. ⏸️ nuoc-szrs - [Awk-08] Implement task wake on awakeable resolution
+9. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+10. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+11. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+12. ⏸️ nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
+13. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+14. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+15. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 Beads Overall Progress:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 Issue Database Status
+
+Summary:
+  Total Issues:           186
+  Open:                   185
+  In Progress:            1
+  Blocked:                148
+  Closed:                 0
+  Ready to Work:          37
+
+Recent Activity (last 24 hours):
+  Commits:                12
+  Total Changes:          561
+  Issues Created:         561
+  Issues Closed:          0
+  Issues Reopened:        0
+  Issues Updated:         0
+
+For more details, use 'bd list' to see individual issues.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔄 Currently In Progress:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+◐ nuoc-9w6 [● P0] [task] - [Awk-01] Create awakeables table schema
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Recently Completed (last 5):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⏭️  Next Ready Beads (top 5):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Ready work (10 issues with no blockers):
+
+1. [● P0] [bug] nuoc-0zq: Parameterize all SQL queries to eliminate injection surface
+2. [● P0] [bug] nuoc-3cd: Wire phase-prompt dispatcher into run-task so TDD15 prompts are actually used
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 Recent Git Activity (last 10 commits):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+b65e57e (HEAD -> main) TDD15-COMPLETE: nuoc-9w6 - ready for Red Queen
+57ca9cd VERIFY: nuoc-9w6 - acceptance criteria met
+fb62e72 GREEN: nuoc-9w6 - awakeables table schema implemented
+bf63be5 RED: nuoc-9w6 - failing tests for awakeables table schema
+51ff2e6 (origin/main) chore(beads): close nuoc-bsx (already implemented)
+67ca0bc feat(engine): implement replay mode detection and transitions
+ff2bd64 feat(engine): add execution context with entry_index tracking
+12ff339 feat(engine): implement journal persistence for deterministic replay
+fd2b981 fix(engine): fix martin_fowler gate false negative
+2b8392a fix(engine): fix martin_fowler gate false negative
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧬 Workflow Phase Distribution (last 50 commits):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TDD15 Phases:
+    RED:      1 commits
+    GREEN:    1 commits
+    REFACTOR: 0
+0 commits
+    VERIFY:   1 commits
+
+  Red Queen Evolution:
+    RQ-FIX:      0
+0 commits (defenses hardened)
+    RQ-COMPLETE: 0
+0 commits (evolution complete)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📈 Progress Estimate:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+./monitor-ralph-full.sh: line 100: 0
+Closed: * 100 / TOTAL_BEADS : arithmetic syntax error in expression (error token is "Closed: * 100 / TOTAL_BEADS ")
+  Total Beads:    186
+  Completed:      0
+Closed: (%)
+  Remaining:      185
+
+  Progress: [��������������������������������������������������./monitor-ralph-full.sh: line 114: printf: : invalid number
+] 0%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 Useful Commands:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  watch -n 10 ./monitor-ralph-full.sh  # Auto-refresh every 10s
+  tail -f ralph-full-*.log             # Watch live log
+  ralph --add-context 'hint'           # Add guidance
+  bd show <bead_id>                    # View bead details
+  git log --grep='RQ-FIX' -10          # See recent Red Queen fixes
+  kill $(pgrep -f ralph)                # Stop Ralph gracefully
+
+[Check   10/480] ⏰ 0h09m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check   11/480] ⏰ 0h10m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check   12/480] ⏰ 0h11m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check   13/480] ⏰ 0h12m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check   14/480] ⏰ 0h13m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check   15/480] ⏰ 0h14m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check   16/480] ⏰ 0h15m elapsed | 📊 Iter:1 | ✅ Beads:0
+Closed:/186 [Check   17/480] ⏰ 0h16m elapsed | 📊 Iter:1 | ✅ Beads:0
 Closed:/186 
