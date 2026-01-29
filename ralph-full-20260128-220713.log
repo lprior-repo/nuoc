@@ -9416,3 +9416,260 @@ Tasks: 1 completed
  Time: 73ms
 
 
+| Tools    Bash 9 • Read 4 • Grep 4 • Edit 3 • Glob 2 • Write 1
+
+[main 0a7f65c] VERIFY: nuoc-xm7h - acceptance complete
+ 3 files changed, 110 insertions(+), 2 deletions(-)
+
+| Tools    Bash 9 • Read 4 • Edit 4 • Grep 4 • Glob 2 • Write 1
+⏳ working... elapsed 4:10 · last activity 0:14 ago
+⏳ working... elapsed 4:20 · last activity 0:24 ago
+| Tools    Bash 9 • Read 4 • Edit 4 • Grep 4 • Glob 2 • Write 2
+| Tools    Bash 10 • Read 4 • Edit 4 • Grep 4 • Glob 2 • Write 2
+
+Running Red Queen Gen 1 tests for reject-awakeable...
+  [ok] Gen 1.1: Empty error message accepted
+  [ok] Gen 1.1: Awakeable rejected with empty error
+  [fail] Gen 1.2: SQL injection in error - should be safely escaped
+  [ok] Gen 1.2: Awakeable rejected, database intact
+  [fail] Gen 1.3: Special characters - should be handled
+  [ok] Gen 1.3: Special characters stored correctly
+Red Queen Gen 1 complete
+
+⏳ working... elapsed 4:50 · last activity 0:15 ago
+| Tools    Bash 11 • Read 4 • Edit 4 • Grep 4 • Glob 2 • Write 2
+
+╭──────────────┬─────────────────────────────╮
+│ rejected     │ true                        │
+│ awakeable_id │ prom_1dGVzdC1qb2I6MA        │
+│ error        │ '; DROP TABLE awakeables;-- │
+╰──────────────┴─────────────────────────────╯
+
+⏳ working... elapsed 5:10 · last activity 0:17 ago
+⏳ working... elapsed 5:20 · last activity 0:27 ago
+⏳ working... elapsed 5:30 · last activity 0:37 ago
+| Tools    Bash 11 • Edit 5 • Read 4 • Grep 4 • Glob 2 • Write 2
+⏳ working... elapsed 5:50 · last activity 0:19 ago
+⏳ working... elapsed 6:00 · last activity 0:29 ago
+⏳ working... elapsed 6:10 · last activity 0:39 ago
+| Tools    Bash 11 • Edit 6 • Read 4 • Grep 4 • Glob 2 • Write 2
+| Tools    Bash 12 • Edit 6 • Read 4 • Grep 4 • Glob 2 • Write 2
+
+Running Red Queen Gen 1 tests for reject-awakeable...
+  [ok] Gen 1.1: Empty error message accepted
+  [ok] Gen 1.1: Awakeable rejected with empty error
+  [ok] Gen 1.2: SQL injection safely escaped
+  [ok] Gen 1.2: Awakeable rejected, database intact
+  [ok] Gen 1.3: Special characters accepted
+  [ok] Gen 1.3: Special characters stored correctly
+Red Queen Gen 1 complete
+
+⏳ working... elapsed 6:40 · last activity 0:16 ago
+⏳ working... elapsed 6:50 · last activity 0:26 ago
+⏳ working... elapsed 7:00 · last activity 0:36 ago
+| Tools    Bash 12 • Edit 6 • Read 4 • Grep 4 • Write 3 • Glob 2
+| Tools    Bash 13 • Edit 6 • Read 4 • Grep 4 • Write 3 • Glob 2
+
+Running Red Queen Gen 2 tests for reject-awakeable...
+  [ok] Gen 2.1: Rejecting RESOLVED awakeable throws error
+  [ok] Gen 2.1: Error message indicates not pending
+  [ok] Gen 2.1: Awakeable remains RESOLVED
+  [ok] Gen 2.2: Rejecting TIMEOUT awakeable throws error
+  [ok] Gen 2.2: Error message indicates not pending
+  [ok] Gen 2.2: Awakeable remains TIMEOUT
+  [ok] Gen 2.3: Rejecting REJECTED awakeable throws error
+  [ok] Gen 2.3: Error message indicates not pending
+  [ok] Gen 2.3: Awakeable remains REJECTED
+  [ok] Gen 2.3: First error message preserved
+Red Queen Gen 2 complete
+
+⏳ working... elapsed 7:30 · last activity 0:16 ago
+⏳ working... elapsed 7:40 · last activity 0:26 ago
+⏳ working... elapsed 7:50 · last activity 0:36 ago
+⏳ working... elapsed 8:00 · last activity 0:46 ago
+⏳ working... elapsed 8:10 · last activity 0:56 ago
+⏳ working... elapsed 8:20 · last activity 1:06 ago
+⏳ working... elapsed 8:30 · last activity 1:16 ago
+⏳ working... elapsed 8:40 · last activity 1:26 ago
+| Tools    Bash 13 • Edit 6 • Read 4 • Grep 4 • Write 4 • Glob 2
+| Tools    Bash 14 • Edit 6 • Read 4 • Grep 4 • Write 4 • Glob 2
+
+Error: nu::parser::error
+
+  x Invalid literal
+    ,-[/home/lewis/src/nuoc/tests/rq-reject-awakeable-gen3.nu:70:31]
+ 69 |   # Test with null byte (C string terminator attack)
+ 70 |   let null_byte_error = "Error\x00message"
+    :                               ^^^^^^|^^^^^
+    :                                     `-- unrecognized escape after '\' in string
+ 71 |   let result = (try { reject-awakeable $awakeable_id $null_byte_error } catch {|e| { exception: true, error: ($e | get msg? | default "unknown") } })
+    `----
+
+
+⏳ working... elapsed 9:00 · last activity 0:12 ago
+| Tools    Bash 14 • Edit 7 • Read 4 • Grep 4 • Write 4 • Glob 2
+| Tools    Bash 15 • Edit 7 • Read 4 • Grep 4 • Write 4 • Glob 2
+
+Running Red Queen Gen 3 tests for reject-awakeable...
+  [ok] Gen 3.1: Unicode injection safely escaped
+  [ok] Gen 3.1: Awakeables table intact
+  [ok] Gen 3.2: Control characters handled
+  [ok] Gen 3.2: Payload stored with control characters
+  [ok] Gen 3.3: Emoji accepted
+  [ok] Gen 3.3: Awakeable rejected
+  [ok] Gen 3.3: Emoji preserved correctly
+Red Queen Gen 3 complete
+
+⏳ working... elapsed 9:20 · last activity 0:10 ago
+⏳ working... elapsed 9:30 · last activity 0:20 ago
+⏳ working... elapsed 9:40 · last activity 0:30 ago
+⏳ working... elapsed 9:50 · last activity 0:40 ago
+⏳ working... elapsed 10:00 · last activity 0:50 ago
+⏳ working... elapsed 10:10 · last activity 1:00 ago
+| Tools    Bash 15 • Edit 7 • Write 5 • Read 4 • Grep 4 • Glob 2
+| Tools    Bash 16 • Edit 7 • Write 5 • Read 4 • Grep 4 • Glob 2
+
+Error: nu::parser::operator_unsupported_type
+
+  x The '*' operator does not work on values of type 'string'.
+    ,-[/home/lewis/src/nuoc/tests/rq-reject-awakeable-gen4.nu:47:17]
+ 46 |     "prom_1tooshort",
+ 47 |     "prom_1" + ("x" * 1000)
+    :                 ^|^ |
+    :                  |  `-- does not support 'string'
+    :                  `-- string
+ 48 |   ]
+    `----
+
+
+| Tools    Bash 16 • Edit 8 • Write 5 • Read 4 • Grep 4 • Glob 2
+⏳ working... elapsed 10:50 · last activity 0:10 ago
+⏳ working... elapsed 11:00 · last activity 0:20 ago
+| Tools    Bash 16 • Edit 9 • Write 5 • Read 4 • Grep 4 • Glob 2
+⏳ working... elapsed 11:20 · last activity 0:18 ago
+⏳ working... elapsed 11:30 · last activity 0:28 ago
+| Tools    Bash 17 • Edit 9 • Write 5 • Read 4 • Grep 4 • Glob 2
+
+Running Red Queen Gen 4 tests for reject-awakeable...
+  [ok] Gen 4.1: Rejecting non-existent awakeable throws error
+  [ok] Gen 4.1: Error message indicates not found
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: All malformed IDs handled
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[/home/lewis/src/nuoc/tests/rq-reject-awakeable-gen4.nu:85:3]
+ 84 |   # Manually corrupt the awakeable record to simulate cross-job corruption
+ 85 |   sql-exec $"UPDATE awakeables SET job_id = 'nonexistent-job' WHERE id = '($awakeable_id)'"
+    :   ^^^^|^^^
+    :       `-- Command `sql-exec` not found
+ 86 | 
+    `----
+  help: Did you mean `exec`?
+
+
+⏳ working... elapsed 11:50 · last activity 0:15 ago
+| Tools    Bash 17 • Edit 10 • Write 5 • Read 4 • Grep 4 • Glob 2
+⏳ working... elapsed 12:10 · last activity 0:15 ago
+| Tools    Bash 18 • Edit 10 • Write 5 • Read 4 • Grep 4 • Glob 2
+
+Running Red Queen Gen 4 tests for reject-awakeable...
+  [ok] Gen 4.1: Rejecting non-existent awakeable throws error
+  [ok] Gen 4.1: Error message indicates not found
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: All malformed IDs handled
+  [ok] Gen 4.3: Reject succeeds (task update fails silently for invalid job)
+  [ok] Gen 4.4: Long error message accepted
+  [ok] Gen 4.4: Full long error message stored
+Red Queen Gen 4 complete
+
+⏳ working... elapsed 12:30 · last activity 0:16 ago
+⏳ working... elapsed 12:40 · last activity 0:26 ago
+| Tools    Bash 18 • Edit 10 • Write 6 • Read 4 • Grep 4 • Glob 2
+| Tools    Bash 19 • Edit 10 • Write 6 • Read 4 • Grep 4 • Glob 2
+
+Running Red Queen Gen 5 tests for reject-awakeable...
+  [ok] Gen 5.1: JSON injection handled as string
+  [ok] Gen 5.1: Awakeable remains REJECTED (not corrupted)
+  [ok] Gen 5.2: XML injection handled as string
+  [ok] Gen 5.2: Awakeable remains REJECTED
+  [ok] Gen 5.3: Script injection handled as string
+  [ok] Gen 5.3: Script stored as data (not executed)
+  [ok] Gen 5.4: Path traversal handled as string
+  [ok] Gen 5.4: Path stored as data (not traversed)
+Red Queen Gen 5 complete
+
+| Tools    Bash 20 • Edit 10 • Write 6 • Read 4 • Grep 4 • Glob 2
+
+Running RED phase tests for reject-awakeable...
+  [ok] Awakeable marked as REJECTED
+  [ok] Error stored in payload
+  [ok] resolved_at timestamp set
+  [ok] Task suspended before rejection
+  [ok] Task woken on rejection
+  [ok] Task receives error on rejection
+RED phase complete - all tests should fail
+---
+Running Red Queen Gen 1 tests for reject-awakeable...
+  [ok] Gen 1.1: Empty error message accepted
+  [ok] Gen 1.1: Awakeable rejected with empty error
+  [ok] Gen 1.2: SQL injection safely escaped
+  [ok] Gen 1.2: Awakeable rejected, database intact
+  [ok] Gen 1.3: Special characters accepted
+  [ok] Gen 1.3: Special characters stored correctly
+Red Queen Gen 1 complete
+---
+Running Red Queen Gen 2 tests for reject-awakeable...
+  [ok] Gen 2.1: Rejecting RESOLVED awakeable throws error
+  [ok] Gen 2.1: Error message indicates not pending
+  [ok] Gen 2.1: Awakeable remains RESOLVED
+  [ok] Gen 2.2: Rejecting TIMEOUT awakeable throws error
+  [ok] Gen 2.2: Error message indicates not pending
+  [ok] Gen 2.2: Awakeable remains TIMEOUT
+  [ok] Gen 2.3: Rejecting REJECTED awakeable throws error
+  [ok] Gen 2.3: Error message indicates not pending
+  [ok] Gen 2.3: Awakeable remains REJECTED
+  [ok] Gen 2.3: First error message preserved
+Red Queen Gen 2 complete
+---
+Running Red Queen Gen 3 tests for reject-awakeable...
+  [ok] Gen 3.1: Unicode injection safely escaped
+  [ok] Gen 3.1: Awakeables table intact
+  [ok] Gen 3.2: Control characters handled
+  [ok] Gen 3.2: Payload stored with control characters
+  [ok] Gen 3.3: Emoji accepted
+  [ok] Gen 3.3: Awakeable rejected
+  [ok] Gen 3.3: Emoji preserved correctly
+Red Queen Gen 3 complete
+---
+Running Red Queen Gen 4 tests for reject-awakeable...
+  [ok] Gen 4.1: Rejecting non-existent awakeable throws error
+  [ok] Gen 4.1: Error message indicates not found
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: Malformed ID '($malformed_id | str substring 0..10)...' rejected
+  [ok] Gen 4.2: All malformed IDs handled
+  [ok] Gen 4.3: Reject succeeds (task update fails silently for invalid job)
+  [ok] Gen 4.4: Long error message accepted
+  [ok] Gen 4.4: Full long error message stored
+Red Queen Gen 4 complete
+---
+Running Red Queen Gen 5 tests for reject-awakeable...
+  [ok] Gen 5.1: JSON injection handled as string
+  [ok] Gen 5.1: Awakeable remains REJECTED (not corrupted)
+  [ok] Gen 5.2: XML injection handled as string
+  [ok] Gen 5.2: Awakeable remains REJECTED
+  [ok] Gen 5.3: Script injection handled as string
+  [ok] Gen 5.3: Script stored as data (not executed)
+  [ok] Gen 5.4: Path traversal handled as string
+  [ok] Gen 5.4: Path stored as data (not traversed)
+Red Queen Gen 5 complete
+
+⏳ working... elapsed 13:10 · last activity 0:14 ago
