@@ -3817,3 +3817,224 @@ Tasks: 1 completed
 [main 86c1d25] VERIFY: nuoc-7wmq - all acceptance criteria met
  2 files changed, 66 insertions(+), 2 deletions(-)
 
+| Tools    Bash 28 • Read 7 • Edit 4 • Glob 2 • Grep 2
+
+[main 093ab18] TDD15-COMPLETE: nuoc-7wmq - ready for Red Queen
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+⏳ working... elapsed 5:30 · last activity 0:19 ago
+⏳ working... elapsed 5:40 · last activity 0:29 ago
+⏳ working... elapsed 5:50 · last activity 0:39 ago
+Now **Red Queen Phase 2** - adversarial evolution. Let me create adversarial tests to harden ctx.awakeable:
+
+**Generation 1**: Basic edge cases - empty job_id, negative entry_index, SQL injection attempts
+| Tools    Bash 28 • Read 7 • Edit 4 • Glob 2 • Grep 2 • Write 1
+| Tools    Bash 29 • Read 7 • Edit 4 • Glob 2 • Grep 2 • Write 1
+
+Running Red Queen Gen 1 tests for ctx.awakeable...
+Red Queen Gen 1 tests completed
+
+⏳ working... elapsed 6:10 · last activity 0:14 ago
+**Gen 1 PASSED** - ctx.awakeable successfully defended against empty inputs and SQL injection!
+
+**Generation 2**: Boundary conditions - large job_id, large task_name, max entry_index, special characters
+| Tools    Bash 29 • Read 7 • Edit 4 • Glob 2 • Grep 2 • Write 2
+| Tools    Bash 30 • Read 7 • Edit 4 • Glob 2 • Grep 2 • Write 2
+
+Error: nu::parser::extra_positional
+
+  x Extra positional argument.
+    ,-[/home/lewis/src/nuoc/tests/rq-awakeable-ctx-gen2.nu:19:49]
+ 18 | 
+ 19 |     let long_job_id = ("a" | into binary | fill 1000 | decode utf-8)
+    :                                                 ^^|^
+    :                                                   `-- extra positional argument
+ 20 |     init-execution-context $long_job_id "task-1" 1 --replay-mode
+    `----
+  help: Usage: fill {flags}
+
+
+| Tools    Bash 30 • Read 7 • Edit 5 • Glob 2 • Grep 2 • Write 2
+| Tools    Bash 30 • Read 7 • Edit 6 • Glob 2 • Grep 2 • Write 2
+| Tools    Bash 31 • Read 7 • Edit 6 • Glob 2 • Grep 2 • Write 2
+
+Error: nu::parser::unknown_operator
+
+  x Unknown operator
+    ,-[/home/lewis/src/nuoc/tests/rq-awakeable-ctx-gen2.nu:79:14]
+ 78 |       let result = (ctx-awakeable "job-1" "task-1" 1)
+ 79 |       if ($i % 10000) == 0 {
+    :              |
+    :              `-- Operator '%' not supported
+ 80 |         print $"  ✓ Processed ($i) awakeables"
+    `----
+  help: Did you mean 'mod'?
+
+
+| Tools    Bash 31 • Read 7 • Edit 7 • Glob 2 • Grep 2 • Write 2
+| Tools    Bash 31 • Edit 8 • Read 7 • Glob 2 • Grep 2 • Write 2
+| Tools    Bash 32 • Edit 8 • Read 7 • Glob 2 • Grep 2 • Write 2
+
+Error: nu::parser::unbalanced_delimiter
+
+  x Unbalanced delimiter.
+    ,-[/home/lewis/src/nuoc/tests/rq-awakeable-ctx-gen2.nu:91:5]
+ 90 | }
+ 91 |     }
+    :     |
+    :     `-- unbalanced { and }
+ 92 | 
+    `----
+
+
+| Tools    Bash 32 • Read 8 • Edit 8 • Glob 2 • Grep 2 • Write 2
+⏳ working... elapsed 7:20 · last activity 0:10 ago
+⏳ working... elapsed 7:30 · last activity 0:20 ago
+| Tools    Bash 32 • Read 8 • Edit 8 • Write 3 • Glob 2 • Grep 2
+| Tools    Bash 33 • Read 8 • Edit 8 • Write 3 • Glob 2 • Grep 2
+
+Running Red Queen Gen 2 tests for ctx.awakeable...
+
+Red Queen Gen 2 tests completed
+
+| Tools    Bash 34 • Read 8 • Edit 8 • Write 3 • Glob 2 • Grep 2
+
+Test passed
+
+| Tools    Bash 35 • Read 8 • Edit 8 • Write 3 • Glob 2 • Grep 2
+
+Result: prom_1YWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWE6MQ
+Job ID length: 500
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[source:21:1]
+ 20 | print $'Job ID length: ($long_job_id | str length)'
+ 21 | assert ($result.id | is-not-empty)
+    : ^^^|^^
+    :    `-- Command `assert` not found
+ 22 | assert ($result.id | str starts-with 'prom_1')
+    `----
+  help: Did you mean `ast`?
+
+
+| Tools    Bash 35 • Read 8 • Edit 8 • Write 4 • Glob 2 • Grep 2
+| Tools    Bash 36 • Read 8 • Edit 8 • Write 4 • Glob 2 • Grep 2
+
+Testing ctx.awakeable basic functionality...
+Test 1: ID = prom_1am9iLTE6MA
+Test 2: Long job_id OK, ID starts with prom_1: true
+Error: nu::shell::error
+
+  x init-execution-context.job_id: invalid identifier 'job-日本語-🚀' — must
+  | match ^[a-zA-Z0-9_.-]+$
+     ,-[/home/lewis/src/nuoc/oc-engine.nu:365:16]
+ 364 |   if not ($value =~ $IDENT_PATTERN) {
+ 365 |     error make { msg: $"($context): invalid identifier '($value)' — must match ($IDENT_PATTERN)" }
+     :                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 366 |   }
+     `----
+
+
+⏳ working... elapsed 8:20 · last activity 0:13 ago
+| Tools    Bash 36 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+| Tools    Bash 37 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+Testing ctx.awakeable basic functionality...
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+⏳ working... elapsed 8:40 · last activity 0:13 ago
+| Tools    Bash 38 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+zsh:1: no matches found: /tmp/verify-awakeable-*
+
+| Tools    Bash 39 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+Testing ctx.awakeable basic functionality...
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+⏳ working... elapsed 9:00 · last activity 0:10 ago
+| Tools    Bash 40 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+Error: nu::parser::module_not_found
+
+  x Module not found.
+   ,-[source:2:5]
+ 1 | 
+ 2 | use ../oc-engine.nu *
+   :     ^^^^^^^|^^^^^^^
+   :            `-- module ../oc-engine.nu not found
+ 3 | 
+   `----
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
+
+
+| Tools    Bash 41 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+Test 1: Normal
+  ID1: prom_1am9iLTE6MQ
+  job1: job-1, entry1: 0
+Test 2: Long job_id
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+⏳ working... elapsed 9:20 · last activity 0:11 ago
+⏳ working... elapsed 9:30 · last activity 0:21 ago
+⏳ working... elapsed 9:40 · last activity 0:31 ago
+| Tools    Bash 42 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+Creating single awakeable...
+ID: prom_1dGVzdC1qb2I6MQ
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[source:17:33]
+ 16 | # Check the awakeables table
+ 17 | let records = (sqlite3 -json $'(test_db_dir)/journal.db' 'SELECT * FROM awakeables' | from json)
+    :                                 ^^^^^|^^^^^
+    :                                      `-- Command `test_db_dir` not found
+ 18 | print $'Records in awakeables table: ($records | length)'
+    `----
+  help: `test_db_dir` is neither a Nushell built-in or a known external
+        command
+
+
+| Tools    Bash 43 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+Creating single awakeable...
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+| Tools    Bash 44 • Edit 9 • Read 8 • Write 4 • Glob 2 • Grep 2
+
+total 0
+drwxr-xr-x   2 lewis lewis    40 Jan 28 22:50 .
+drwxrwxrwt 607 root  root  28360 Jan 28 22:50 ..
+
+| Tools    Bash 44 • Read 9 • Edit 9 • Write 4 • Glob 2 • Grep 2
+| Tools    Bash 45 • Read 9 • Edit 9 • Write 4 • Glob 2 • Grep 2
+
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let tables = (sqlite3 $test_db_path "SELECT name FROM sqlite_master WHERE type='table' AND name='awakeables' ORDER BY name;" | from ssv)
+    assert equal ($tables | length) 1
+    assert equal $tables.0.name "awakeables"
+  }
+--
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let schema = (sqlite3 $test_db_path "PRAGMA table_info(awakeables);" | from ssv)
+    
+    assert equal ($schema | where name == "id" | length) 1
+    assert equal ($schema | where name == "job_id" | length) 1
+--
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let indexes = (sqlite3 $test_db_path "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='awakeables' ORDER BY name;" | from ssv)
+    let has_index = ($indexes | where name =~ "idx_awakeables_job_task" | length) > 0
+    assert equal $has_index true
+  }
+
+⏳ working... elapsed 10:30 · last activity 0:19 ago
+| Tools    Bash 45 • Read 9 • Edit 9 • Write 4 • Grep 3 • Glob 2
+| Tools    Bash 45 • Read 10 • Edit 9 • Write 4 • Grep 3 • Glob 2
+| Tools    Bash 45 • Read 11 • Edit 9 • Write 4 • Grep 3 • Glob 2
