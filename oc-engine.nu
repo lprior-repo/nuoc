@@ -224,7 +224,7 @@ export def check-replay [
 
 # Initialize execution context for a task attempt
 # Precondition: job_id and task_name are validated identifiers
-# Postcondition: entry_index reset to 0, ready for journaling
+# Postcondition: entry_index reset to 0, replay_mode set based on existing journal entries
 # Invariant: Must be called at task execution start
 export def init-execution-context [
   job_id: string,
@@ -234,7 +234,12 @@ export def init-execution-context [
 ]: nothing -> nothing {
   let jid = (validate-ident $job_id "init-execution-context.job_id")
   let tname = (validate-ident $task_name "init-execution-context.task_name")
-  let replay = (if $replay_mode { 1 } else { 0 })
+
+  # Check if there are existing journal entries for this attempt
+  let known_entries = (sql $"SELECT COUNT\(*\) as count FROM journal WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)").0.count
+
+  # Auto-detect replay mode: if we have journal entries, start in replay mode
+  let replay = (if $replay_mode or ($known_entries > 0) { 1 } else { 0 })
 
   sql-exec $"INSERT OR REPLACE INTO execution_context \(job_id, task_name, attempt, entry_index, replay_mode\) VALUES \('($jid)', '($tname)', ($attempt), 0, ($replay)\)"
 }
@@ -277,8 +282,56 @@ export def next-entry-index [
   # Update to next value
   sql-exec $"UPDATE execution_context SET entry_index = ($next) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
 
+  # Check if we should transition out of replay mode
+  update-replay-mode $jid $tname $attempt
+
   # Return current value (before increment was persisted, this is the index to use)
   $current
+}
+
+# Check if currently in replay mode
+# Precondition: execution context initialized
+# Postcondition: returns true if reading from journal, false if writing new entries
+export def is-replay-mode [
+  job_id: string,
+  task_name: string,
+  attempt: int
+]: nothing -> bool {
+  let jid = (validate-ident $job_id "is-replay-mode.job_id")
+  let tname = (validate-ident $task_name "is-replay-mode.task_name")
+
+  let result = (sql $"SELECT replay_mode FROM execution_context WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)")
+  if ($result | is-empty) {
+    false
+  } else {
+    ($result.0.replay_mode == 1)
+  }
+}
+
+# Update replay mode based on current entry_index vs known journal entries
+# Precondition: execution context initialized
+# Postcondition: replay_mode updated, transitions to live when entry_index >= known_entries
+# Invariant: Ensures deterministic replay before live execution
+def update-replay-mode [
+  job_id: string,
+  task_name: string,
+  attempt: int
+]: nothing -> nothing {
+  let jid = (validate-ident $job_id "update-replay-mode.job_id")
+  let tname = (validate-ident $task_name "update-replay-mode.task_name")
+
+  # Get current entry index
+  let current_index = (get-entry-index $jid $tname $attempt)
+
+  # Count known journal entries
+  let known_entries = (sql $"SELECT COUNT\(*\) as count FROM journal WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)").0.count
+
+  # If current_index >= known_entries, we're in live mode (writing new entries)
+  # Otherwise, we're in replay mode (reading existing entries)
+  let new_mode = (if $current_index < $known_entries { 1 } else { 0 })
+
+  # Update replay_mode
+  sql-exec $"UPDATE execution_context SET replay_mode = ($new_mode) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
 }
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
