@@ -108,7 +108,7 @@ export def db-init [] {
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       UNIQUE (job_id, task_name, attempt, entry_index)
     );
-    CREATE INDEX idx_journal_replay ON journal(job_id, task_name, attempt);
+    CREATE INDEX IF NOT EXISTS idx_journal_replay ON journal(job_id, task_name, attempt);
 
     CREATE TABLE IF NOT EXISTS execution_context (
       job_id TEXT NOT NULL,
@@ -127,6 +127,20 @@ export def db-init [] {
       headers TEXT,
       condition TEXT
     );
+
+    CREATE TABLE IF NOT EXISTS awakeables (
+      id TEXT PRIMARY KEY,
+      job_id TEXT NOT NULL,
+      task_name TEXT NOT NULL,
+      entry_index INTEGER NOT NULL,
+      status TEXT DEFAULT 'PENDING',
+      payload TEXT,
+      timeout_at TEXT,
+      created_at TEXT DEFAULT (datetime('now')),
+      resolved_at TEXT
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_awakeables_job_task ON awakeables(job_id, task_name);
   "
 }
 

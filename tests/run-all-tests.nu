@@ -138,15 +138,15 @@ def test-oc-engine [] {
   # Test: awakeables table is created by db-init
   rm -rf $DB_DIR
   db-init
-  let tables = (sqlite3 $DB_PATH "SELECT name FROM sqlite_master WHERE type='table' AND name='awakeables' ORDER BY name;" | from ssv)
-  if (($tables | length) == 1) and ($tables.0.name == "awakeables") {
+  let tables = (sqlite3 $DB_PATH "SELECT name FROM sqlite_master WHERE type='table' AND name='awakeables';" | lines)
+  if (($tables | length) == 1) and ($tables.0 == "awakeables") {
     print "  [ok] awakeables table created"
   } else {
-    print $"  [fail] awakeables table created: expected 1 table named awakeables, got ($tables | length) tables"
+    print $"  [fail] awakeables table created: expected 1 table named awakeables, got ($tables | length) tables: ($tables)"
   }
 
   # Test: awakeables table has correct schema
-  let schema = (sqlite3 $DB_PATH "PRAGMA table_info(awakeables);" | from ssv)
+  let schema = (sqlite3 $DB_PATH "PRAGMA table_info(awakeables);" | lines | split column '|' cid name type notnull dflt_value pk)
   
   let id_exists = ($schema | where name == "id" | length) == 1
   let job_id_exists = ($schema | where name == "job_id" | length) == 1
@@ -165,26 +165,26 @@ def test-oc-engine [] {
   }
   
   let id_col = ($schema | where name == "id")
-  if ($id_col.0.pk == 1) {
+  if ($id_col | is-not-empty) and ($id_col.0.pk == "1") {
     print "  [ok] awakeables id is PRIMARY KEY"
   } else {
     print $"  [fail] awakeables id is PRIMARY KEY"
   }
   
   let status_col = ($schema | where name == "status")
-  if ($status_col.0.dflt_value == "'PENDING'") {
+  if ($status_col | is-not-empty) and ($status_col.0.dflt_value == "'PENDING'") {
     print "  [ok] awakeables status defaults to PENDING"
   } else {
-    print $"  [fail] awakeables status defaults to PENDING: got ($status_col.0.dflt_value)"
+    print $"  [fail] awakeables status defaults to PENDING: got ($status_col.0.dflt_value? | default 'null')"
   }
 
   # Test: awakeables table has index on (job_id, task_name)
-  let indexes = (sqlite3 $DB_PATH "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='awakeables' ORDER BY name;" | from ssv)
-  let has_index = ($indexes | where name =~ "idx_awakeables_job_task" | length) > 0
+  let indexes = (sqlite3 $DB_PATH "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='awakeables';" | lines)
+  let has_index = ($indexes | where $it =~ "idx_awakeables_job_task" | length) > 0
   if $has_index {
     print "  [ok] awakeables has index on (job_id, task_name)"
   } else {
-    print $"  [fail] awakeables has index on (job_id, task_name)"
+    print $"  [fail] awakeables has index on (job_id, task_name): got ($indexes)"
   }
 }
 

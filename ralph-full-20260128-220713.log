@@ -835,3 +835,303 @@ Error: task_runner::run_failed
   [fail] awakeables table has all columns
 
 RED phase complete. Tests are failing as expected (awakeables table doesn't exist). Committing RED state now.
+| Tools    Bash 35 • Read 9 • Edit 9
+
+[main bf63be5] RED: nuoc-9w6 - failing tests for awakeables table schema
+ 22 files changed, 3262 insertions(+), 189 deletions(-)
+ create mode 100644 .ralph/ralph-history.json
+ create mode 100644 .ralph/ralph-loop.state.json
+ create mode 100644 .ralph/ralph-opencode.config.json
+ create mode 100644 .ralph/ralph-tasks.md
+ create mode 100644 RALPH-SETUP.md
+ create mode 100644 README-RALPH.md
+ create mode 100644 babysit-log.txt
+ create mode 100755 babysit-ralph.sh
+ create mode 100755 launch-ralph-full.sh
+ create mode 100755 launch-ralph.sh
+ create mode 100755 monitor-ralph-full.sh
+ create mode 100755 monitor-ralph.sh
+ create mode 100644 ralph-features.json
+ create mode 100644 ralph-full-20260128-220713.log
+ create mode 100644 ralph-prompt-full.md
+ create mode 100644 ralph-prompt-with-red-queen.md
+ create mode 100644 ralph-prompt.md
+
+Now in GREEN phase. Implementing minimal code to make tests pass by adding awakeables table to db-init.
+| Tools    Bash 35 • Read 10 • Edit 9
+| Tools    Bash 35 • Read 11 • Edit 9
+| Tools    Bash 35 • Read 11 • Edit 10
+
+  [fail] awakeables table created: expected 1 table named awakeables, got 0 tables
+  [fail] awakeables table has all columns
+== Test Summary ==
+Passed: 2
+Failed: 1
+
+| Tools    Bash 37 • Read 11 • Edit 10
+
+--- Testing oc-engine.nu ---
+  [fail] awakeables table created: expected 1 table named awakeables, got 0 tables
+  [fail] awakeables table has all columns
+
+| Tools    Bash 38 • Read 11 • Edit 10
+
+Error: in prepare, index idx_journal_replay already exists
+
+| Tools    Bash 38 • Read 11 • Edit 11
+⏳ working... elapsed 6:00 · last activity 0:10 ago
+| Tools    Bash 40 • Read 11 • Edit 11
+| Tools    Bash 41 • Read 11 • Edit 11
+
+Error:   × Nushell launched as a REPL, but STDIN is not a TTY; either launch in a
+  │ valid terminal or provide arguments to invoke a script!
+
+
+| Tools    Bash 42 • Read 11 • Edit 11
+
+Error: unable to open database ".oc-workflow/journal.db": unable to open database file
+
+| Tools    Bash 43 • Read 11 • Edit 11
+
+Error: nu::parser::module_not_found
+
+  x Module not found.
+   ,-[/tmp/test-db.nu:2:5]
+ 1 | #!/usr/bin/env nu
+ 2 | use ../oc-engine.nu *
+   :     ^^^^^^^|^^^^^^^
+   :            `-- module ../oc-engine.nu not found
+ 3 | db-init
+   `----
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
+
+
+| Tools    Bash 44 • Read 11 • Edit 11
+
+Error: nu::shell::missing_parameter
+
+  x Missing parameter: requires file paths.
+   ,-[source:3:1]
+ 2 | use oc-engine.nu *
+ 3 | rm -rf 
+   : ^|
+   :  `-- missing parameter: requires file paths
+ 4 | db-init
+   `----
+
+
+| Tools    Bash 45 • Read 11 • Edit 11
+
+Error: in prepare, no such column: "table" - should this be a string literal in single-quotes?
+  SELECT name FROM sqlite_master WHERE type="table"
+                              error here ---^
+
+| Tools    Bash 46 • Read 11 • Edit 11
+
+Error: in prepare, near "table": syntax error
+  SELECT name FROM sqlite_master WHERE type=table
+                              error here ---^
+
+| Tools    Bash 47 • Read 11 • Edit 11
+
+Error:   × Nushell launched as a REPL, but STDIN is not a TTY; either launch in a
+  │ valid terminal or provide arguments to invoke a script!
+
+
+| Tools    Bash 47 • Read 11 • Edit 11 • Write 1
+
+Error: nu::parser::module_not_found
+
+  x Module not found.
+   ,-[/tmp/check-db.nu:2:5]
+ 1 | #!/usr/bin/env nu
+ 2 | use ../oc-engine.nu *
+   :     ^^^^^^^|^^^^^^^
+   :            `-- module ../oc-engine.nu not found
+ 3 | 
+   `----
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
+
+
+| Tools    Bash 48 • Read 11 • Edit 11 • Write 2
+
+Error: in prepare, no such column: "table" - should this be a string literal in single-quotes?
+  SELECT name FROM sqlite_master WHERE type="table";
+                              error here ---^
+
+| Tools    Bash 49 • Edit 12 • Read 11 • Write 2
+
+All tables:
+jobs
+tasks
+task_deps
+job_deps
+events
+sqlite_sequence
+journal
+execution_context
+webhooks
+awakeables
+Error: nu::shell::only_supports_this_input_type
+
+  x Input type not supported.
+    ,-[/home/lewis/src/nuoc/check-db.nu:11:19]
+ 10 | 
+ 11 | let awakeables = ($tables | where name == "awakeables")
+    :                   ^^^|^^^   ^^|^^
+    :                      |        `-- only list<any>, table, and range input data is supported
+    :                      `-- input type: string
+ 12 | print "Awakeables count:"
+    `----
+
+
+| Tools    Bash 50 • Edit 13 • Read 11 • Write 2
+
+All tables:
+╭───┬───────────────────╮
+│ # │       jobs        │
+├───┼───────────────────┤
+│ 0 │ tasks             │
+│ 1 │ task_deps         │
+│ 2 │ job_deps          │
+│ 3 │ events            │
+│ 4 │ sqlite_sequence   │
+│ 5 │ journal           │
+│ 6 │ execution_context │
+│ 7 │ webhooks          │
+│ 8 │ awakeables        │
+╰───┴───────────────────╯
+Error: nu::shell::column_not_found
+
+  x Cannot find column 'name'
+    ,-[/home/lewis/src/nuoc/check-db.nu:11:35]
+ 10 | 
+ 11 | let awakeables = ($tables | where name == "awakeables")
+    :                                   ^^|^|
+    :                                     | `-- value originates here
+    :                                     `-- cannot find column 'name'
+ 12 | print "Awakeables count:"
+    `----
+
+
+| Tools    Bash 51 • Edit 14 • Read 11 • Write 2
+
+All tables:
+╭───┬───────────────────╮
+│ # │       jobs        │
+├───┼───────────────────┤
+│ 0 │ tasks             │
+│ 1 │ task_deps         │
+│ 2 │ job_deps          │
+│ 3 │ events            │
+│ 4 │ sqlite_sequence   │
+│ 5 │ journal           │
+│ 6 │ execution_context │
+│ 7 │ webhooks          │
+│ 8 │ awakeables        │
+╰───┴───────────────────╯
+Column names:
+╭───┬──────╮
+│ 0 │ jobs │
+╰───┴──────╯
+
+| Tools    Bash 53 • Edit 14 • Read 11 • Write 2
+
+jobs
+tasks
+task_deps
+job_deps
+events
+sqlite_sequence
+journal
+execution_context
+webhooks
+awakeables
+
+| Tools    Bash 54 • Edit 14 • Read 11 • Write 2
+
+sqlite_autoindex_awakeables_1
+idx_awakeables_job_task
+
+⏳ working... elapsed 7:40 · last activity 0:18 ago
+| Tools    Bash 54 • Edit 15 • Read 11 • Write 2
+
+  [ok] awakeables table created
+  [fail] awakeables table has all columns
+== Test Summary ==
+Passed: 2
+Failed: 1
+
+| Tools    Bash 56 • Edit 15 • Read 11 • Write 2
+
+0|id|TEXT|0||1
+1|job_id|TEXT|1||0
+2|task_name|TEXT|1||0
+3|entry_index|INTEGER|1||0
+4|status|TEXT|0|'PENDING'|0
+5|payload|TEXT|0||0
+6|timeout_at|TEXT|0||0
+7|created_at|TEXT|0|datetime('now')|0
+8|resolved_at|TEXT|0||0
+
+| Tools    Bash 57 • Edit 15 • Read 11 • Write 2
+
+Schema:
+╭────────────╮
+│ empty list │
+╰────────────╯
+Columns:
+╭────────────╮
+│ empty list │
+╰────────────╯
+First row:
+Error: nu::shell::access_beyond_end
+
+  x Row number too large (empty content).
+   ,-[source:9:15]
+ 8 | print "First row:"
+ 9 | print $schema.0
+   :               |
+   :               `-- index too large (empty content)
+   `----
+
+
+| Tools    Bash 58 • Edit 15 • Read 11 • Write 2
+
+Schema:
+╭───┬─────┬─────────────┬─────────┬─────────┬─────────────────┬────╮
+│ # │ cid │    name     │  type   │ notnull │   dflt_value    │ pk │
+├───┼─────┼─────────────┼─────────┼─────────┼─────────────────┼────┤
+│ 0 │ 0   │ id          │ TEXT    │ 0       │                 │ 1  │
+│ 1 │ 1   │ job_id      │ TEXT    │ 1       │                 │ 0  │
+│ 2 │ 2   │ task_name   │ TEXT    │ 1       │                 │ 0  │
+│ 3 │ 3   │ entry_index │ INTEGER │ 1       │                 │ 0  │
+│ 4 │ 4   │ status      │ TEXT    │ 0       │ 'PENDING'       │ 0  │
+│ 5 │ 5   │ payload     │ TEXT    │ 0       │                 │ 0  │
+│ 6 │ 6   │ timeout_at  │ TEXT    │ 0       │                 │ 0  │
+│ 7 │ 7   │ created_at  │ TEXT    │ 0       │ datetime('now') │ 0  │
+│ 8 │ 8   │ resolved_at │ TEXT    │ 0       │                 │ 0  │
+╰───┴─────┴─────────────┴─────────┴─────────┴─────────────────┴────╯
+Columns:
+╭───┬────────────╮
+│ 0 │ cid        │
+│ 1 │ name       │
+│ 2 │ type       │
+│ 3 │ notnull    │
+│ 4 │ dflt_value │
+│ 5 │ pk         │
+╰───┴────────────╯
+
+| Tools    Bash 58 • Edit 16 • Read 11 • Write 2
+
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+== Test Summary ==
+Passed: 3
+Failed: 0
+
