@@ -1,0 +1,40 @@
+$schema: https://moonrepo.dev/schemas/project.json
+
+type: application
+platform: system
+
+tasks:
+  test:
+    description: Run all tests
+    command: nu
+    args: tests/run-all-tests.nu
+    inputs:
+      - 'oc-*.nu'
+      - 'tests/**/*'
+    local: true
+
+  check:
+    description: Check syntax (uses same validation as quick)
+    command: nu
+    args: tests/quick-check.nu
+    inputs:
+      - '*.nu'
+    local: true
+
+  quick:
+    description: Quick validation
+    command: nu
+    args: tests/quick-check.nu
+    inputs:
+      - 'oc-*.nu'
+      - 'tests/*.nu'
+    local: true
+
+  ci:
+    description: Run CI pipeline (tests only)
+    command: nu
+    args: tests/run-all-tests.nu
+    inputs:
+      - 'oc-*.nu'
+      - 'tests/**/*'
+    local: true

@@ -1,0 +1,54 @@
+layout {
+  default_tab_template {
+    pane size=1 borderless=true {
+      plugin location="zellij:tab-bar"
+    }
+    children
+    pane size=2 borderless=true {
+      plugin location="zellij:status-bar"
+    }
+  }
+
+  tab name="work" {
+    pane {
+      name "bead-work"
+      command "nu"
+      args "-c" "cd workspace; nu"
+    }
+  }
+
+  tab name="monitor" split_axis="horizontal" {
+    pane {
+      name "ralph-logs"
+      command "tail"
+      args "-f" "Ralph/logs/ralph-full.log"
+    }
+    pane split_axis="vertical" {
+      pane {
+        name "bead-status"
+        command "nu"
+        args "-c" "cd workspace; watch -n 5 'bd show \$BEAD_ID 2>/dev/null | head -30'"
+      }
+      pane {
+        name "git-status"
+        command "nu"
+        args "-c" "cd workspace; watch -n 5 'jj status && jj log -l 5'"
+      }
+    }
+  }
+
+  tab name="tasks" {
+    pane {
+      name "task-list"
+      command "nu"
+      args "-c" "cat .ralph/ralph-tasks.md | less +F"
+    }
+  }
+
+  tab name="shell" {
+    pane {
+      name "shell"
+      command "nu"
+    }
+  }
+}
