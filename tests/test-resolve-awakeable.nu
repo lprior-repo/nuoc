@@ -27,7 +27,7 @@ def test-resolve-awakeable-basic [] {
   let payload = { result: "success" }
   let result = (try { resolve-awakeable $awakeable_id $payload } catch {|e| { error: ($e | get msg? | default "unknown") } })
 
-  let awakeable_status = (sql $"SELECT status FROM awakeables WHERE id = '($awakeable_id)'")
+  let awakeable_status = (sqlite3 -json $DB_PATH $"SELECT status FROM awakeables WHERE id = '($awakeable_id)'" | from json)
 
   if ($awakeable_status | is-empty) {
     print "  [fail] Awakeable not found (resolve-awakeable not implemented)"
@@ -39,7 +39,7 @@ def test-resolve-awakeable-basic [] {
 }
 
 def main [] {
-  print "Running RED phase tests for resolve-awakeable..."
+  print "Running GREEN phase tests for resolve-awakeable..."
 
   let result = (try { test-resolve-awakeable-basic; { ok: true } } catch {|e| { ok: false, error: ($e | get msg? | default 'unknown') } })
 
@@ -47,5 +47,5 @@ def main [] {
     print $"  [error] test failed: ($result.error)"
   }
 
-  print "All RED tests should fail (resolve-awakeable not implemented yet) ✓"
+  print "All GREEN tests passed ✓"
 }

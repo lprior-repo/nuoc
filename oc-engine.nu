@@ -1009,6 +1009,47 @@ export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int,
   { suspended: true, awakeable_id: $aw_id }
 }
 
+# Resolve an awakeable with a payload, waking the suspended task
+# Precondition: awakeable_id is a valid awakeable ID, payload is any JSON-serializable value
+# Postcondition: awakeable marked RESOLVED with payload, task woken from suspension
+# Invariant: only PENDING awakeables can be resolved, task status transitions to pending
+export def resolve-awakeable [awakeable_id: string, payload: any]: nothing -> record {
+  let aw_id = (validate-ident $awakeable_id "resolve-awakeable.awakeable_id")
+
+  # Parse awakeable ID to get job_id and task_name
+  let parsed = (awakeable-id-parse $aw_id)
+  let jid = $parsed.invocation_id
+  let tname = $parsed.entry_index | into string
+
+  # Get task name from awakeables table
+  let awakeable_record = (sql $"SELECT job_id, task_name, status FROM awakeables WHERE id = '($aw_id)'")
+  if ($awakeable_record | is-empty) {
+    error make { msg: $"awakeable not found: ($aw_id)" }
+  }
+
+  let actual_job_id = $awakeable_record.0.job_id
+  let actual_task_name = $awakeable_record.0.task_name
+  let status = $awakeable_record.0.status
+
+  # Check if already resolved
+  if $status == "RESOLVED" {
+    error make { msg: $"awakeable already resolved: ($aw_id)" }
+  }
+
+  # Serialize payload to JSON and escape for SQL
+  let payload_json = ($payload | to json -r)
+  let payload_esc = (sql-escape-text $payload_json)
+
+  # Update awakeable: mark RESOLVED, store payload, set timestamp
+  sql-exec $"UPDATE awakeables SET status = 'RESOLVED', payload = '($payload_esc)', resolved_at = datetime\('now'\) WHERE id = '($aw_id)'"
+
+  # Wake the suspended task
+  sql-exec $"UPDATE tasks SET status = 'pending' WHERE job_id = '($actual_job_id)' AND name = '($actual_task_name)'"
+  emit-event $actual_job_id $actual_task_name "task.StateChange" "suspended" "pending" $"awakeable ($aw_id) resolved"
+
+  { resolved: true, awakeable_id: $aw_id, payload: $payload }
+}
+
 # ── Task Output Retrieval ────────────────────────────────────────────────────
 
 # Retrieve cached output by var name (Tork's {{ tasks.X }})

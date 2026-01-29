@@ -4941,3 +4941,371 @@ Completion promise: not detected
 
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 7...
+📝 Auto-committed changes
+
+🔄 Iteration 7 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T05:00:57.633Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll work on the next task: "nuoc-a7ti - [Awk-06] Implement resolve-awakeable command".
+
+Let me first mark it as in progress and read the bead context.
+| Tools    Read 1
+
+
+○ nuoc-a7ti · [Awk-06] Implement resolve-awakeable command   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+CLI command to resolve awakeable.
+
+## Command
+```nu
+export def resolve-awakeable [id: string, payload: any] {
+  # Parse ID, update awakeable, wake task
+}
+```
+
+## Acceptance
+- [ ] Awakeable marked resolved
+- [ ] Payload stored
+- [ ] Task woken
+
+DEPENDS ON
+  → ✓ nuoc-pvb2: [Awk-03] Implement awakeable ID parsing ● P0
+
+BLOCKS
+  ← ○ nuoc-bfxa: [Awk-10] Implement duplicate resolution rejection ● P0
+  ← ○ nuoc-n686: [Awk-07] Implement HTTP endpoint for awakeable resolution ● P0
+  ← ○ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+  ← ○ nuoc-xm7h: [Awk-12] Implement ctx.rejectAwakeable ● P0
+
+
+| Tools    Read 1 • Bash 1 • Edit 1
+Now let me explore the existing awakeable implementation to understand the context.
+| Tools    Read 1 • Bash 1 • Edit 1 • Glob 1
+| Tools    Read 2 • Bash 2 • Glob 2 • Edit 1 • Grep 1
+Let me look at existing awakeable tests to understand the testing patterns.
+| Tools    Read 3 • Bash 2 • Glob 2 • Edit 1 • Grep 1
+⏳ working... elapsed 1:00 · last activity 0:11 ago
+⏳ working... elapsed 1:10 · last activity 0:21 ago
+⏳ working... elapsed 1:20 · last activity 0:31 ago
+Now I'll implement the resolve-awakeable command using TDD15. Let me start with Phase 1-2 (RED) - create failing tests.
+| Tools    Read 4 • Bash 2 • Glob 2 • Edit 1 • Grep 1 • Write 1
+| Tools    Read 4 • Bash 3 • Glob 2 • Edit 1 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Read 4 • Bash 4 • Glob 2 • Edit 1 • Grep 1 • Write 1
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:40]
+ 1 | use tests/test-resolve-awakeable.nu *; main
+   :                                        ^^|^
+   :                                          `-- Command `main` not found
+   `----
+  help: Did you mean `math min`?
+
+
+⏳ working... elapsed 2:00 · last activity 0:16 ago
+| Tools    Bash 5 • Read 4 • Glob 2 • Edit 1 • Grep 1 • Write 1
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+| Tools    Bash 6 • Read 4 • Glob 2 • Edit 1 • Grep 1 • Write 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (88ms)
+
+Tasks: 1 completed
+ Time: 88ms
+
+
+| Tools    Bash 7 • Read 4 • Glob 2 • Edit 1 • Grep 1 • Write 1
+
+$schema: https://moonrepo.dev/schemas/project.json
+
+type: application
+platform: system
+
+tasks:
+  test:
+    description: Run all tests
+    command: nu
+    args: tests/run-all-tests.nu
+    inputs:
+      - 'oc-*.nu'
+      - 'tests/**/*'
+    local: true
+
+  check:
+    description: Check syntax (uses same validation as quick)
+    command: nu
+    args: tests/quick-check.nu
+    inputs:
+      - '*.nu'
+    local: true
+
+  quick:
+    description: Quick validation
+    command: nu
+    args: tests/quick-check.nu
+    inputs:
+      - 'oc-*.nu'
+      - 'tests/*.nu'
+    local: true
+
+  ci:
+    description: Run CI pipeline (tests only)
+    command: nu
+    args: tests/run-all-tests.nu
+    inputs:
+      - 'oc-*.nu'
+      - 'tests/**/*'
+    local: true
+
+| Tools    Bash 7 • Read 5 • Glob 3 • Edit 1 • Grep 1 • Write 1
+| Tools    Bash 8 • Read 5 • Glob 3 • Edit 1 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+⏳ working... elapsed 2:40 · last activity 0:16 ago
+⏳ working... elapsed 2:50 · last activity 0:26 ago
+| Tools    Bash 8 • Read 5 • Glob 3 • Edit 2 • Grep 1 • Write 1
+| Tools    Bash 9 • Read 5 • Glob 3 • Edit 2 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+Error: unable to open database "/tmp/test-resolve-awakeable-($env.PID)/journal.db": unable to open database file
+  [fail] Awakeable marked as RESOLVED: expected RESOLVED, got []
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Bash 9 • Read 5 • Edit 3 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 10 • Read 5 • Edit 3 • Glob 3 • Grep 1 • Write 1
+
+Error: nu::parser::extra_positional
+
+  x Extra positional argument.
+   ,-[/home/lewis/src/nuoc/tests/test-resolve-awakeable.nu:7:30]
+ 6 | def test-resolve-awakeable-basic [] {
+ 7 |   let pid = (date now | date to-record).nanosecond
+   :                              ^^^^|^^^^
+   :                                  `-- extra positional argument
+ 8 |   let test_db_dir = $"/tmp/test-resolve-awakeable-($pid)"
+   `----
+  help: Usage: date
+
+
+| Tools    Bash 10 • Read 5 • Edit 4 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 11 • Read 5 • Edit 4 • Glob 3 • Grep 1 • Write 1
+
+Error: nu::parser::parse_mismatch
+
+  x Parse mismatch during operation.
+   ,-[/home/lewis/src/nuoc/tests/test-resolve-awakeable.nu:7:25]
+ 6 | def test-resolve-awakeable-basic [] {
+ 7 |   let pid = (random int 1000000 9999999)
+   :                         ^^^|^^^
+   :                            `-- expected at least one range bound set
+ 8 |   let test_db_dir = $"/tmp/test-resolve-awakeable-($pid)"
+   `----
+
+
+| Tools    Bash 11 • Read 5 • Edit 5 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 12 • Read 5 • Edit 5 • Glob 3 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+  [error] test failed: External command had a non-zero exit code
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Bash 13 • Read 5 • Edit 5 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 13 • Edit 6 • Read 5 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 14 • Edit 6 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+Error: unable to open database "/tmp/test-resolve-awakeable-1361810/journal.db": unable to open database file
+  [fail] Awakeable marked as RESOLVED: expected RESOLVED, got []
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Bash 15 • Edit 6 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+5:export const DB_DIR = ".oc-workflow"
+6:export const DB_PATH = $"($DB_DIR)/journal.db"
+22:  mkdir $DB_DIR
+23:  sqlite3 $DB_PATH "
+461:  sqlite3 -json $DB_PATH $query | from json
+465:  sqlite3 $DB_PATH $query
+
+| Tools    Bash 16 • Edit 6 • Read 5 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 17 • Edit 6 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+export def db-init [] {
+  mkdir $DB_DIR
+  sqlite3 $DB_PATH "
+    CREATE TABLE IF NOT EXISTS jobs (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      bead_id TEXT,
+      inputs TEXT,
+      defaults TEXT,
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','completed')),
+      position INTEGER DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      scheduled_start_at TEXT,
+      started_at TEXT,
+      completed_at TEXT,
+      completion_result TEXT CHECK(completion_result IS NULL OR completion_result IN ('success','failure')),
+      completion_failure TEXT,
+      next_retry_at TEXT,
+      retry_count INTEGER DEFAULT 0,
+      last_failure TEXT,
+      last_failure_code INTEGER,
+
+⏳ working... elapsed 4:20 · last activity 0:18 ago
+| Tools    Bash 17 • Edit 7 • Read 5 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 18 • Edit 7 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+  [error] test failed: External command failed
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Bash 19 • Edit 7 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:6:19]
+ 5 | } catch {|e| 
+ 6 |   print $'Error: (.msg)'
+   :                   ^^|^
+   :                     `-- Command `.msg` not found
+ 7 | }
+   `----
+  help: `.msg` is neither a Nushell built-in or a known external command
+
+
+| Tools    Bash 20 • Edit 7 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+Error: nu::shell::pipeline_mismatch
+
+  x Pipeline empty.
+   ,-[source:6:22]
+ 5 | } catch {|e| 
+ 6 |   print $'Error: ( | get msg? | default "unknown")'
+   :                      ^|^
+   :                       `-- no input value was piped in
+ 7 | }
+   `----
+
+
+| Tools    Bash 21 • Edit 7 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+Error: External command failed
+
+Good! The RED phase tests are failing as expected because `resolve-awakeable` doesn't exist yet. Let me commit the RED phase.
+| Tools    Bash 22 • Edit 7 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+[main e422eff] RED: nuoc-a7ti - failing tests for resolve-awakeable
+ 1 file changed, 51 insertions(+)
+ create mode 100644 tests/test-resolve-awakeable.nu
+
+Now let me implement the resolve-awakeable function (GREEN phase).
+| Tools    Bash 22 • Edit 8 • Read 5 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 23 • Edit 8 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+  [error] test failed: External command failed
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Bash 24 • Edit 8 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+╭──────────────┬──────────────────────╮
+│ resolved     │ true                 │
+│ awakeable_id │ prom_1dGVzdC1qb2I6MA │
+│ payload      │ {record 1 field}     │
+╰──────────────┴──────────────────────╯
+
+| Tools    Bash 25 • Edit 8 • Read 5 • Glob 3 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+  [error] test failed: External command failed
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Bash 25 • Edit 8 • Read 6 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 26 • Edit 8 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+def sql [query: string] {
+def sql-exec [query: string] {
+
+| Tools    Bash 26 • Edit 9 • Read 6 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 27 • Edit 9 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+Running RED phase tests for resolve-awakeable...
+  [ok] Awakeable marked as RESOLVED
+All RED tests should fail (resolve-awakeable not implemented yet) ✓
+
+| Tools    Bash 27 • Edit 10 • Read 6 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 28 • Edit 10 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+Running GREEN phase tests for resolve-awakeable...
+  [ok] Awakeable marked as RESOLVED
+All GREEN tests passed ✓
+
