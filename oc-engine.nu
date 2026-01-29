@@ -160,6 +160,57 @@ export def journal-write [
   $entry_index
 }
 
+# Read all journal entries for a task attempt
+# Precondition: job_id and task_name are validated identifiers
+# Postcondition: returns entries ordered by entry_index, empty table if none exist
+# Invariant: entry_index ordering ensures deterministic replay sequence
+export def journal-read [
+  job_id: string,
+  task_name: string,
+  attempt: int
+]: nothing -> table {
+  # Validate identifiers
+  let jid = (validate-ident $job_id "journal-read.job_id")
+  let tname = (validate-ident $task_name "journal-read.task_name")
+
+  # Query journal entries in order
+  sql $"SELECT * FROM journal WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt) ORDER BY entry_index"
+}
+
+# Check if a journal entry exists and return cached output
+# Precondition: job_id and task_name are validated identifiers
+# Postcondition: returns cached output if entry exists, null otherwise
+# Invariant: Enables deterministic replay by checking journal before execution
+export def check-replay [
+  job_id: string,
+  task_name: string,
+  attempt: int,
+  entry_index: int
+]: nothing -> any {
+  # Validate identifiers
+  let jid = (validate-ident $job_id "check-replay.job_id")
+  let tname = (validate-ident $task_name "check-replay.task_name")
+
+  # Query for specific entry
+  let result = (sql $"SELECT output FROM journal WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt) AND entry_index=($entry_index)")
+
+  # Return null if not found, otherwise deserialize output
+  if ($result | is-empty) {
+    null
+  } else {
+    let output_str = $result.0.output
+    if ($output_str == "null" or ($output_str | is-empty)) {
+      null
+    } else {
+      try {
+        $output_str | from json
+      } catch {
+        $output_str
+      }
+    }
+  }
+}
+
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 # Identifier validation regex: alphanumeric, underscore, hyphen, dot only
