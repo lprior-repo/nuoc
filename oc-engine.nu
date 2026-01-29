@@ -27,7 +27,7 @@ export def db-init [] {
       bead_id TEXT,
       inputs TEXT,
       defaults TEXT,
-      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','cancelled','completed')),
+      status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','scheduled','ready','running','suspended','backing-off','paused','cancelled','completed','failed')),
       position INTEGER DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
       scheduled_start_at TEXT,
@@ -177,7 +177,7 @@ export def journal-write [
   let hash_esc = (sql-escape-text $input_hash)
 
   # Insert entry atomically
-  sql-exec $"INSERT INTO journal \(job_id, task_name, attempt, entry_index, op_type, input_hash, input, output\) VALUES \('($jid)', '($tname)', ($attempt), ($entry_index), '($op)', '($hash_esc)', '($input_esc)', '($output_esc)'\)"
+  sql-exec $"INSERT OR REPLACE INTO journal \(job_id, task_name, attempt, entry_index, op_type, input_hash, input, output\) VALUES \('($jid)', '($tname)', ($attempt), ($entry_index), '($op)', '($hash_esc)', '($input_esc)', '($output_esc)'\)"
 
   # Return entry_index on success
   $entry_index
@@ -234,6 +234,84 @@ export def check-replay [
   }
 }
 
+# ── Replay Execution Wrapper ─────────────────────────────────────────────────────
+
+# Verify non-determinism by comparing expected vs actual op_type
+# Precondition: job_id, task_name validated; journal entry exists
+# Postcondition: returns error record if mismatch, null if match
+# Invariant: op_type must match journal entry for deterministic replay
+def verify-replay-determinism [
+  job_id: string,
+  task_name: string,
+  attempt: int,
+  entry_index: int,
+  expected_op_type: string
+]: nothing -> nothing {
+  let journal_entry = (sql $"SELECT op_type FROM journal WHERE job_id='($job_id)' AND task_name='($task_name)' AND attempt=($attempt) AND entry_index=($entry_index)")
+
+  if not ($journal_entry | is-empty) {
+    let journal_op_type = $journal_entry.0.op_type
+
+    if $journal_op_type != $expected_op_type {
+      let error_msg = $"Non-determinism detected: expected op_type '($journal_op_type)' but got '($expected_op_type)' at entry_index ($entry_index)"
+      sql-exec $"UPDATE jobs SET status = 'failed', error = '(sql-escape-text $error_msg)', last_failure_code = 99 WHERE id = '($job_id)'"
+      error make {
+        msg: $error_msg
+        label: {
+          text: "non-deterministic operation during replay"
+          span: (metadata $expected_op_type).span
+        }
+      }
+    }
+  }
+}
+
+
+# Execute an operation with replay support
+# Precondition: job_id, task_name are validated identifiers; execution context initialized
+# Postcondition: Returns operation result, writes to journal if new, returns cached if replaying
+# Invariant: entry_index incremented exactly once per operation
+export def execute-with-replay [
+  job_id: string,
+  task_name: string,
+  attempt: int,
+  op_type: string,
+  execute_fn: closure
+]: nothing -> any {
+  let jid = (validate-ident $job_id "execute-with-replay.job_id")
+  let tname = (validate-ident $task_name "execute-with-replay.task_name")
+  let op = (validate-ident $op_type "execute-with-replay.op_type")
+
+  # Get current replay mode and entry index
+  let ctx = (sql $"SELECT replay_mode, entry_index FROM execution_context WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)")
+  let replay_mode = if ($ctx | is-empty) { 0 } else { $ctx.0.replay_mode }
+  let entry_index = if ($ctx | is-empty) { 0 } else { $ctx.0.entry_index }
+
+  # Check if journal entry exists for this operation
+  let cached = (check-replay $jid $tname $attempt $entry_index)
+
+  # If we have a cached result and we're in replay mode
+  if ($cached != null) and ($replay_mode == 1) {
+    # Verify operation type matches (non-determinism check)
+    verify-replay-determinism $jid $tname $attempt $entry_index $op
+
+    # Increment entry_index and return cached result
+    sql-exec $"UPDATE execution_context SET entry_index = ($entry_index + 1) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
+    $cached
+  } else {
+    # No cached result or not in replay mode - execute the operation
+    let result = (do $execute_fn)
+
+    # Write result to journal
+    journal-write $jid $tname $attempt $entry_index $op {input: "auto"} $result
+
+    # Increment entry_index
+    sql-exec $"UPDATE execution_context SET entry_index = ($entry_index + 1) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
+
+    $result
+  }
+}
+
 # ── Execution Context (Entry Index Tracking) ─────────────────────────────────
 
 # Initialize execution context for a task attempt
@@ -256,6 +334,11 @@ export def init-execution-context [
   let replay = (if $replay_mode or ($known_entries > 0) { 1 } else { 0 })
 
   sql-exec $"INSERT OR REPLACE INTO execution_context \(job_id, task_name, attempt, entry_index, replay_mode\) VALUES \('($jid)', '($tname)', ($attempt), 0, ($replay)\)"
+  # If we created a new context (not replacing), reset entry_index to 0
+  # This handles the case where we're replaying and want to start from the beginning
+  if $known_entries > 0 {
+    sql-exec $"UPDATE execution_context SET entry_index = 0 WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
+  }
 }
 
 # Get current entry index
@@ -457,11 +540,15 @@ export def awakeable-id-parse [awakeable_id: string]: nothing -> record {
   }
 }
 
-def sql [query: string] {
-  sqlite3 -json $DB_PATH $query | from json
+export def sql [query: string] {
+  try {
+    sqlite3 -json $DB_PATH $query | from json
+  } catch {
+    []
+  }
 }
 
-def sql-exec [query: string] {
+export def sql-exec [query: string] {
   sqlite3 $DB_PATH $query
 }
 
@@ -613,7 +700,7 @@ export def job-execute [job_id: string] {
     # Find tasks with all deps satisfied (completed or skipped)
     let pending = ($tasks | where status == "pending")
     let ready = ($pending | each {|t|
-      let task_deps = ($deps | where task_name == $t.name | get depends_on)
+      let task_deps = if ($deps | is-empty) { [] } else { ($deps | where task_name == $t.name | get depends_on) }
       let deps_met = if ($task_deps | is-empty) {
         true
       } else {
