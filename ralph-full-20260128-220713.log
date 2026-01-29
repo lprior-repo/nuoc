@@ -3343,3 +3343,272 @@ Completion promise: not detected
 
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 5...
+📝 Auto-committed changes
+
+🔄 Iteration 5 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T04:40:25.921Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll work on task nuoc-7wmq - [Awk-04] Implement awakeable creation in ctx.awakeable.
+
+Let me first read the current task file and bead details:
+| Tools    Read 1
+
+
+○ nuoc-7wmq · [Awk-04] Implement awakeable creation in ctx.awakeable   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Create awakeable record and return ID.
+
+## Acceptance
+- [ ] Record inserted
+- [ ] ID returned
+- [ ] Journaled for replay
+
+DEPENDS ON
+  → ◐ nuoc-pvb2: [Awk-03] Implement awakeable ID parsing ● P0
+
+BLOCKS
+  ← ○ nuoc-f2pc: [Awk-05] Implement task suspension on awakeable await ● P0
+
+
+| Tools    Read 1 • Bash 1 • Edit 1
+| Tools    Read 2 • Glob 2 • Bash 1 • Edit 1 • Grep 1
+| Tools    Read 2 • Glob 2 • Grep 2 • Bash 1 • Edit 1
+
+✓ Updated issue: nuoc-7wmq
+
+| Tools    Read 3 • Bash 2 • Glob 2 • Grep 2 • Edit 1
+⏳ working... elapsed 1:00 · last activity 0:19 ago
+Now I'll implement ctx.awakeable following TDD15. Let me start with **Phase 0-2: RED** - write failing tests.
+| Tools    Read 3 • Bash 2 • Edit 2 • Glob 2 • Grep 2
+| Tools    Read 3 • Bash 3 • Edit 2 • Glob 2 • Grep 2
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+▪▪▪▪ nuoc:test
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (95ms)
+
+Tasks: 1 completed
+ Time: 96ms
+
+
+| Tools    Bash 5 • Read 3 • Edit 2 • Glob 2 • Grep 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 5 • Read 4 • Edit 2 • Glob 2 • Grep 2
+| Tools    Bash 6 • Read 4 • Edit 2 • Glob 2 • Grep 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:4:23]
+ 3 | let test_db_dir = '/tmp/test-ctx-awakeable-manual'
+ 4 | let test_db_path = $'(test_db_dir)/journal.db'
+   :                       ^^^^^|^^^^^
+   :                            `-- Command `test_db_dir` not found
+ 5 | rm -rf $test_db_dir
+   `----
+  help: `test_db_dir` is neither a Nushell built-in or a known external
+        command
+
+
+| Tools    Bash 7 • Read 4 • Edit 2 • Glob 2 • Grep 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:24]
+ 1 | use ../oc-engine.nu *; ctx-awakeable 'job-123' 'task-1' 1
+   :                        ^^^^^^|^^^^^^
+   :                              `-- Command `ctx-awakeable` not found
+   `----
+  help: `ctx-awakeable` is neither a Nushell built-in or a known external
+        command
+
+
+| Tools    Bash 7 • Read 5 • Edit 2 • Glob 2 • Grep 2
+⏳ working... elapsed 1:50 · last activity 0:18 ago
+| Tools    Bash 7 • Read 5 • Edit 3 • Glob 2 • Grep 2
+| Tools    Bash 8 • Read 5 • Edit 3 • Glob 2 • Grep 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 9 • Read 5 • Edit 3 • Glob 2 • Grep 2
+| Tools    Bash 10 • Read 5 • Edit 3 • Glob 2 • Grep 2
+
+391:def test-ctx-awakeable-returns-id [] {
+417:def test-ctx-awakeable-inserts-record [] {
+448:def test-ctx-awakeable-journals-operation [] {
+475:def test-ctx-awakeable-uses-current-entry-index [] {
+
+| Tools    Bash 11 • Read 5 • Edit 3 • Glob 2 • Grep 2
+
+Test failed: External command failed
+
+| Tools    Bash 12 • Read 5 • Edit 3 • Glob 2 • Grep 2
+
+Error: {msg: External command failed, debug: ExternalCommand { label: "Command `test-ctx-awakeable-returns-id` not found", help: "`test-ctx-awakeable-returns-id` is neither a Nushell built-in or a known external command", span: Span { start: 143477, end: 143506 } }, raw: ExternalCommand { label: "Command `test-ctx-awakeable-returns-id` not found", help: "`test-ctx-awakeable-returns-id` is neither a Nushell built-in or a known external command", span: Span { start: 143477, end: 143506 } }, rendered: Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:4:3]
+ 3 | try {
+ 4 |   test-ctx-awakeable-returns-id
+   :   ^^^^^^^^^^^^^^|^^^^^^^^^^^^^^
+   :                 `-- Command `test-ctx-awakeable-returns-id` not found
+ 5 | } catch { |e|
+   `----
+  help: `test-ctx-awakeable-returns-id` is neither a Nushell built-in or a
+        known external command
+, json: {"msg":"External command failed","labels":[{"text":"Command `test-ctx-awakeable-returns-id` not found","span":{"start":143477,"end":143506}}],"code":"nu::shell::external_command","url":null,"help":"`test-ctx-awakeable-returns-id` is neither a Nushell built-in or a known external command","inner":[]}}
+
+⏳ working... elapsed 2:30 · last activity 0:11 ago
+| Tools    Bash 12 • Read 6 • Edit 3 • Glob 2 • Grep 2
+| Tools    Bash 13 • Read 6 • Edit 3 • Glob 2 • Grep 2
+
+test test-ctx-awakeable-returns-id
+test test-ctx-awakeable-inserts-record
+test test-ctx-awakeable-journals-operation
+test test-ctx-awakeable-uses-current-entry-index
+
+| Tools    Bash 14 • Read 6 • Edit 3 • Glob 2 • Grep 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 15 • Read 6 • Edit 3 • Glob 2 • Grep 2
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    let job_id = "test-job-entry"
+    let task_name = "test-task"
+    let attempt = 1
+    init-execution-context $job_id $task_name $attempt --replay-mode
+
+    let entry_index_1 = (next-entry-index $job_id $task_name $attempt)
+    let result_1 = (ctx-awakeable $job_id $task_name $attempt)
+
+    let entry_index_2 = (next-entry-index $job_id $task_name $attempt)
+    let result_2 = (ctx-awakeable $job_id $task_name $attempt)
+
+    assert not ($result_1.id == $result_2.id)
+    assert ($result_1.id | is-not-empty)
+    assert ($result_2.id | is-not-empty)
+  }
+
+  rm -rf $test_db_dir
+}
+
+# Run awakeables tests
+test test-awakeables-table-created
+test test-awakeables-table-schema
+test test-awakeables-index-created
+test test-awakeable-id-generate-prefix
+test test-awakeable-id-generate-unique
+test test-awakeable-id-generate-base64url
+test test-awakeable-id-generate-encodes-inputs
+test test-awakeable-id-parse-extract-invocation-id
+test test-awakeable-id-parse-extract-entry-index
+test test-awakeable-id-parse-zero-entry-index
+test test-awakeable-id-parse-large-entry-index
+test test-awakeable-id-parse-invalid-prefix
+test test-awakeable-id-parse-empty-id
+test test-awakeable-id-parse-missing-content
+test test-awakeable-id-parse-invalid-base64
+test test-awakeable-id-parse-malformed-content
+test test-awakeable-id-parse-non-numeric-entry-index
+test test-awakeable-id-parse-generate-roundtrip
+test test-ctx-awakeable-returns-id
+test test-ctx-awakeable-inserts-record
+test test-ctx-awakeable-journals-operation
+test test-ctx-awakeable-uses-current-entry-index
+
+print "[ok] oc-engine.nu tests completed"
+
+⏳ working... elapsed 3:00 · last activity 0:13 ago
+⏳ working... elapsed 3:10 · last activity 0:23 ago
+⏳ working... elapsed 3:20 · last activity 0:33 ago
+| Tools    Bash 16 • Read 6 • Edit 3 • Glob 2 • Grep 2
+⏳ working... elapsed 3:40 · last activity 0:11 ago
+| Tools    Bash 17 • Read 6 • Edit 3 • Glob 2 • Grep 2
+
+Test completed
+
+| Tools    Bash 18 • Read 6 • Edit 3 • Glob 2 • Grep 2
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:9:1]
+ 8 | next-entry-index 'job-1' 'task-1' 1
+ 9 | ctx-awakeable 'job-1' 'task-1' 1
+   : ^^^^^^|^^^^^^
+   :       `-- Command `ctx-awakeable` not found
+   `----
+  help: `ctx-awakeable` is neither a Nushell built-in or a known external
+        command
+
+

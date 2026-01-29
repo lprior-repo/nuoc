@@ -385,6 +385,122 @@ def test-awakeable-id-parse-generate-roundtrip [] {
   assert equal $parsed.entry_index $entry_index
 }
 
+# ── Awakeable Creation Tests ──────────────────────────────────────────────────
+
+# Test: ctx.awakeable returns an ID
+def test-ctx-awakeable-returns-id [] {
+  let test_db_dir = "/tmp/test-ctx-awakeable-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    let job_id = "test-job-awakeable"
+    let task_name = "test-task"
+    let attempt = 1
+    init-execution-context $job_id $task_name $attempt --replay-mode
+    let entry_index = (next-entry-index $job_id $task_name $attempt)
+
+    let result = (ctx-awakeable $job_id $task_name $attempt)
+
+    assert ($result.id | is-not-empty)
+    assert ($result.id | str starts-with "prom_1")
+  }
+
+  rm -rf $test_db_dir
+}
+
+# Test: ctx.awakeable inserts record into awakeables table
+def test-ctx-awakeable-inserts-record [] {
+  let test_db_dir = "/tmp/test-ctx-awakeable-insert-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    let job_id = "test-job-insert"
+    let task_name = "test-task"
+    let attempt = 1
+    init-execution-context $job_id $task_name $attempt --replay-mode
+    let entry_index = (next-entry-index $job_id $task_name $attempt)
+
+    let result = (ctx-awakeable $job_id $task_name $attempt)
+
+    let records = (sqlite3 -json $test_db_path $"SELECT * FROM awakeables WHERE id='($result.id)'" | from json)
+    assert equal ($records | length) 1
+    assert equal $records.0.id $result.id
+    assert equal $records.0.job_id $job_id
+    assert equal $records.0.task_name $task_name
+    assert equal $records.0.entry_index $entry_index
+    assert equal $records.0.status "PENDING"
+  }
+
+  rm -rf $test_db_dir
+}
+
+# Test: ctx.awakeable journals the operation for replay
+def test-ctx-awakeable-journals-operation [] {
+  let test_db_dir = "/tmp/test-ctx-awakeable-journal-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    let job_id = "test-job-journal"
+    let task_name = "test-task"
+    let attempt = 1
+    init-execution-context $job_id $task_name $attempt --replay-mode
+    let entry_index = (next-entry-index $job_id $task_name $attempt)
+
+    let result = (ctx-awakeable $job_id $task_name $attempt)
+
+    let journal_entries = (sqlite3 -json $test_db_path $"SELECT * FROM journal WHERE job_id='($job_id)' AND task_name='($task_name)' AND attempt=($attempt) AND entry_index=($entry_index)" | from json)
+    assert equal ($journal_entries | length) 1
+    assert equal $journal_entries.0.op_type "awakeable-create"
+  }
+
+  rm -rf $test_db_dir
+}
+
+# Test: ctx.awakeable uses current entry_index from execution context
+def test-ctx-awakeable-uses-current-entry-index [] {
+  let test_db_dir = "/tmp/test-ctx-awakeable-entry-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    let job_id = "test-job-entry"
+    let task_name = "test-task"
+    let attempt = 1
+    init-execution-context $job_id $task_name $attempt --replay-mode
+
+    let entry_index_1 = (next-entry-index $job_id $task_name $attempt)
+    let result_1 = (ctx-awakeable $job_id $task_name $attempt)
+
+    let entry_index_2 = (next-entry-index $job_id $task_name $attempt)
+    let result_2 = (ctx-awakeable $job_id $task_name $attempt)
+
+    assert not ($result_1.id == $result_2.id)
+    assert ($result_1.id | is-not-empty)
+    assert ($result_2.id | is-not-empty)
+  }
+
+  rm -rf $test_db_dir
+}
+
 # Run awakeables tests
 test test-awakeables-table-created
 test test-awakeables-table-schema
@@ -404,5 +520,9 @@ test test-awakeable-id-parse-invalid-base64
 test test-awakeable-id-parse-malformed-content
 test test-awakeable-id-parse-non-numeric-entry-index
 test test-awakeable-id-parse-generate-roundtrip
+test test-ctx-awakeable-returns-id
+test test-ctx-awakeable-inserts-record
+test test-ctx-awakeable-journals-operation
+test test-ctx-awakeable-uses-current-entry-index
 
 print "[ok] oc-engine.nu tests completed"
