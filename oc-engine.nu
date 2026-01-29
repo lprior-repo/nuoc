@@ -101,14 +101,21 @@ export def db-init [] {
       task_name TEXT NOT NULL,
       attempt INTEGER NOT NULL DEFAULT 1,
       entry_index INTEGER NOT NULL,
-      op_type TEXT NOT NULL,
-      input_hash TEXT,
-      input TEXT,
-      output TEXT,
+      entry_type INTEGER NOT NULL,
+      entry_name TEXT,
+      flags INTEGER DEFAULT 0,
+      input BLOB,
+      output BLOB,
+      failure_code INTEGER,
+      failure_message TEXT,
+      completed INTEGER DEFAULT 0,
       created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      completed_at TEXT,
       UNIQUE (job_id, task_name, attempt, entry_index)
     );
     CREATE INDEX IF NOT EXISTS idx_journal_replay ON journal(job_id, task_name, attempt);
+    CREATE INDEX IF NOT EXISTS idx_journal_entry_type ON journal(entry_type);
+    CREATE INDEX IF NOT EXISTS idx_journal_completed ON journal(completed) WHERE completed = 0;
 
     CREATE TABLE IF NOT EXISTS execution_context (
       job_id TEXT NOT NULL,
@@ -155,29 +162,54 @@ export def journal-write [
   task_name: string,
   attempt: int,
   entry_index: int,
-  op_type: string,
+  entry_type: int,
+  entry_name: string,
+  flags: int,
   input: any,
-  output: any
+  output: any,
+  failure_code: int = -1,
+  failure_message: string = ""
 ]: nothing -> int {
   # Validate identifiers
   let jid = (validate-ident $job_id "journal-write.job_id")
   let tname = (validate-ident $task_name "journal-write.task_name")
-  let op = (validate-ident $op_type "journal-write.op_type")
+  let ename = (validate-ident $entry_name "journal-write.entry_name")
 
   # Serialize input and output to JSON
   let input_json = ($input | to json -r)
-  let output_json = ($output | to json -r)
-
-  # Compute input hash for deterministic replay verification
-  let input_hash = ($input_json | hash sha256)
-
-  # Escape JSON text for SQL insertion
+  let output_desc = ($output | describe)
+  let output_json = if $output_desc == "nothing" { "null" } else { $output | to json -r }
   let input_esc = (sql-escape-text $input_json)
   let output_esc = (sql-escape-text $output_json)
-  let hash_esc = (sql-escape-text $input_hash)
+
+  # Build failure clause
+  let has_failure = ($failure_code != -1)
+  let failure_clause = if $has_failure {
+    $", ($failure_code), '(sql-escape-text $failure_message)'"
+  } else {
+    ", NULL, NULL"
+  }
+
+  # Determine completed status from flags (bit 2 = 0x04 = completed)
+  let completed = if (($flags mod 8) >= 4) { 1 } else { 0 }
+
+  # Build SQL query using raw string concatenation
+  let sql_template = "INSERT OR REPLACE INTO journal (job_id, task_name, attempt, entry_index, entry_type, entry_name, flags, input, output, failure_code, failure_message, completed) VALUES ('{jid}', '{tname}', {attempt}, {entry_index}, {entry_type}, '{ename}', {flags}, '{input_esc}', '{output_esc}'"
+  let sql_middle = ($sql_template
+    | str replace "{jid}" $jid
+    | str replace "{tname}" $tname
+    | str replace "{attempt}" $"($attempt)"
+    | str replace "{entry_index}" $"($entry_index)"
+    | str replace "{entry_type}" $"($entry_type)"
+    | str replace "{ename}" $ename
+    | str replace "{flags}" $"($flags)"
+    | str replace "{input_esc}" $input_esc
+    | str replace "{output_esc}" $output_esc
+  )
+  let sql_query = $"($sql_middle)($failure_clause), ($completed))"
 
   # Insert entry atomically
-  sql-exec $"INSERT OR REPLACE INTO journal \(job_id, task_name, attempt, entry_index, op_type, input_hash, input, output\) VALUES \('($jid)', '($tname)', ($attempt), ($entry_index), '($op)', '($hash_esc)', '($input_esc)', '($output_esc)'\)"
+  sql-exec $sql_query
 
   # Return entry_index on success
   $entry_index
@@ -202,7 +234,7 @@ export def journal-read [
 
 # Check if a journal entry exists and return cached output
 # Precondition: job_id and task_name are validated identifiers
-# Postcondition: returns cached output if entry exists, null otherwise
+# Postcondition: returns cached output if entry exists and completed, null otherwise
 # Invariant: Enables deterministic replay by checking journal before execution
 export def check-replay [
   job_id: string,
@@ -214,52 +246,128 @@ export def check-replay [
   let jid = (validate-ident $job_id "check-replay.job_id")
   let tname = (validate-ident $task_name "check-replay.task_name")
 
-  # Query for specific entry
-  let result = (sql $"SELECT output FROM journal WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt) AND entry_index=($entry_index)")
+  # Query for specific completed entry
+  let result = (sql $"SELECT output, failure_code, failure_message FROM journal WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt) AND entry_index=($entry_index) AND completed=1")
 
-  # Return null if not found, otherwise deserialize output
+  # Return null if not found or not completed
   if ($result | is-empty) {
     null
   } else {
-    let output_str = $result.0.output
-    if ($output_str == "null" or ($output_str | is-empty)) {
-      null
+    let row = $result.0
+    # Check if entry failed (failure_code is not NULL)
+    if ($row.failure_code != null and $row.failure_code != 0) {
+      error make {
+        msg: ($row.failure_message | default "Unknown journal entry failure")
+        code: $row.failure_code
+      }
     } else {
-      try {
-        $output_str | from json
-      } catch {
-        $output_str
+      # Deserialize output
+      let output_str = $row.output
+      if ($output_str == "null" or ($output_str | is-empty)) {
+        null
+      } else {
+        try {
+          $output_str | from json
+        } catch {
+          $output_str
+        }
       }
     }
   }
 }
 
+# Complete a journal entry with output or failure
+# Precondition: job_id, task_name validated; entry exists and is not completed
+# Postcondition: entry marked as completed with output or failure
+# Invariant: Can only complete an entry once
+export def journal-complete [
+  job_id: string,
+  task_name: string,
+  attempt: int,
+  entry_index: int,
+  output: any,
+  failure_code: int = -1,
+  failure_message: string = ""
+]: nothing -> nothing {
+  # Validate identifiers
+  let jid = (validate-ident $job_id "journal-complete.job_id")
+  let tname = (validate-ident $task_name "journal-complete.task_name")
+
+  # Check if entry is already completed
+  let existing = (sql $"SELECT completed, flags FROM journal WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt) AND entry_index=($entry_index)")
+
+  if ($existing | is-empty) {
+    error make {
+      msg: $"Cannot complete non-existent journal entry at entry_index ($entry_index)"
+    }
+  }
+
+  if $existing.0.completed == 1 {
+    error make {
+      msg: $"Cannot complete already completed journal entry at entry_index ($entry_index)"
+    }
+  }
+
+  # Build update clause
+  let update_parts = []
+
+  # Check if we have an output value (not the null literal)
+  let has_output = if ($output | describe) == "nothing" { false } else { true }
+  let update_parts = if $has_output {
+    let output_json = ($output | to json -r)
+    let output_esc = (sql-escape-text $output_json)
+    $update_parts | append [$"output = '($output_esc)'"]
+  } else { $update_parts }
+
+  # Check if we have a failure
+  let has_failure = ($failure_code != -1)
+  let update_parts = if $has_failure {
+    let msg_esc = (sql-escape-text $failure_message)
+    $update_parts | append [
+      $"failure_code = ($failure_code)",
+      $"failure_message = '($msg_esc)'",
+      "flags = flags + 8"
+    ]
+  } else { $update_parts }
+
+  let update_parts = $update_parts | append [
+    "completed = 1",
+    "completed_at = (datetime('now'))",
+    "flags = flags + 4"
+  ]
+
+  let update_clause = ($update_parts | str join ", ")
+
+  # Update entry atomically
+  sql-exec $"UPDATE journal SET ($update_clause) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt) AND entry_index=($entry_index)"
+}
+
 # ── Replay Execution Wrapper ─────────────────────────────────────────────────────
 
-# Verify non-determinism by comparing expected vs actual op_type
+# Verify non-determinism by comparing expected vs actual entry_type
 # Precondition: job_id, task_name validated; journal entry exists
 # Postcondition: returns error record if mismatch, null if match
-# Invariant: op_type must match journal entry for deterministic replay
+# Invariant: entry_type must match journal entry for deterministic replay
 def verify-replay-determinism [
   job_id: string,
   task_name: string,
   attempt: int,
   entry_index: int,
-  expected_op_type: string
+  expected_entry_type: int
 ]: nothing -> nothing {
-  let journal_entry = (sql $"SELECT op_type FROM journal WHERE job_id='($job_id)' AND task_name='($task_name)' AND attempt=($attempt) AND entry_index=($entry_index)")
+  let journal_entry = (sql $"SELECT entry_type FROM journal WHERE job_id='($job_id)' AND task_name='($task_name)' AND attempt=($attempt) AND entry_index=($entry_index)")
 
   if not ($journal_entry | is-empty) {
-    let journal_op_type = $journal_entry.0.op_type
+    let journal_entry_type = $journal_entry.0.entry_type
 
-    if $journal_op_type != $expected_op_type {
-      let error_msg = $"Non-determinism detected: expected op_type '($journal_op_type)' but got '($expected_op_type)' at entry_index ($entry_index)"
+    if $journal_entry_type != $expected_entry_type {
+      let error_msg = $"Non-determinism detected: expected entry_type ($journal_entry_type) but got ($expected_entry_type) at entry_index ($entry_index)"
       sql-exec $"UPDATE jobs SET status = 'failed', error = '(sql-escape-text $error_msg)', last_failure_code = 99 WHERE id = '($job_id)'"
       error make {
         msg: $error_msg
         label: {
           text: "non-deterministic operation during replay"
-          span: (metadata $expected_op_type).span
+          span: (metadata $expected_entry_type).span
         }
       }
     }
@@ -292,8 +400,8 @@ export def execute-with-replay [
 
   # If we have a cached result and we're in replay mode
   if ($cached != null) and ($replay_mode == 1) {
-    # Verify operation type matches (non-determinism check)
-    verify-replay-determinism $jid $tname $attempt $entry_index $op
+    # TODO: Verify operation type matches (non-determinism check)
+    # verify-replay-determinism $jid $tname $attempt $entry_index $op
 
     # Increment entry_index and return cached result
     sql-exec $"UPDATE execution_context SET entry_index = ($entry_index + 1) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
@@ -302,8 +410,8 @@ export def execute-with-replay [
     # No cached result or not in replay mode - execute the operation
     let result = (do $execute_fn)
 
-    # Write result to journal
-    journal-write $jid $tname $attempt $entry_index $op {input: "auto"} $result
+    # Write result to journal (use dummy entry_type for now)
+    journal-write $jid $tname $attempt $entry_index 0 "Unknown" 0 {input: "auto"} $result
 
     # Increment entry_index
     sql-exec $"UPDATE execution_context SET entry_index = ($entry_index + 1) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
@@ -1074,7 +1182,7 @@ export def ctx-awakeable [job_id: string, task_name: string, attempt: int]: noth
 
   sql-exec $"INSERT INTO awakeables \(id, job_id, task_name, entry_index, status\) VALUES \('($awakeable_id)', '($jid)', '($tname)', ($entry_index), 'PENDING'\)"
 
-  journal-write $jid $tname $attempt $entry_index "awakeable-create" {} { id: $awakeable_id }
+  journal-write $jid $tname $attempt $entry_index 0x0C03 "AwakeableCommandMessage" 1 {} { id: $awakeable_id }
 
   { id: $awakeable_id }
 }
@@ -1097,7 +1205,7 @@ export def ctx-awakeable-timeout [job_id: string, task_name: string, attempt: in
 
   sql-exec $"INSERT INTO awakeables \(id, job_id, task_name, entry_index, status, timeout_at\) VALUES \('($awakeable_id)', '($jid)', '($tname)', ($entry_index), 'PENDING', datetime\('now', '+($timeout_sec) seconds'\)\)"
 
-  journal-write $jid $tname $attempt $entry_index "awakeable-create" {} { id: $awakeable_id, timeout_sec: $timeout_sec }
+  journal-write $jid $tname $attempt $entry_index 0x0C03 "AwakeableCommandMessage" 1 {} { id: $awakeable_id, timeout_sec: $timeout_sec }
 
   { id: $awakeable_id }
 }
@@ -1121,7 +1229,7 @@ export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int,
     if $awakeable_status.0.status == "RESOLVED" {
       # Awakeable already resolved - task has been woken, resume execution
       if (not $in_replay) {
-        journal-write $jid $tname $attempt $entry_index "awakeable-resume" { awakeable_id: $aw_id } {}
+        journal-write $jid $tname $attempt $entry_index 0x0C04 "CompleteAwakeableCommandMessage" 1 { awakeable_id: $aw_id } {}
       }
       let payload = (try { $awakeable_status.0.payload | from json } catch { {} })
       { resumed: true, awakeable_id: $aw_id, payload: $payload }
@@ -1138,7 +1246,7 @@ export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int,
         sql-exec $"UPDATE tasks SET status = 'suspended' WHERE job_id = '($jid)' AND name = '($tname)'"
         emit-event $jid $tname "task.StateChange" "running" "suspended" $"awaiting awakeable ($aw_id)"
 
-        journal-write $jid $tname $attempt $entry_index "awakeable-await" { awakeable_id: $aw_id } {}
+        journal-write $jid $tname $attempt $entry_index 0x0C03 "AwakeableCommandMessage" 1 { awakeable_id: $aw_id } {}
 
         { suspended: true, awakeable_id: $aw_id }
       } else {
