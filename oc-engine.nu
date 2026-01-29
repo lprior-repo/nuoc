@@ -1000,13 +1000,32 @@ export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int,
   let aw_id = (validate-ident $awakeable_id "ctx-await-awakeable.awakeable_id")
 
   let entry_index = (next-entry-index $jid $tname $attempt)
+  let in_replay = (is-replay-mode $jid $tname $attempt)
 
-  sql-exec $"UPDATE tasks SET status = 'suspended' WHERE job_id = '($jid)' AND name = '($tname)'"
-  emit-event $jid $tname "task.StateChange" "running" "suspended" $"awaiting awakeable ($aw_id)"
+  # Check if awakeable is already resolved (task resumed after wake)
+  let awakeable_status = (sql $"SELECT status, payload FROM awakeables WHERE id = '($aw_id)'")
 
-  journal-write $jid $tname $attempt $entry_index "awakeable-await" { awakeable_id: $aw_id } {}
+  if (not ($awakeable_status | is-empty)) and ($awakeable_status.0.status == "RESOLVED") {
+    # Awakeable already resolved - task has been woken, resume execution
+    if (not $in_replay) {
+      journal-write $jid $tname $attempt $entry_index "awakeable-resume" { awakeable_id: $aw_id } {}
+    }
+    let payload = (try { $awakeable_status.0.payload | from json } catch { {} })
+    { resumed: true, awakeable_id: $aw_id, payload: $payload }
+  } else {
+    # Awakeable not resolved - suspend task
+    if (not $in_replay) {
+      sql-exec $"UPDATE tasks SET status = 'suspended' WHERE job_id = '($jid)' AND name = '($tname)'"
+      emit-event $jid $tname "task.StateChange" "running" "suspended" $"awaiting awakeable ($aw_id)"
 
-  { suspended: true, awakeable_id: $aw_id }
+      journal-write $jid $tname $attempt $entry_index "awakeable-await" { awakeable_id: $aw_id } {}
+
+      { suspended: true, awakeable_id: $aw_id }
+    } else {
+      # In replay mode, return suspended state without side effects
+      { suspended: true, awakeable_id: $aw_id }
+    }
+  }
 }
 
 # Resolve an awakeable with a payload, waking the suspended task
