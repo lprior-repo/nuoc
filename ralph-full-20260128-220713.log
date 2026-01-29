@@ -2685,3 +2685,382 @@ Elapsed:   3:32
 Tools:     Bash 31 • Read 4 • Edit 3 • Glob 3
 Exit code: 0
 Completion promise: not detected
+📝 Auto-committed changes
+
+🔄 Iteration 4 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T04:35:52.761Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll work on the current task: "nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing"
+
+Let me first read the bead context:
+| Tools    Bash 1
+
+
+◐ nuoc-pvb2 · [Awk-03] Implement awakeable ID parsing   [● P0 · IN_PROGRESS]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Parse ID back to invocation + entry_index.
+
+## Acceptance
+- [ ] Extract invocation_id
+- [ ] Extract entry_index
+- [ ] Error on invalid format
+
+DEPENDS ON
+  → ○ nuoc-l4d: [Awk-02] Implement awakeable ID generation ● P0
+
+BLOCKS
+  ← ○ nuoc-7wmq: [Awk-04] Implement awakeable creation in ctx.awakeable ● P0
+  ← ○ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+
+
+| Tools    Bash 1 • Glob 1
+
+
+○ nuoc-l4d · [Awk-02] Implement awakeable ID generation   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Generate ID in Restate format: prom_1 + base64url(invocation_id + entry_index)
+
+## Acceptance
+- [ ] Prefix is 'prom_1'
+- [ ] Base64-URL encoding
+- [ ] Globally unique
+
+DEPENDS ON
+  → ✓ nuoc-9w6: [Awk-01] Create awakeables table schema ● P0
+
+BLOCKS
+  ← ◐ nuoc-pvb2: [Awk-03] Implement awakeable ID parsing ● P0
+
+
+| Tools    Bash 2 • Glob 1 • Grep 1
+| Tools    Bash 2 • Glob 1 • Grep 1 • Read 1
+| Tools    Grep 3 • Bash 2 • Glob 1 • Read 1
+Let me run the tests to see the current state (RED phase):
+| Tools    Bash 3 • Grep 3 • Read 2 • Glob 1
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+⏳ working... elapsed 0:50 · last activity 0:12 ago
+| Tools    Bash 4 • Grep 3 • Read 2 • Glob 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+▪▪▪▪ nuoc:test
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (96ms)
+
+Tasks: 1 completed
+ Time: 97ms
+
+
+| Tools    Bash 5 • Grep 3 • Read 2 • Glob 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+
+| Tools    Bash 5 • Read 4 • Grep 3 • Glob 1
+| Tools    Bash 6 • Read 4 • Grep 3 • Glob 1
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 6 • Read 5 • Grep 3 • Glob 1
+| Tools    Bash 7 • Read 5 • Grep 3 • Glob 1
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:21]
+ 1 | use oc-engine.nu *; awakeable-id-parse "prom_1test123"
+   :                     ^^^^^^^^^|^^^^^^^^
+   :                              `-- Command `awakeable-id-parse` not found
+   `----
+  help: Did you mean `awakeable-id-generate`?
+
+
+⏳ working... elapsed 1:30 · last activity 0:13 ago
+⏳ working... elapsed 1:40 · last activity 0:23 ago
+Now let me implement the `awakeable-id-parse` function in oc-engine.nu:
+| Tools    Bash 7 • Read 5 • Grep 3 • Glob 1 • Edit 1
+| Tools    Bash 8 • Read 5 • Grep 3 • Glob 1 • Edit 1
+
+Error: nu::parser::parse_mismatch_with_full_string_msg
+
+  x Parse mismatch during operation.
+     ,-[/home/lewis/src/nuoc/oc-engine.nu:418:54]
+ 417 |   let padded_base64 = ($base64_content | str replace --all '-' '+' | str replace --all '_' '/')
+ 418 |   let with_padding = match ($padded_base64 | length) % 4 {
+     :                                                      |
+     :                                                      `-- expected match-block
+ 419 |     1 => ($padded_base64 + "===")
+     `----
+
+
+| Tools    Bash 8 • Read 5 • Grep 3 • Edit 2 • Glob 1
+| Tools    Bash 9 • Read 5 • Grep 3 • Edit 2 • Glob 1
+
+Error: nu::parser::unknown_operator
+
+  x Unknown operator
+     ,-[/home/lewis/src/nuoc/oc-engine.nu:418:56]
+ 417 |   let padded_base64 = ($base64_content | str replace --all '-' '+' | str replace --all '_' '/')
+ 418 |   let padding_needed = (4 - (($padded_base64 | length) % 4)) % 4
+     :                                                        |
+     :                                                        `-- Operator '%' not supported
+ 419 |   let with_padding = if $padding_needed == 1 {
+     `----
+  help: Did you mean 'mod'?
+
+
+| Tools    Bash 9 • Read 5 • Grep 3 • Edit 3 • Glob 1
+
+Error: nu::parser::extra_positional
+
+  x Extra positional argument.
+     ,-[/home/lewis/src/nuoc/oc-engine.nu:436:31]
+ 435 |   # Split on colon
+ 436 |   let parts = ($decoded | str split ':')
+     :                               ^^|^^
+     :                                 `-- extra positional argument
+ 437 |   if (($parts | length) != 2) {
+     `----
+  help: Usage: str
+
+
+| Tools    Bash 10 • Read 5 • Edit 4 • Grep 3 • Glob 1
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 12 • Read 5 • Edit 4 • Grep 3 • Glob 1
+
+Error: nu::shell::only_supports_this_input_type
+
+  x Input type not supported.
+     ,-[/home/lewis/src/nuoc/oc-engine.nu:418:31]
+ 417 |   let padded_base64 = ($base64_content | str replace --all '-' '+' | str replace --all '_' '/')
+ 418 |   let padding_needed = (4 - (($padded_base64 | length) mod 4)) mod 4
+     :                               ^^^^^^^|^^^^^^   ^^^|^^
+     :                                      |            `-- only list<any>, binary, and nothing input data is supported
+     :                                      `-- input type: string
+ 419 |   let with_padding = if $padding_needed == 1 {
+     `----
+
+
+| Tools    Bash 12 • Read 5 • Edit 5 • Grep 3 • Glob 1
+| Tools    Bash 13 • Read 5 • Edit 5 • Grep 3 • Glob 1
+
+Error: nu::shell::only_supports_this_input_type
+
+  x Input type not supported.
+     ,-[/home/lewis/src/nuoc/oc-engine.nu:437:16]
+ 436 |   # Split on colon
+ 437 |   let parts = ($decoded | split row ':')
+     :                ^^^^|^^^   ^^^^|^^^^
+     :                    |          `-- only string and list<string> input data is supported
+     :                    `-- input type: binary
+ 438 |   if (($parts | length) != 2) {
+     `----
+
+
+| Tools    Bash 13 • Edit 6 • Read 5 • Grep 3 • Glob 1
+
+╭───────────────┬─────────╮
+│ invocation_id │ job-123 │
+│ entry_index   │ 5       │
+╰───────────────┴─────────╯
+
+| Tools    Bash 15 • Edit 6 • Read 5 • Grep 3 • Glob 1
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+
+⏳ working... elapsed 3:10 · last activity 0:15 ago
+⏳ working... elapsed 3:20 · last activity 0:25 ago
+| Tools    Bash 17 • Edit 6 • Read 5 • Grep 3 • Glob 1
+
+Error: nu::parser::expected_keyword
+
+  x Expected keyword.
+   ,-[/home/lewis/src/nuoc/tests/test-oc-engine.nu:6:1]
+ 5 | 
+ 6 | print "Testing oc-engine.nu..."
+   : ^^|^^
+   :   `-- expected def, const, extern, alias, use, module, export or export-env keyword
+ 7 | 
+   `----
+
+
+| Tools    Bash 18 • Edit 6 • Read 5 • Grep 3 • Glob 1
+
+Test 1: Valid parse
+  invocation_id: job-123
+  entry_index: 5
+
+Test 2: Zero entry_index
+  invocation_id: job-456
+  entry_index: 0
+
+Test 3: Invalid prefix
+  Error: invalid awakeable ID format
+
+Test 4: Empty ID
+  Error: invalid awakeable ID format
+
+Test 5: Missing content
+  Error: invalid awakeable ID format
+
+All tests passed!
+
