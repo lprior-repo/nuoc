@@ -7017,3 +7017,271 @@ Completion promise: not detected
 
 ⚠️  OpenCode exited with code 1. Continuing to next iteration.
 📝 Context was consumed this iteration
+📝 Auto-committed changes
+
+🔄 Iteration 12 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T05:48:22.185Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+⏳ working... elapsed 0:20 · last activity 0:19 ago
+I'll work on completing the awakeable timeout handling task. Let me first check what this bead requires.
+| Tools    Read 1
+
+
+○ nuoc-qodw · [Awk-09] Implement awakeable timeout handling   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Fail awakeable if timeout_at passed.
+
+## Acceptance
+- [ ] Scheduler checks timeouts
+- [ ] Status -> TIMEOUT
+- [ ] Task receives timeout error
+
+DEPENDS ON
+  → ✓ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+
+| Tools    Read 1 • Bash 1 • Glob 1
+⏳ working... elapsed 0:50 · last activity 0:12 ago
+| Tools    Read 2 • Glob 2 • Bash 1 • Grep 1
+⏳ working... elapsed 1:10 · last activity 0:16 ago
+⏳ working... elapsed 1:20 · last activity 0:26 ago
+⏳ working... elapsed 1:30 · last activity 0:36 ago
+⏳ working... elapsed 1:40 · last activity 0:46 ago
+⏳ working... elapsed 1:50 · last activity 0:56 ago
+⏳ working... elapsed 2:00 · last activity 1:06 ago
+| Tools    Read 3 • Bash 2 • Glob 2 • Grep 1
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+    Awakeable ID: prom_1dGVzdC1qb2ItdGltZW91dC0xOjA
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:33:3]
+ 32 |   let awakeable_before = (sqlite3 -json $DB_PATH $"SELECT status, timeout_at FROM awakeables WHERE id = '($awakeable_id)'" | from json).0
+ 33 |   assert equal $awakeable_before.status "PENDING"
+    :   ^^^|^^
+    :      `-- Command `assert` not found
+ 34 |   print $"    [ok] Awakeable status is PENDING before timeout"
+    `----
+  help: Did you mean `ast`?
+
+
+| Tools    Read 4 • Bash 3 • Glob 2 • Grep 1
+
+0.110.0
+
+| Tools    Bash 5 • Read 4 • Glob 2 • Grep 1
+
+│ 2 │ testing │ [list 0 items] │ [table 6 rows] │ [list 0 items] │ [list │ ... │
+│   │         │                │                │                │  0 it │     │
+│   │         │                │                │                │ ems]  │     │
+╰───┴─────────┴────────────────┴────────────────┴────────────────┴───────┴─────╯
+
+| Tools    Bash 6 • Read 4 • Glob 2 • Grep 1
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:1]
+ 1 | assert true
+   : ^^^|^^
+   :    `-- Command `assert` not found
+   `----
+  help: Did you mean `ast`?
+
+
+⏳ working... elapsed 2:40 · last activity 0:15 ago
+⏳ working... elapsed 2:50 · last activity 0:25 ago
+⏳ working... elapsed 3:00 · last activity 0:35 ago
+⏳ working... elapsed 3:10 · last activity 0:45 ago
+⏳ working... elapsed 3:20 · last activity 0:55 ago
+⏳ working... elapsed 3:30 · last activity 1:05 ago
+⏳ working... elapsed 3:40 · last activity 1:15 ago
+| Tools    Bash 7 • Read 4 • Glob 2 • Grep 1
+
+Error: nu::parser::not_found
+
+  x Not found.
+   ,-[source:1:6]
+ 1 | help assert
+   :      ^^^|^^
+   :         `-- did not find anything under this name
+   `----
+
+
+| Tools    Bash 8 • Read 4 • Glob 2 • Grep 1
+
+16:  assert equal (validate-ident "hello" "test") "hello"
+17:  assert equal (validate-ident "test123" "test") "test123"
+18:  assert equal (validate-ident "Test_Name" "test") "Test_Name"
+21:  assert equal (validate-ident "tdd15-beads-abc123" "test") "tdd15-beads-abc123"
+22:  assert equal (validate-ident "job.name" "test") "job.name"
+23:  assert equal (validate-ident "task_1.sub-2" "test") "task_1.sub-2"
+29:  assert equal $result "error"
+36:  assert equal $result1 "error"
+40:  assert equal $result2 "error"
+44:  assert equal $result3 "error"
+
+| Tools    Bash 8 • Read 5 • Glob 2 • Grep 1
+| Tools    Bash 9 • Read 5 • Glob 2 • Grep 1
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Bash 10 • Read 5 • Glob 2 • Grep 1
+| Tools    Bash 11 • Read 5 • Glob 2 • Grep 1
+
+Running GREEN phase tests for awakeable suspension...
+All GREEN tests passed ✓
+
+⏳ working... elapsed 4:30 · last activity 0:12 ago
+⏳ working... elapsed 4:40 · last activity 0:22 ago
+⏳ working... elapsed 4:50 · last activity 0:32 ago
+⏳ working... elapsed 5:00 · last activity 0:42 ago
+⏳ working... elapsed 5:10 · last activity 0:52 ago
+⏳ working... elapsed 5:20 · last activity 1:02 ago
+| Tools    Bash 12 • Read 5 • Glob 2 • Grep 1
+
+  assert equal $awakeable_before.status "PENDING"
+  assert equal $awakeable_after.status "TIMEOUT"
+  assert not ($result.error | is-empty)
+  assert equal $awakeable_after.status "PENDING"
+  assert equal $awakeable_after.status "RESOLVED"
+
+| Tools    Bash 13 • Read 5 • Glob 2 • Grep 1
+
+╭────────────╮
+│ empty list │
+╰────────────╯
+
+| Tools    Bash 14 • Read 5 • Glob 2 • Grep 1
+
+
+# Test: validate-ident accepts valid identifiers
+def test-validate-ident-valid [] {
+  # Basic alphanumeric
+  assert equal (validate-ident "hello" "test") "hello"
+--
+
+# Test: validate-ident rejects empty string
+def test-validate-ident-empty-rejected [] {
+  let result = (try { validate-ident "" "test" } catch { "error" })
+  assert equal $result "error"
+--
+
+# Test: validate-ident rejects SQL injection attempts
+def test-validate-ident-sql-injection-rejected [] {
+  # Classic SQL injection
+  let result1 = (try { validate-ident "'; DROP TABLE jobs;--" "test" } catch { "error" })
+--
+
+# Test: validate-ident rejects unicode and special chars
+
+| Tools    Bash 15 • Read 5 • Glob 2 • Grep 1
+
+Testing assert...
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[/tmp/test-assert.nu:4:1]
+ 3 | print "Testing assert..."
+ 4 | assert equal 1 1
+   : ^^^|^^
+   :    `-- Command `assert` not found
+ 5 | print "Done"
+   `----
+  help: Did you mean `ast`?
+
+
+| Tools    Bash 16 • Read 5 • Glob 2 • Grep 1
+| Tools    Bash 17 • Read 5 • Glob 2 • Grep 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (90ms)
+
+Tasks: 1 completed
+ Time: 91ms
+
+
+| Tools    Bash 17 • Read 5 • Glob 3 • Grep 1
+| Tools    Bash 17 • Read 6 • Glob 5 • Grep 1
+⏳ working... elapsed 6:10 · last activity 0:16 ago
+| Tools    Bash 17 • Read 7 • Glob 5 • Grep 1
+⏳ working... elapsed 6:30 · last activity 0:18 ago
+⏳ working... elapsed 6:40 · last activity 0:28 ago
+| Tools    Bash 17 • Read 7 • Glob 5 • Grep 1 • Edit 1
+⏳ working... elapsed 7:00 · last activity 0:17 ago
+[91m[1mError: [0mError: unknown certificate verification error
+| Tools    Bash 17 • Read 7 • Glob 5 • Grep 1 • Edit 1
+
+Iteration Summary
+────────────────────────────────────────────────────────────────────
+Iteration: 12
+Elapsed:   7:09
+Tools:     Bash 17 • Read 7 • Glob 5 • Grep 1 • Edit 1
+Exit code: 1
+Completion promise: not detected
+
+⚠️  OpenCode exited with code 1. Continuing to next iteration.

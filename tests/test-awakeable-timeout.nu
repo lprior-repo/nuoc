@@ -7,45 +7,60 @@ use ../oc-engine.nu *
 
 # Test: awakeable with timeout gets marked as TIMEOUT after timeout expires
 def test-awakeable-timeout-expires [] {
-  rm -rf $DB_DIR
-  db-init
+  let test_db_dir = "/tmp/test-awakeable-timeout-1-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
 
-  let job_id = "test-job-timeout-1"
-  job-create {
-    name: $job_id,
-    inputs: { bead_id: "test-bead" },
-    tasks: [
-      { name: "task-1" }
-    ]
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    let job_id = "test-job-timeout-1"
+    job-create {
+      name: $job_id,
+      inputs: { bead_id: "test-bead" },
+      tasks: [
+        { name: "task-1" }
+      ]
+    }
+
+    let task_name = "task-1"
+    let attempt = 1
+    init-execution-context $job_id $task_name $attempt
+
+    # Create awakeable with 1 second timeout
+    let awakeable = (ctx-awakeable-timeout $job_id $task_name $attempt 1)
+    let awakeable_id = $awakeable.id
+    print $"    Awakeable ID: ($awakeable_id)"
+
+    # Verify awakeable is PENDING
+    let awakeable_before = (sqlite3 -json $test_db_path $"SELECT status, timeout_at FROM awakeables WHERE id = '($awakeable_id)'" | from json).0
+    if ($awakeable_before.status == "PENDING") {
+      print $"    [ok] Awakeable status is PENDING before timeout"
+    } else {
+      print $"    [fail] Awakeable status is PENDING before timeout: got ($awakeable_before.status)"
+    }
+
+    # Wait for timeout to expire
+    print "    Waiting for timeout..."
+    sleep 2sec
+
+    # Process timeouts
+    check-awakeable-timeouts
+
+    # Verify awakeable is now TIMEOUT
+    let awakeable_after = (sqlite3 -json $test_db_path $"SELECT status FROM awakeables WHERE id = '($awakeable_id)'" | from json).0
+    if ($awakeable_after.status == "TIMEOUT") {
+      print $"    [ok] Awakeable marked as TIMEOUT"
+    } else {
+      print $"    [fail] Awakeable marked as TIMEOUT: got ($awakeable_after.status)"
+    }
+
+    print "  [ok] awakeable-timeout-expires"
+  } always {
+    rm -rf $test_db_dir
   }
-
-  let task_name = "task-1"
-  let attempt = 1
-  init-execution-context $job_id $task_name $attempt
-
-  # Create awakeable with 1 second timeout
-  let awakeable = (ctx-awakeable-timeout $job_id $task_name $attempt 1)
-  let awakeable_id = $awakeable.id
-  print $"    Awakeable ID: ($awakeable_id)"
-
-  # Verify awakeable is PENDING
-  let awakeable_before = (sqlite3 -json $DB_PATH $"SELECT status, timeout_at FROM awakeables WHERE id = '($awakeable_id)'" | from json).0
-  assert equal $awakeable_before.status "PENDING"
-  print $"    [ok] Awakeable status is PENDING before timeout"
-
-  # Wait for timeout to expire
-  print "    Waiting for timeout..."
-  sleep 2sec
-
-  # Process timeouts
-  check-awakeable-timeouts
-
-  # Verify awakeable is now TIMEOUT
-  let awakeable_after = (sqlite3 -json $DB_PATH $"SELECT status FROM awakeables WHERE id = '($awakeable_id)'" | from json).0
-  assert equal $awakeable_after.status "TIMEOUT"
-  print $"    [ok] Awakeable marked as TIMEOUT"
-
-  print "  [ok] awakeable-timeout-expires"
 }
 
 # Test: ctx-await-awakeable returns error for TIMEOUT awakeable
