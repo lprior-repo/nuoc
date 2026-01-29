@@ -8848,3 +8848,174 @@ Tasks: 1 completed
  Time: 95ms
 
 
+| Tools    Bash 55 • Edit 34 • Read 27 • Grep 7 • Glob 1 • Write 1
+
+[main 9a73f86] GREEN: nuoc-wpi9 - tests passing for awakeable cleanup on job completion
+ 10 files changed, 2263 insertions(+), 7 deletions(-)
+ create mode 100755 tests/test-awakeable-cleanup.nu
+
+| Tools    Bash 55 • Edit 34 • Read 28 • Grep 7 • Glob 1 • Write 1
+⏳ working... elapsed 44:51 · last activity 0:12 ago
+| Tools    Bash 56 • Edit 34 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+Running quick validation...
+Checking Nushell files...
+  [ok] oc-agent.nu
+  [ok] oc-engine.nu
+  [ok] oc-orchestrate.nu
+  [ok] oc-tdd15.nu
+
+Passed: 4
+Failed: 0
+Skipped: 0
+▪▪▪▪ nuoc:check
+▪▪▪▪ nuoc:check (73ms)
+
+Tasks: 1 completed
+ Time: 74ms
+
+
+| Tools    Bash 57 • Edit 34 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+Running quick validation...
+Checking Nushell files...
+  [ok] oc-agent.nu
+  [ok] oc-engine.nu
+  [ok] oc-orchestrate.nu
+  [ok] oc-tdd15.nu
+
+Passed: 4
+Failed: 0
+Skipped: 0
+▪▪▪▪ nuoc:quick
+▪▪▪▪ nuoc:quick (76ms)
+
+Tasks: 1 completed
+ Time: 77ms
+
+
+| Tools    Bash 58 • Edit 34 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+On branch main
+Your branch is ahead of 'origin/main' by 7 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .beads/export-state/8e20e730c5403ecd.json
+	modified:   babysit-log.txt
+	modified:   ralph-full-20260128-220713.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+| Tools    Bash 59 • Edit 34 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+## Acceptance
+- [ ] All job's awakeables cancelled
+- [ ] Late resolutions rejected
+- [ ] Resources freed
+
+DEPENDS ON
+  → ✓ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+
+| Tools    Bash 60 • Edit 34 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+Running awakeable cleanup tests...
+    [ok] Awakeable marked as CANCELLED on job completion
+  [ok] job-completion-cancels-awakeables
+    [ok] Awakeable marked as CANCELLED on job cancellation
+  [ok] job-cancellation-cancels-awakeables
+    [ok] resolve-awakeable rejected CANCELLED awakeable: awakeable not pending, status is 'CANCELLED': prom_1dGVzdC1qb2ItMzow
+  [ok] reject-cancelled-awakeable-resolution
+
+| Tools    Bash 61 • Edit 34 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+On branch main
+Your branch is ahead of 'origin/main' by 7 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .beads/export-state/8e20e730c5403ecd.json
+	modified:   babysit-log.txt
+	modified:   ralph-full-20260128-220713.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+| Tools    Bash 61 • Edit 35 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+Error: unknown flag: --reason
+Usage:
+  bd update [id...] [flags]
+
+Flags:
+      --acceptance string      Acceptance criteria
+      --add-label strings      Add labels (repeatable)
+  -a, --assignee string        Assignee
+      --await-id string        Set gate await_id (e.g., GitHub run ID for gh:run gates)
+      --body-file string       Read description from file (use - for stdin)
+      --claim                  Atomically claim the issue (sets assignee to you, status to in_progress; fails if already claimed)
+      --defer string           Defer until date (empty to clear). Issue hidden from bd ready until then
+  -d, --description string     Issue description
+      --design string          Design notes
+      --due string             Due date/time (empty to clear). Formats: +6h, +1d, +2w, tomorrow, next monday, 2025-01-15
+  -e, --estimate int           Time estimate in minutes (e.g., 60 for 1 hour)
+      --external-ref string    External reference (e.g., 'gh-9', 'jira-ABC')
+  -h, --help                   help for update
+      --notes string           Additional notes
+      --parent string          New parent issue ID (reparents the issue, use empty string to remove parent)
+  -p, --priority string        Priority (0-4 or P0-P4, 0=highest)
+      --remove-label strings   Remove labels (repeatable)
+      --session string         Claude Code session ID for status=closed (or set CLAUDE_SESSION_ID env var)
+      --set-labels strings     Set labels, replacing all existing (repeatable)
+  -s, --status string          New status
+      --title string           New title
+  -t, --type string            New type (bug|feature|task|epic|chore|merge-request|molecule|gate|agent|role|rig|convoy|event|slot)
+
+Global Flags:
+      --actor string            Actor name for audit trail (default: $BD_ACTOR, git user.name, $USER)
+      --allow-stale             Allow operations on potentially stale data (skip staleness check)
+      --db string               Database path (default: auto-discover .beads/*.db)
+      --json                    Output in JSON format
+      --lock-timeout duration   SQLite busy timeout (0 = fail immediately if locked) (default 30s)
+      --no-auto-flush           Disable automatic JSONL sync after CRUD operations
+      --no-auto-import          Disable automatic JSONL import when newer than DB
+      --no-daemon               Force direct storage mode, bypass daemon if running
+      --no-db                   Use no-db mode: load from JSONL, no SQLite
+      --profile                 Generate CPU profile for performance analysis
+  -q, --quiet                   Suppress non-essential output (errors only)
+      --readonly                Read-only mode: block write operations (for worker sandboxes)
+      --sandbox                 Sandbox mode: disables daemon and auto-sync
+  -v, --verbose                 Enable verbose/debug output
+
+
+| Tools    Bash 63 • Edit 35 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+✓ Updated issue: nuoc-wpi9
+
+| Tools    Bash 64 • Edit 35 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+Exporting beads to JSONL...
+✓ Exported 0 issues (1 changed since last sync)
+✓ /home/lewis/src/nuoc/.beads/issues.jsonl updated
+
+| Tools    Bash 65 • Edit 35 • Read 28 • Grep 7 • Glob 1 • Write 1
+
+On branch main
+Your branch is ahead of 'origin/main' by 7 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .beads/export-state/8e20e730c5403ecd.json
+	modified:   .beads/issues.jsonl
+	modified:   .ralph/ralph-tasks.md
+	modified:   babysit-log.txt
+	modified:   ralph-full-20260128-220713.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
