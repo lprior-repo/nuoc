@@ -265,16 +265,50 @@
         "Error: nu::parser::extra_positional",
         "Error: nu::parser::parse_mismatch"
       ]
+    },
+    {
+      "iteration": 8,
+      "startedAt": "2026-01-29T05:13:19.170Z",
+      "endedAt": "2026-01-29T05:23:52.163Z",
+      "durationMs": 632953,
+      "toolsUsed": {
+        "Read": 8,
+        "Bash": 24,
+        "Edit": 10,
+        "Glob": 4,
+        "Grep": 4,
+        "Write": 4
+      },
+      "filesModified": [
+        ".oc-workflow/journal.db",
+        ".ralph/ralph-tasks.md",
+        "babysit-log.txt",
+        "ralph-full-20260128-220713.log",
+        ".ralph/ralph-context.md",
+        "oc-server.nu",
+        "scripts/__pycache__/",
+        "scripts/oc-http-server.py",
+        "test-http-manual.nu",
+        "tests/test-awakeable-http-endpoint.nu"
+      ],
+      "exitCode": 0,
+      "completionDetected": false,
+      "errors": [
+        "Error: nu::parser::input_type_mismatch",
+        "Error: nu::parser::extra_positional",
+        "Error: nu::shell::external_command",
+        "Failed: 0"
+      ]
     }
   ],
-  "totalDurationMs": 3957718,
+  "totalDurationMs": 4590671,
   "struggleIndicators": {
     "repeatedErrors": {
       "Now I'll implement nuoc-9w6 (Create awakeables table schema) using TDD15. Let me start with Phase 0:": 1,
       "RED phase complete. Tests are failing as expected (awakeables table doesn't exist). Committing RED s": 1,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun awakeables tests (should fail)": 1,
       "error: unexpected argument '--filter' found": 6,
-      "Failed: 0": 7,
+      "Failed: 0": 8,
       "Error: nu::parser::expected_keyword": 2,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun all tests (should fail awakeables tests)": 1,
       "Error: in prepare, index idx_journal_replay already exists": 1,
@@ -282,7 +316,7 @@
       "Error: task_runner::run_failed": 1,
       "Error: nu::parser::missing_positional": 1,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun awakeable ID generation tests (should fail)": 1,
-      "Error: nu::shell::external_command": 5,
+      "Error: nu::shell::external_command": 6,
       "Error: nu::parser::module_not_found": 3,
       "Error: nu::shell::pipeline_mismatch": 1,
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun tests to see failures (RED phase)": 1,
@@ -294,7 +328,7 @@
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun failing test and check exit code": 1,
       "Error: nu::parser::parse_mismatch_with_full_string_msg": 1,
       "Error: nu::parser::unknown_operator": 1,
-      "Error: nu::parser::extra_positional": 3,
+      "Error: nu::parser::extra_positional": 4,
       "Error: nu::shell::only_supports_this_input_type": 1,
       "Error: invalid awakeable ID format": 1,
       "Now I'll implement ctx.awakeable following TDD15. Let me start with **Phase 0-2: RED** - write faili": 1,
@@ -315,7 +349,8 @@
       "\u001b[91m\u001b[1m| \u001b[0m\u001b[90m Bash     \u001b[0mRun RED phase tests (should fail)": 1,
       "All RED tests should fail (resolve-awakeable not implemented yet) ✓": 1,
       "Error: unable to open database \"/tmp/test-resolve-awakeable-($env.PID)/journal.db\": unable to open d": 1,
-      "Error: nu::parser::parse_mismatch": 1
+      "Error: nu::parser::parse_mismatch": 1,
+      "Error: nu::parser::input_type_mismatch": 1
     },
     "noProgressIterations": 0,
     "shortIterations": 0
