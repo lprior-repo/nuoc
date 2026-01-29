@@ -95,6 +95,21 @@ export def db-init [] {
       created_at TEXT NOT NULL DEFAULT (datetime('now'))
     );
 
+    CREATE TABLE IF NOT EXISTS journal (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_id TEXT NOT NULL,
+      task_name TEXT NOT NULL,
+      attempt INTEGER NOT NULL DEFAULT 1,
+      entry_index INTEGER NOT NULL,
+      op_type TEXT NOT NULL,
+      input_hash TEXT,
+      input TEXT,
+      output TEXT,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      UNIQUE (job_id, task_name, attempt, entry_index)
+    );
+    CREATE INDEX idx_journal_replay ON journal(job_id, task_name, attempt);
+
     CREATE TABLE IF NOT EXISTS webhooks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       job_id TEXT NOT NULL,
@@ -104,6 +119,45 @@ export def db-init [] {
       condition TEXT
     );
   "
+}
+
+# ── Journal Operations ───────────────────────────────────────────────────────
+
+# Append a journal entry atomically
+# Precondition: job_id and task_name are validated identifiers
+# Postcondition: entry persisted with computed input_hash, returns entry_index
+# Invariant: UNIQUE constraint ensures no duplicate (job_id, task_name, attempt, entry_index)
+export def journal-write [
+  job_id: string,
+  task_name: string,
+  attempt: int,
+  entry_index: int,
+  op_type: string,
+  input: any,
+  output: any
+]: nothing -> int {
+  # Validate identifiers
+  let jid = (validate-ident $job_id "journal-write.job_id")
+  let tname = (validate-ident $task_name "journal-write.task_name")
+  let op = (validate-ident $op_type "journal-write.op_type")
+
+  # Serialize input and output to JSON
+  let input_json = ($input | to json -r)
+  let output_json = ($output | to json -r)
+
+  # Compute input hash for deterministic replay verification
+  let input_hash = ($input_json | hash sha256)
+
+  # Escape JSON text for SQL insertion
+  let input_esc = (sql-escape-text $input_json)
+  let output_esc = (sql-escape-text $output_json)
+  let hash_esc = (sql-escape-text $input_hash)
+
+  # Insert entry atomically
+  sql-exec $"INSERT INTO journal \(job_id, task_name, attempt, entry_index, op_type, input_hash, input, output\) VALUES \('($jid)', '($tname)', ($attempt), ($entry_index), '($op)', '($hash_esc)', '($input_esc)', '($output_esc)'\)"
+
+  # Return entry_index on success
+  $entry_index
 }
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
