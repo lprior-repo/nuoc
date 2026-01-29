@@ -4565,3 +4565,10 @@ Running RED phase tests for awakeable suspension...
 All RED tests complete - expected to fail without implementation
 
 | Tools    Bash 22 • Edit 7 • Read 5 • Glob 3 • Write 2 • Grep 1
+| Tools    Bash 23 • Edit 7 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+[main 15b0dad] RED: nuoc-f2pc - failing tests for task suspension on awakeable await
+ 9 files changed, 702 insertions(+), 5 deletions(-)
+ create mode 100644 .ralph/ralph-context.md
+ create mode 100644 tests/test-awakeable-suspension.nu
+
