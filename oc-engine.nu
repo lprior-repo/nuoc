@@ -372,6 +372,29 @@ export def validate-ident-opt [value: string, context: string]: nothing -> strin
   if ($value | is-empty) { "" } else { validate-ident $value $context }
 }
 
+# Generate awakeable ID in Restate format: prom_1 + base64url(invocation_id + entry_index)
+# Precondition: job_id is a validated identifier, entry_index is non-negative
+# Postcondition: returns globally unique awakeable ID with prefix 'prom_1'
+# Invariant: Different (job_id, entry_index) pairs always produce different IDs
+export def awakeable-id-generate [job_id: string, entry_index: int]: nothing -> string {
+  # Validate inputs
+  if ($job_id | is-empty) {
+    error make { msg: "awakeable-id-generate: job_id cannot be empty" }
+  }
+  if ($entry_index < 0) {
+    error make { msg: $"awakeable-id-generate: entry_index cannot be negative: ($entry_index)" }
+  }
+
+  # Concatenate invocation_id and entry_index
+  let input = $"($job_id):($entry_index)"
+
+  # Base64-URL encode (base64 with +/ replaced by -_ and padding removed)
+  let encoded = ($input | encode base64 | str replace --all '+' '-' | str replace --all '/' '_' | str replace -r '=+$' '')
+
+  # Prepend Restate prefix
+  $"prom_1($encoded)"
+}
+
 def sql [query: string] {
   sqlite3 -json $DB_PATH $query | from json
 }

@@ -1834,3 +1834,512 @@ Completion promise: not detected
 
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 2...
+📝 Auto-committed changes
+
+🔄 Iteration 2 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T04:26:18.514Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll work on implementing awakeable ID generation for task nuoc-l4d.
+| Tools    Read 1
+
+
+○ nuoc-l4d · [Awk-02] Implement awakeable ID generation   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Generate ID in Restate format: prom_1 + base64url(invocation_id + entry_index)
+
+## Acceptance
+- [ ] Prefix is 'prom_1'
+- [ ] Base64-URL encoding
+- [ ] Globally unique
+
+DEPENDS ON
+  → ✓ nuoc-9w6: [Awk-01] Create awakeables table schema ● P0
+
+BLOCKS
+  ← ○ nuoc-pvb2: [Awk-03] Implement awakeable ID parsing ● P0
+
+
+⏳ working... elapsed 0:20 · last activity 0:12 ago
+⏳ working... elapsed 0:30 · last activity 0:22 ago
+| Tools    Glob 2 • Read 1 • Bash 1
+
+
+✓ nuoc-9w6 · [Awk-01] Create awakeables table schema   [● P0 · CLOSED]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+Close reason: TDD15 + Red Queen complete - battle-hardened schema implementation
+
+DESCRIPTION
+## Micro-task
+Schema for awakeable tracking.
+
+## Schema
+```sql
+CREATE TABLE awakeables (
+  id TEXT PRIMARY KEY,
+  job_id TEXT NOT NULL,
+  task_name TEXT NOT NULL,
+  entry_index INTEGER NOT NULL,
+  status TEXT DEFAULT 'PENDING',
+  payload TEXT,
+  timeout_at TEXT,
+  created_at TEXT DEFAULT (datetime('now')),
+  resolved_at TEXT
+);
+```
+
+## Acceptance
+- [ ] Table created
+- [ ] Index on (job_id, task_name)
+
+NOTES
+TDD15 complete - awaiting Red Queen evolution
+
+BLOCKS
+  ← ○ nuoc-d56: [Ctx-12] Implement ctx.awakeable to create awaitable ● P0
+  ← ○ nuoc-l4d: [Awk-02] Implement awakeable ID generation ● P0
+
+
+| Tools    Read 2 • Glob 2 • Bash 2 • Grep 1
+| Tools    Read 3 • Glob 3 • Bash 2 • Grep 2
+| Tools    Read 4 • Glob 3 • Grep 3 • Bash 2
+| Tools    Read 5 • Grep 4 • Glob 3 • Bash 2
+| Tools    Read 7 • Grep 5 • Glob 3 • Bash 2
+| Tools    Read 7 • Grep 6 • Glob 3 • Bash 3
+
+dGVzdC1qb2ItMTp0YXNrLWE=
+
+
+dGVzdC1qb2ItMTp0YXNrLWE=
+
+| Tools    Read 8 • Grep 6 • Bash 4 • Glob 3
+
+Error: nu::parser::missing_positional
+
+  x Missing required positional argument.
+   ,-[source:1:117]
+ 1 | "test-job-1:task-a" | encode base64 | str replace --all '+' '-' | str replace --all '/' '_' | str replace --all '=+'
+   `----
+  help: Usage: str replace {flags} <find> <replace> ...(rest) . Use `--help`
+        for more information.
+
+
+| Tools    Read 9 • Grep 6 • Bash 5 • Glob 3
+
+dGVzdC1qb2ItMTp0YXNrLWE
+
+⏳ working... elapsed 1:40 · last activity 0:14 ago
+| Tools    Read 10 • Bash 6 • Grep 6 • Glob 3
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+| Tools    Read 10 • Bash 8 • Grep 6 • Glob 3 • Edit 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (92ms)
+
+Tasks: 1 completed
+ Time: 92ms
+
+
+| Tools    Read 10 • Bash 9 • Grep 6 • Glob 3 • Edit 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (91ms)
+
+Tasks: 1 completed
+ Time: 91ms
+
+
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+| Tools    Read 11 • Bash 10 • Grep 6 • Glob 3 • Edit 1
+| Tools    Read 11 • Bash 11 • Grep 6 • Glob 3 • Edit 1
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+⏳ working... elapsed 2:30 · last activity 0:13 ago
+| Tools    Bash 12 • Read 11 • Grep 6 • Glob 3 • Edit 1
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:1:21]
+ 1 | use oc-engine.nu *; awakeable-id-generate 'job-123' 0
+   :                     ^^^^^^^^^^|^^^^^^^^^^
+   :                               `-- Command `awakeable-id-generate` not found
+   `----
+  help: `awakeable-id-generate` is neither a Nushell built-in or a known
+        external command
+
+
+⏳ working... elapsed 2:50 · last activity 0:14 ago
+⏳ working... elapsed 3:00 · last activity 0:24 ago
+| Tools    Read 12 • Bash 12 • Grep 6 • Glob 3 • Edit 2
+| Tools    Bash 13 • Read 12 • Grep 6 • Glob 3 • Edit 2
+
+prom_1am9iLTQ1Njow
+
+
+prom_1am9iLTEyMzox
+
+
+prom_1am9iLTEyMzow
+
+| Tools    Bash 16 • Read 12 • Grep 6 • Glob 3 • Edit 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+⏳ working... elapsed 3:30 · last activity 0:19 ago
+| Tools    Bash 17 • Read 12 • Grep 6 • Glob 3 • Edit 2
+
+Testing oc-engine.nu...
+[ok] oc-engine.nu tests completed
+
+
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (87ms)
+
+Tasks: 1 completed
+ Time: 88ms
+
+
+| Tools    Bash 18 • Read 13 • Grep 6 • Glob 3 • Edit 2
+
+311:test test-awakeables-table-created
+312:test test-awakeables-table-schema
+313:test test-awakeables-index-created
+314:test test-awakeable-id-generate-prefix
+315:test test-awakeable-id-generate-unique
+316:test test-awakeable-id-generate-base64url
+317:test test-awakeable-id-generate-encodes-inputs
+
+| Tools    Bash 19 • Read 13 • Grep 6 • Glob 3 • Edit 3
+| Tools    Bash 20 • Read 13 • Grep 6 • Glob 3 • Edit 3
+
+Error: nu::parser::module_not_found
+
+  x Module not found.
+   ,-[source:3:5]
+ 2 | use std testing
+ 3 | use ../oc-engine.nu *
+   :     ^^^^^^^|^^^^^^^
+   :            `-- module ../oc-engine.nu not found
+ 4 | let result = (awakeable-id-generate 'job-123' 0)
+   `----
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
+
+
+| Tools    Bash 21 • Read 13 • Grep 6 • Glob 3 • Edit 3
+
+Result: ()
+Starts with prom_1: ( | str starts-with 'prom_1')
+Contains +: ( | str contains '+')
+Contains /: ( | str contains '/')
+ID1: ()
+ID2: ()
+ID3: ()
+ID1 != ID2: ( != )
+ID1 != ID3: ( != )
+ID2 != ID3: ( != )
+
+| Tools    Bash 22 • Read 13 • Grep 6 • Glob 3 • Edit 3
+
+prom_1am9iLTEyMzow
+
+| Tools    Bash 22 • Read 13 • Grep 6 • Edit 4 • Glob 3
+| Tools    Bash 24 • Read 13 • Grep 6 • Edit 4 • Glob 3
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+▪▪▪▪ nuoc:test
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (93ms)
+
+Tasks: 1 completed
+ Time: 94ms
+
+
+| Tools    Bash 24 • Read 14 • Grep 6 • Edit 4 • Glob 3
+⏳ working... elapsed 4:40 · last activity 0:14 ago
+⏳ working... elapsed 4:50 · last activity 0:24 ago
+| Tools    Bash 25 • Read 14 • Grep 6 • Edit 4 • Glob 3
+
+Test 1: prefix check
+  Result: ()
+Error: nu::shell::pipeline_mismatch
+
+  x Pipeline empty.
+    ,-[source:9:12]
+  8 | print "  Result: ()"
+  9 | assert ( | str starts-with 'prom_1')
+    :            ^^^^^^^|^^^^^^^
+    :                   `-- no input value was piped in
+ 10 | print '  [PASS]'
+    `----
+
+
+| Tools    Bash 26 • Read 14 • Grep 6 • Edit 4 • Glob 3
+
+Test 1: prefix check
+Result: prom_1am9iLTEyMzow
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:7:1]
+ 6 | print $"Result: ($result)"
+ 7 | assert ($result | str starts-with 'prom_1')
+   : ^^^|^^
+   :    `-- Command `assert` not found
+ 8 | print '  [PASS]'
+   `----
+  help: Did you mean `ast`?
+
+
+| Tools    Bash 27 • Read 14 • Grep 6 • Edit 4 • Glob 3
+
+Test 1: prefix check
+Result: prom_1am9iLTEyMzow
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:8:1]
+ 7 | print $"Result: ($result)"
+ 8 | assert ($result | str starts-with 'prom_1')
+   : ^^^|^^
+   :    `-- Command `assert` not found
+ 9 | print '  [PASS]'
+   `----
+  help: Did you mean `ast`?
+
+
+| Tools    Bash 27 • Read 15 • Grep 6 • Edit 4 • Glob 3
+| Tools    Bash 28 • Read 15 • Grep 6 • Edit 4 • Glob 3
+
+Contains /: false
+
+| Tools    Bash 29 • Read 15 • Grep 6 • Edit 4 • Glob 3
+
+prom_1dGVzdC1qb2I6NQ
+
+
+▪▪▪▪ nuoc:test (89ms)
+
+Tasks: 1 completed
+ Time: 90ms
+
+
+| Tools    Bash 31 • Read 15 • Grep 6 • Edit 4 • Glob 3
+
+Running quick validation...
+Checking Nushell files...
+  [ok] oc-agent.nu
+  [ok] oc-engine.nu
+  [ok] oc-orchestrate.nu
+  [ok] oc-tdd15.nu
+
+Passed: 4
+Failed: 0
+Skipped: 0
+▪▪▪▪ nuoc:check
+▪▪▪▪ nuoc:check (74ms)
+
+Tasks: 1 completed
+ Time: 74ms
+
+
+
+Running quick validation...
+Checking Nushell files...
+  [ok] oc-agent.nu
+  [ok] oc-engine.nu
+  [ok] oc-orchestrate.nu
+  [ok] oc-tdd15.nu
+
+Passed: 4
+Failed: 0
+Skipped: 0
+▪▪▪▪ nuoc:quick
+▪▪▪▪ nuoc:quick (75ms)
+
+Tasks: 1 completed
+ Time: 75ms
+
+

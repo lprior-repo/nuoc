@@ -268,9 +268,52 @@ def test-awakeables-index-created [] {
   rm -rf $test_db_dir
 }
 
+# ── Awakeable ID Generation Tests ──────────────────────────────────────────────
+
+# Test: awakeable-id-generate has correct prefix
+def test-awakeable-id-generate-prefix [] {
+  let result = (awakeable-id-generate "job-123" 0)
+  assert ($result | str starts-with "prom_1")
+}
+
+# Test: awakeable-id-generate produces globally unique IDs
+def test-awakeable-id-generate-unique [] {
+  let id1 = (awakeable-id-generate "job-123" 0)
+  let id2 = (awakeable-id-generate "job-123" 1)
+  let id3 = (awakeable-id-generate "job-456" 0)
+  
+  assert not ($id1 == $id2)
+  assert not ($id1 == $id3)
+  assert not ($id2 == $id3)
+}
+
+# Test: awakeable-id-generate uses base64url encoding
+def test-awakeable-id-generate-base64url [] {
+  let result = (awakeable-id-generate "job-123" 0)
+  # Base64url should not have '+' or '/' characters (they're replaced with '-' and '_')
+  assert not ($result | str contains '+')
+  assert not ($result | str contains '/')
+}
+
+# Test: awakeable-id-generate encodes job_id and entry_index
+def test-awakeable-id-generate-encodes-inputs [] {
+  let result1 = (awakeable-id-generate "job-abc" 0)
+  let result2 = (awakeable-id-generate "job-abc" 1)
+  let result3 = (awakeable-id-generate "job-def" 0)
+  
+  # Different entry_index should produce different IDs
+  assert not ($result1 == $result2)
+  # Different job_id should produce different IDs  
+  assert not ($result1 == $result3)
+}
+
 # Run awakeables tests
 test test-awakeables-table-created
 test test-awakeables-table-schema
 test test-awakeables-index-created
+test test-awakeable-id-generate-prefix
+test test-awakeable-id-generate-unique
+test test-awakeable-id-generate-base64url
+test test-awakeable-id-generate-encodes-inputs
 
 print "[ok] oc-engine.nu tests completed"
