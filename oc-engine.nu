@@ -1045,9 +1045,9 @@ export def resolve-awakeable [awakeable_id: string, payload: any]: nothing -> re
   let task_name = $awakeable_record.0.task_name
   let status = $awakeable_record.0.status
 
-  # Check if already resolved
-  if $status == "RESOLVED" {
-    error make { msg: $"awakeable already resolved: ($aw_id)" }
+  # Reject if not pending (duplicate resolution or invalid state)
+  if $status != "PENDING" {
+    error make { msg: $"awakeable not pending, status is '($status)': ($aw_id)" }
   }
 
   # Serialize payload to JSON and escape for SQL

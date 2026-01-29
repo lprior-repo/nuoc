@@ -88,8 +88,10 @@ class AwakeableHandler(BaseHTTPRequestHandler):
 
             job_id, task_name, status = result
 
-            if status == "RESOLVED":
-                self._send_error(f"Awakeable already resolved: {awakeable_id}", 409)
+            if status != "PENDING":
+                self._send_error(
+                    f"Awakeable not pending (status: {status}): {awakeable_id}", 409
+                )
                 return
 
             # Serialize payload to JSON for storage

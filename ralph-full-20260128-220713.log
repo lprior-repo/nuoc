@@ -6497,3 +6497,271 @@ Completion promise: not detected
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 10...
 📝 Context was consumed this iteration
+📝 Auto-committed changes
+
+🔄 Iteration 10 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T05:36:00.000Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+I'll work on task "nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection". Let me first check the current task state and then implement the feature.
+| Tools    Read 1
+
+
+○ nuoc-bfxa · [Awk-10] Implement duplicate resolution rejection   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Reject resolution if already resolved.
+
+## Acceptance
+- [ ] Error if status != PENDING
+- [ ] Original payload preserved
+- [ ] Clear error message
+
+DEPENDS ON
+  → ✓ nuoc-a7ti: [Awk-06] Implement resolve-awakeable command ● P0
+
+
+| Tools    Read 1 • Bash 1 • Glob 1
+| Tools    Read 2 • Bash 2 • Glob 2
+| Tools    Read 4 • Bash 2 • Glob 2
+
+./scripts/oc-http-server.py
+
+⏳ working... elapsed 0:50 · last activity 0:11 ago
+⏳ working... elapsed 1:00 · last activity 0:21 ago
+Let me check the awakeable schema more carefully and understand the requirements:
+| Tools    Read 5 • Bash 3 • Glob 2 • invalid 1
+⏳ working... elapsed 1:20 · last activity 0:14 ago
+Now I understand the task. Let me mark it as in progress and implement duplicate resolution rejection. The current implementation only checks for "RESOLVED" status, but the acceptance criteria requires checking if status != PENDING (which should also reject REJECTED, TIMEOUT, and any other non-PENDING statuses).
+| Tools    Read 5 • Bash 4 • Glob 2 • invalid 1 • Grep 1 • Edit 1
+Now I'll implement the duplicate resolution rejection. The key change is to reject resolution if status != PENDING (not just RESOLVED):
+| Tools    Read 5 • Bash 4 • Glob 2 • Edit 2 • invalid 1 • Grep 1
+| Tools    Read 5 • Bash 4 • Edit 3 • Glob 2 • invalid 1 • Grep 1
+⏳ working... elapsed 1:50 · last activity 0:12 ago
+⏳ working... elapsed 2:00 · last activity 0:22 ago
+⏳ working... elapsed 2:10 · last activity 0:32 ago
+| Tools    Read 5 • Bash 4 • Edit 3 • Glob 2 • invalid 1 • Grep 1 • +1 more
+| Tools    Read 5 • Bash 5 • Edit 3 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Running tests for duplicate resolution rejection...
+  [ok] Awakeable marked as RESOLVED
+  [ok] Original payload stored
+  [fail] Duplicate resolution rejected: wrong error message: External command failed
+  [ok] Original payload preserved
+  [ok] Status remains RESOLVED
+  [error] test-reject-resolution-on-non-pending failed: External command failed
+All tests passed ✓
+
+| Tools    Bash 6 • Read 5 • Edit 3 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Error: nu::shell::external_command
+
+  x External command failed
+      ,-[/home/lewis/src/nuoc/oc-engine.nu:1050:48]
+ 1049 |   if $status != "PENDING" {
+ 1050 |     error make { msg: $"awakeable not pending (status: ($status)): ($aw_id)" }
+      :                                                ^^^|^^^
+      :                                                   `-- Command `status:` not found
+ 1051 |   }
+      `----
+  help: `status:` is neither a Nushell built-in or a known external command
+
+
+| Tools    Bash 6 • Read 5 • Edit 4 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Running tests for duplicate resolution rejection...
+  [ok] Awakeable marked as RESOLVED
+  [ok] Original payload stored
+  [ok] Duplicate resolution rejected
+  [ok] Original payload preserved
+  [ok] Status remains RESOLVED
+  [error] test-reject-resolution-on-non-pending failed: External command failed
+All tests passed ✓
+
+| Tools    Bash 8 • Read 5 • Edit 4 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Error: nu::shell::external_command
+
+  x External command failed
+   ,-[source:8:1]
+ 7 | let awakeable = (ctx-awakeable 'test-job' 'task-1' 1)
+ 8 | sql-exec "UPDATE awakeables SET status = 'REJECTED' WHERE id = '($awakeable.id)'"
+   : ^^^^|^^^
+   :     `-- Command `sql-exec` not found
+ 9 | resolve-awakeable $awakeable.id { result: 'test' }
+   `----
+  help: Did you mean `exec`?
+
+
+| Tools    Bash 8 • Read 5 • Edit 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Running tests for duplicate resolution rejection...
+  [ok] Awakeable marked as RESOLVED
+  [ok] Original payload stored
+  [ok] Duplicate resolution rejected
+  [ok] Original payload preserved
+  [ok] Status remains RESOLVED
+  [ok] Resolution rejected for non-PENDING status
+  [fail] Error message includes current status: awakeable not pending, status is 'REJECTED': prom_1dGVzdC1qb2ItMjow
+All tests passed ✓
+
+| Tools    Bash 9 • Edit 6 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+| Tools    Bash 10 • Edit 6 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Running tests for duplicate resolution rejection...
+  [ok] Awakeable marked as RESOLVED
+  [ok] Original payload stored
+  [ok] Duplicate resolution rejected
+  [ok] Original payload preserved
+  [ok] Status remains RESOLVED
+  [ok] Resolution rejected for non-PENDING status
+  [ok] Error message includes current status
+All tests passed ✓
+
+⏳ working... elapsed 3:10 · last activity 0:11 ago
+⏳ working... elapsed 3:20 · last activity 0:21 ago
+| Tools    Bash 11 • Edit 6 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (91ms)
+
+Tasks: 1 completed
+ Time: 92ms
+
+
+⏳ working... elapsed 3:40 · last activity 0:13 ago
+⏳ working... elapsed 3:50 · last activity 0:23 ago
+⏳ working... elapsed 4:00 · last activity 0:33 ago
+| Tools    Bash 12 • Edit 6 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Testing ctx.awakeable basic functionality...
+Test 1: ID = prom_1am9iLTE6MA
+Test 2: Long job_id OK, ID starts with prom_1: true
+Test 4: Multiple OK, 10 unique IDs: true
+
+✓ All verification tests passed!
+
+⏳ working... elapsed 4:20 · last activity 0:19 ago
+| Tools    Bash 13 • Edit 6 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Error: unknown flag: --reason
+Usage:
+  bd update [id...] [flags]
+
+Flags:
+      --acceptance string      Acceptance criteria
+      --add-label strings      Add labels (repeatable)
+  -a, --assignee string        Assignee
+      --await-id string        Set gate await_id (e.g., GitHub run ID for gh:run gates)
+      --body-file string       Read description from file (use - for stdin)
+      --claim                  Atomically claim the issue (sets assignee to you, status to in_progress; fails if already claimed)
+      --defer string           Defer until date (empty to clear). Issue hidden from bd ready until then
+  -d, --description string     Issue description
+      --design string          Design notes
+      --due string             Due date/time (empty to clear). Formats: +6h, +1d, +2w, tomorrow, next monday, 2025-01-15
+  -e, --estimate int           Time estimate in minutes (e.g., 60 for 1 hour)
+      --external-ref string    External reference (e.g., 'gh-9', 'jira-ABC')
+  -h, --help                   help for update
+      --notes string           Additional notes
+      --parent string          New parent issue ID (reparents the issue, use empty string to remove parent)
+  -p, --priority string        Priority (0-4 or P0-P4, 0=highest)
+      --remove-label strings   Remove labels (repeatable)
+      --session string         Claude Code session ID for status=closed (or set CLAUDE_SESSION_ID env var)
+      --set-labels strings     Set labels, replacing all existing (repeatable)
+  -s, --status string          New status
+      --title string           New title
+  -t, --type string            New type (bug|feature|task|epic|chore|merge-request|molecule|gate|agent|role|rig|convoy|event|slot)
+
+Global Flags:
+      --actor string            Actor name for audit trail (default: $BD_ACTOR, git user.name, $USER)
+      --allow-stale             Allow operations on potentially stale data (skip staleness check)
+      --db string               Database path (default: auto-discover .beads/*.db)
+      --json                    Output in JSON format
+      --lock-timeout duration   SQLite busy timeout (0 = fail immediately if locked) (default 30s)
+      --no-auto-flush           Disable automatic JSONL sync after CRUD operations
+      --no-auto-import          Disable automatic JSONL import when newer than DB
+      --no-daemon               Force direct storage mode, bypass daemon if running
+      --no-db                   Use no-db mode: load from JSONL, no SQLite
+      --profile                 Generate CPU profile for performance analysis
+  -q, --quiet                   Suppress non-essential output (errors only)
+      --readonly                Read-only mode: block write operations (for worker sandboxes)
+      --sandbox                 Sandbox mode: disables daemon and auto-sync
+  -v, --verbose                 Enable verbose/debug output
+
+
+⏳ working... elapsed 4:40 · last activity 0:13 ago
+| Tools    Bash 14 • Edit 6 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+✓ Updated issue: nuoc-bfxa
+
+| Tools    Bash 14 • Edit 7 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+| Tools    Bash 14 • Edit 8 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+<promise>READY_FOR_NEXT_TASK</promise>
+
+Task nuoc-bfxa complete. Changes made:
+- Updated `oc-engine.nu`: Modified `resolve-awakeable` to reject resolution if status != PENDING (not just RESOLVED)
+- Updated `scripts/oc-http-server.py`: Modified `_handle_resolve_awakeable` to reject resolution if status != PENDING
+- Created `tests/test-duplicate-resolution-rejection.nu`: Tests for duplicate resolution and non-PENDING rejection
+- All tests passing (moon run :test, verify-awakeable.nu)
+- Bead marked as closed in bd
+| Tools    Bash 14 • Edit 8 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+
+Iteration Summary
+────────────────────────────────────────────────────────────────────
+Iteration: 10
+Elapsed:   5:05
+Tools:     Bash 14 • Edit 8 • Read 5 • Glob 2 • invalid 1 • Grep 1 • +1 more
+Exit code: 0
+Completion promise: not detected
+
+🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
+   Moving to next task in iteration 11...
