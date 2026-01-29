@@ -883,8 +883,65 @@ def run-task [job_id: string, task: record]: nothing -> record {
     let response = (oc-wait-idle $session.id ($task.timeout_sec | into int))
     let output = $response.content
 
-    # Evaluate gate
-    if ($task.gate | is-not-empty) {
+    # Handle user_approval gate with awakeable
+    if $task.gate == "user_approval" {
+      let current_attempt = (sql $"SELECT attempt FROM tasks WHERE job_id = '($job_id)' AND name = '($task.name)'").0.attempt
+
+      # Get current entry index
+      let entry_index = (get-entry-index $job_id $task.name $current_attempt)
+
+      # Check if we already have an awakeable for this approval
+      let existing_awakeable = (sql $"SELECT id, status, payload FROM awakeables WHERE job_id = '($job_id)' AND task_name = '($task.name)' AND entry_index = ($entry_index) ORDER BY created_at DESC LIMIT 1")
+
+      if ($existing_awakeable | is-empty) {
+        # Create new awakeable for approval
+        let awakeable = (ctx-awakeable $job_id $task.name $current_attempt)
+        let await_result = (ctx-await-awakeable $job_id $task.name $current_attempt $awakeable.id)
+
+        if $await_result.suspended {
+          # Task suspended, return early
+          return { status: "suspended", awakeable_id: $await_result.awakeable_id }
+        } else if $await_result.resumed {
+          # Task resumed with payload, check approval decision
+          let approval = ($await_result.payload | get -o action | default "reject")
+          if $approval == "approve" {
+            { status: "completed", output: $output }
+          } else {
+            { status: "failed", error: "approval rejected", output: $output }
+          }
+        } else {
+          # Should not happen
+          error make { msg: "unexpected awakeable state" }
+        }
+      } else {
+        # Existing awakeable found
+        let aw = $existing_awakeable.0
+        if $aw.status == "RESOLVED" {
+          # Already resolved, check payload
+          let approval = (try { ($aw.payload | from json | get -o action | default "reject") } catch { "reject" })
+          if $approval == "approve" {
+            { status: "completed", output: $output }
+          } else {
+            { status: "failed", error: "approval rejected", output: $output }
+          }
+        } else if $aw.status == "REJECTED" {
+          # Awakeable was rejected
+          { status: "failed", error: "approval rejected", output: $output }
+        } else if $aw.status == "TIMEOUT" {
+          # Awakeable timed out
+          { status: "failed", error: "approval timed out", output: $output }
+        } else {
+          # Still pending, suspend task
+          let await_result = (ctx-await-awakeable $job_id $task.name $current_attempt $aw.id)
+          if $await_result.suspended {
+            return { status: "suspended", awakeable_id: $await_result.awakeable_id }
+          } else {
+            error make { msg: "unexpected awakeable state" }
+          }
+        }
+      }
+    # Evaluate other gates normally
+    } else if ($task.gate | is-not-empty) {
       let gate_result = (gate-check $task.gate $output $job_id)
       if $gate_result.pass {
         { status: "completed", output: $output }
@@ -1000,8 +1057,9 @@ export def gate-check [gate_name: string, output: string, job_id: string]: nothi
       { pass: $ok, reason: (if $ok { "ok" } else { "no plan found" }) }
     }
     "user_approval" => {
-      # Auto-approve in automated mode
-      { pass: true, reason: "auto-approved" }
+      # Handled in run-task with awakeables
+      # This should never be called directly
+      { pass: false, reason: "user_approval gate must be handled via awakeable in run-task" }
     }
     "tests_fail" => {
       # RED phase: tests should fail
