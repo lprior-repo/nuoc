@@ -5,9 +5,9 @@
 # ── Complexity Routes ────────────────────────────────────────────────────────
 
 # All TDD15 phases
-const PHASES_COMPLEX = [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15]
-const PHASES_MEDIUM = [0 1 2 4 5 6 7 9 11 15]
-const PHASES_SIMPLE = [0 4 5 6 14 15]
+export const PHASES_COMPLEX = [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15]
+export const PHASES_MEDIUM = [0 1 2 4 5 6 7 9 11 15]
+export const PHASES_SIMPLE = [0 4 5 6 14 15]
 
 # Map complexity label to phase route
 export def tdd15-route [complexity: string]: nothing -> list<int> {
