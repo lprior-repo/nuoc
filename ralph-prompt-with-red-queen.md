@@ -3,6 +3,31 @@
 ## Mission
 Implement ALL 186 beads using TDD15, then stress-test and evolve each using Red Queen adversarial QA. Create a self-healing system where code and tests coevolve.
 
+## CRITICAL: Task Mode with Dynamic Replenishment
+
+Ralph is running in **Tasks Mode**. Your task list in `.ralph/ralph-tasks.md` must ALWAYS have pending tasks until all 186 beads are complete.
+
+### On First Iteration or Empty Task List
+
+If `.ralph/ralph-tasks.md` is empty or has < 5 pending tasks:
+
+```bash
+# Populate initial tasks from bd ready
+bd ready | head -20 | while read line; do
+  BEAD_ID=$(echo "$line" | grep -oE 'nuoc-[a-z0-9]+')
+  TITLE=$(echo "$line" | sed 's/.*\] //')
+  echo "- [ ] $BEAD_ID - $TITLE"
+done > .ralph/ralph-tasks.md
+```
+
+Then proceed with normal workflow.
+
+### Task Replenishment (every iteration)
+
+Before starting work, check task inventory:
+- If tasks < 5: Add 10 more from `bd ready`
+- Never let task list go empty until ALL beads complete
+
 ## Dual-Phase Workflow
 
 ### Phase 1: TDD15 Implementation (per bead)
@@ -12,9 +37,10 @@ Implement ALL 186 beads using TDD15, then stress-test and evolve each using Red 
 
 ## PHASE 1: TDD15 IMPLEMENTATION
 
-### 1. Get Next Ready Bead
+### 1. Get Next Task from Task List
 ```bash
-bd ready | head -1
+# Get first uncompleted task from .ralph/ralph-tasks.md
+grep "^\- \[ \]" .ralph/ralph-tasks.md | head -1
 ```
 
 ### 2. Read Full Context
@@ -137,14 +163,47 @@ bd sync
 
 ---
 
-## COMPLETE WORKFLOW PER BEAD
+## TASKS MODE WORKFLOW - DYNAMIC BEAD SELECTION
+
+Ralph is running in **Tasks Mode** with dynamic bead selection from `bd ready`.
+
+### Task Replenishment Strategy
+
+**CRITICAL**: Never let the task list become empty!
+
+1. **Check task list**: Read `.ralph/ralph-tasks.md`
+2. **If tasks < 5**: Replenish from `bd ready`
+3. **Add next ready beads**: Get from `bd ready` and add to task list
+4. **Keep working**: Continue with TDD15 + Red Queen workflow
+
+### Task List Management
+
+```bash
+# At start of each iteration, check task inventory
+TASK_COUNT=$(grep -c "^\- \[ \]" .ralph/ralph-tasks.md || echo 0)
+
+if [ $TASK_COUNT -lt 5 ]; then
+  # Get next 10 ready beads
+  bd ready | head -10 | while read line; do
+    # Parse bead ID and title
+    BEAD_ID=$(echo $line | grep -oE 'nuoc-[a-z0-9]+')
+    TITLE=$(echo $line | sed 's/.*\] //')
+    # Add to task list
+    echo "- [ ] $BEAD_ID - $TITLE" >> .ralph/ralph-tasks.md
+  done
+  echo "✅ Added new tasks from bd ready"
+fi
+```
+
+### Complete Workflow Per Bead
 
 ```
-1. bd ready → get bead
-2. bd show <bead_id> → read context
-3. bd update <bead_id> --status=in_progress
+1. Check task inventory (add from bd ready if < 5)
+2. Get next task from .ralph/ralph-tasks.md
+3. bd show <bead_id> → read context
+4. bd update <bead_id> --status=in_progress
 
-4. TDD15 (15 phases):
+5. TDD15 (15 phases):
    Phase 0: Understanding
    Phase 1-2: RED
    Phase 3-7: GREEN
@@ -153,7 +212,7 @@ bd sync
    → Commit: "TDD15-COMPLETE: <bead_id>"
    → Output: <promise>READY_FOR_NEXT_TASK</promise>
 
-5. Red Queen (5-10 generations):
+6. Red Queen (5-10 generations):
    For each generation:
      - Generate adversarial test
      - Run test
@@ -162,17 +221,16 @@ bd sync
    → Commit: "RQ-COMPLETE: <bead_id>"
    → Output: <promise>READY_FOR_NEXT_TASK</promise>
 
-6. bd close <bead_id>
-7. bd sync && git push
-8. Output: <promise>READY_FOR_NEXT_TASK</promise>
-9. Loop to step 1
+7. bd close <bead_id>
+8. bd sync && git push
+9. Mark task complete in .ralph/ralph-tasks.md
+10. Output: <promise>READY_FOR_NEXT_TASK</promise>
+11. Loop to step 1
 ```
 
 ## TASK COMPLETION SIGNALS
 
-Ralph is running in **Tasks Mode** for structured task tracking.
-
-After completing each major milestone, output the task completion signal:
+After completing each major milestone, output:
 
 ```
 <promise>READY_FOR_NEXT_TASK</promise>
@@ -181,9 +239,16 @@ After completing each major milestone, output the task completion signal:
 **When to signal**:
 1. After TDD15 complete (before Red Queen)
 2. After Red Queen complete (before closing bead)
-3. After closing bead (ready for next bead)
+3. After closing bead and marking task complete (ready for next bead)
 
-This allows Ralph to track progress granularly and manage context per task.
+## COMPLETION CRITERIA
+
+Only output `<promise>COMPLETE</promise>` when:
+- ALL tasks in .ralph/ralph-tasks.md are marked [x]
+- AND `bd ready` returns 0 ready beads
+- AND `bd stats` shows 186 closed beads
+
+**Never complete early** - keep replenishing tasks from `bd ready`!
 
 ---
 
