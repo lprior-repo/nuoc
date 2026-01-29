@@ -4252,3 +4252,316 @@ Completion promise: not detected
 🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
    Moving to next task in iteration 6...
 📝 Context was consumed this iteration
+📝 Auto-committed changes
+
+🔄 Iteration 6 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T04:52:03.321Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+| Tools    Read 1
+| Tools    Read 1 • Edit 1
+
+
+○ nuoc-f2pc · [Awk-05] Implement task suspension on awakeable await   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Task suspends when awaiting awakeable promise.
+
+## Acceptance
+- [ ] Task status -> suspended
+- [ ] Worker slot freed
+- [ ] Suspension point journaled
+
+DEPENDS ON
+  → ◐ nuoc-7wmq: [Awk-04] Implement awakeable creation in ctx.awakeable ● P0
+
+BLOCKS
+  ← ○ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+
+| Tools    Bash 2 • Read 1 • Edit 1
+
+✓ Updated issue: nuoc-f2pc
+
+| Tools    Bash 2 • Read 1 • Edit 1 • Glob 1
+| Tools    Read 2 • Bash 2 • Glob 2 • Edit 1 • Grep 1
+⏳ working... elapsed 0:50 · last activity 0:15 ago
+⏳ working... elapsed 1:00 · last activity 0:25 ago
+⏳ working... elapsed 1:10 · last activity 0:35 ago
+| Tools    Read 2 • Bash 2 • Glob 2 • Edit 1 • Grep 1 • Write 1
+⏳ working... elapsed 1:30 · last activity 0:12 ago
+| Tools    Bash 3 • Read 2 • Glob 2 • Edit 1 • Grep 1 • Write 1
+
+Error: nu::parser::module_not_found
+
+  x Module not found.
+   ,-[/home/lewis/src/nuoc/tests/test-awakeable-suspension.nu:4:5]
+ 3 | 
+ 4 | use oc-engine.nu *
+   :     ^^^^^^|^^^^^
+   :           `-- module oc-engine.nu not found
+ 5 | use testing.nu *
+   `----
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
+
+
+| Tools    Bash 3 • Read 2 • Edit 2 • Glob 2 • Grep 1 • Write 1
+| Tools    Edit 3 • Bash 3 • Read 2 • Glob 2 • Grep 1 • Write 1
+
+Error: nu::parser::error
+
+  x Error: nu::shell::not_a_constant
+  | 
+  |   x Not a constant.
+  |     ,-[/home/lewis/src/nuoc/tests/test-awakeable-suspension.nu:12:19]
+  |  11 |   let test_db_path = $"($test_db_dir)/journal.db"
+  |  12 |   const DB_PATH = $test_db_path
+  |     :                   ^^^^^^|^^^^^^
+  |     :                         `-- Value is not a parse-time constant
+  |  13 |   export const DB_PATH
+  |     `----
+  |   help: Only a subset of expressions are allowed constants during parsing.
+  | Try
+  |         using the 'const' command or typing the value literally.
+  | 
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-suspension.nu:12:19]
+ 11 |   let test_db_path = $"($test_db_dir)/journal.db"
+ 12 |   const DB_PATH = $test_db_path
+    :                   ^^^^^^|^^^^^^
+    :                         `-- Encountered error during parse-time evaluation
+ 13 |   export const DB_PATH
+    `----
+
+
+| Tools    Edit 4 • Bash 4 • Read 2 • Glob 2 • Grep 1 • Write 1
+| Tools    Bash 5 • Edit 4 • Read 3 • Glob 2 • Grep 1 • Write 1
+
+def test-awakeables-table-created [] {
+  let test_db_dir = "/tmp/test-awakeables-db-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+  
+  rm -rf $test_db_dir
+  
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let tables = (sqlite3 $test_db_path "SELECT name FROM sqlite_master WHERE type='table' AND name='awakeables' ORDER BY name;" | from ssv)
+    assert equal ($tables | length) 1
+    assert equal $tables.0.name "awakeables"
+  }
+  
+  rm -rf $test_db_dir
+}
+
+# Test: awakeables table has correct schema
+def test-awakeables-table-schema [] {
+  let test_db_dir = "/tmp/test-awakeables-db-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+
+⏳ working... elapsed 2:10 · last activity 0:12 ago
+| Tools    Edit 5 • Bash 5 • Read 3 • Glob 2 • Grep 1 • Write 1
+
+Error: nu::parser::duplicate_command_def
+
+  x Duplicate command definition within a block.
+     ,-[/home/lewis/src/nuoc/tests/test-awakeable-suspension.nu:158:5]
+ 157 | # Test: ctx-await-awakeable suspends task with correct status
+ 158 | def test-ctx-await-awakeable-suspends-task [] {
+     :     ^^^^^^^^^^^^^^^^^^^|^^^^^^^^^^^^^^^^^^
+     :                        `-- defined more than once
+ 159 |   setup
+     `----
+
+
+| Tools    Bash 6 • Edit 5 • Read 3 • Glob 2 • Write 2 • Grep 1
+⏳ working... elapsed 2:50 · last activity 0:14 ago
+⏳ working... elapsed 3:00 · last activity 0:24 ago
+| Tools    Bash 7 • Edit 5 • Read 3 • Glob 2 • Write 2 • Grep 1
+
+Running RED phase tests for awakeable suspension...
+All RED tests complete - expected to fail without implementation
+
+| Tools    Bash 8 • Edit 5 • Read 3 • Glob 2 • Write 2 • Grep 1
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+
+Error: nu::parser::extra_positional
+
+  x Extra positional argument.
+   ,-[<commandline>:1:6]
+ 1 | main main
+   :      ^^|^
+   :        `-- extra positional argument
+   `----
+  help: Usage: test-awakeable-suspension.nu
+
+
+| Tools    Bash 10 • Edit 5 • Read 3 • Glob 2 • Write 2 • Grep 1
+| Tools    Bash 11 • Edit 5 • Read 3 • Glob 2 • Write 2 • Grep 1
+| Tools    Bash 12 • Edit 5 • Read 3 • Glob 2 • Write 2 • Grep 1
+| Tools    Bash 12 • Edit 5 • Read 3 • Glob 3 • Write 2 • Grep 1
+| Tools    Bash 12 • Read 5 • Edit 5 • Glob 3 • Write 2 • Grep 1
+| Tools    Bash 13 • Read 5 • Edit 5 • Glob 3 • Write 2 • Grep 1
+⏳ working... elapsed 4:10 · last activity 0:13 ago
+| Tools    Bash 14 • Read 5 • Edit 5 • Glob 3 • Write 2 • Grep 1
+
+Error: nu::parser::module_not_found
+
+  x Module not found.
+   ,-[source:2:5]
+ 1 | 
+ 2 | use ../oc-engine.nu *
+   :     ^^^^^^^|^^^^^^^
+   :            `-- module ../oc-engine.nu not found
+ 3 | try { ctx-await-awakeable 'job-1' 'task-1' 1 'prom_1abc' } catch { print 'Function not found as expected' }
+   `----
+  help: module files and their paths must be available before your script is
+        run as parsing occurs before anything is evaluated
+
+
+⏳ working... elapsed 4:30 · last activity 0:10 ago
+| Tools    Bash 15 • Read 5 • Edit 5 • Glob 3 • Write 2 • Grep 1
+
+Function not found as expected
+
+⏳ working... elapsed 4:50 · last activity 0:16 ago
+| Tools    Bash 15 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+| Tools    Bash 16 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+Running RED phase tests for awakeable suspension...
+All RED tests complete - expected to fail without implementation
+
+| Tools    Bash 17 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+▪▪▪▪ nuoc:test
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (108ms)
+
+Tasks: 1 completed
+ Time: 108ms
+
+
+| Tools    Bash 18 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+All tests passed
+
+⏳ working... elapsed 5:20 · last activity 0:13 ago
+⏳ working... elapsed 5:30 · last activity 0:23 ago
+⏳ working... elapsed 5:40 · last activity 0:33 ago
+⏳ working... elapsed 5:50 · last activity 0:43 ago
+⏳ working... elapsed 6:00 · last activity 0:53 ago
+⏳ working... elapsed 6:10 · last activity 1:03 ago
+| Tools    Bash 19 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+Error: nu::parser::parse_mismatch
+
+  x Parse mismatch during operation.
+    ,-[source:11:16]
+ 10 | do {
+ 11 |   .NUOC_DB_DIR = 
+    :                |
+    :                `-- expected right hand side of assignment
+ 12 |   db-init
+    `----
+
+
+| Tools    Bash 20 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+Error: nu::parser::parse_mismatch
+
+  x Parse mismatch during operation.
+    ,-[source:11:16]
+ 10 | do {
+ 11 |   .NUOC_DB_DIR = 
+    :                |
+    :                `-- expected right hand side of assignment
+ 12 |   db-init
+    `----
+
+
+⏳ working... elapsed 6:40 · last activity 0:11 ago
+| Tools    Bash 21 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let tables = (sqlite3 $test_db_path "SELECT name FROM sqlite_master WHERE type='table' AND name='awakeables' ORDER BY name;" | from ssv)
+    assert equal ($tables | length) 1
+    assert equal $tables.0.name "awakeables"
+  }
+--
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let schema = (sqlite3 $test_db_path "PRAGMA table_info(awakeables);" | from ssv)
+    
+    assert equal ($schema | where name == "id" | length) 1
+    assert equal ($schema | where name == "job_id" | length) 1
+--
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+    let indexes = (sqlite3 $test_db_path "SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='awakeables' ORDER BY name;" | from ssv)
+    let has_index = ($indexes | where name =~ "idx_awakeables_job_task" | length) > 0
+    assert equal $has_index true
+  }
+
+| Tools    Bash 22 • Edit 6 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+Running RED phase tests for awakeable suspension...
+All RED tests complete - expected to fail without implementation
+
+| Tools    Bash 22 • Edit 7 • Read 5 • Glob 3 • Write 2 • Grep 1

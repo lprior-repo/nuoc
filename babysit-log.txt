@@ -789,4 +789,207 @@ Closed:/186 [Check   41/480] ⏰ 0h40m elapsed | 📊 Iter:5 | ✅ Beads:1
 Closed:/186 [Check   42/480] ⏰ 0h41m elapsed | 📊 Iter:5 | ✅ Beads:1
 Closed:/186 [Check   43/480] ⏰ 0h42m elapsed | 📊 Iter:5 | ✅ Beads:1
 Closed:/186 [Check   44/480] ⏰ 0h43m elapsed | 📊 Iter:5 | ✅ Beads:1
+Closed:/186 [Check   45/480] ⏰ 0h44m elapsed | 📊 Iter:6 | ✅ Beads:1
+Closed:/186 [Check   46/480] ⏰ 0h45m elapsed | 📊 Iter:6 | ✅ Beads:1
+Closed:/186 [Check   47/480] ⏰ 0h46m elapsed | 📊 Iter:6 | ✅ Beads:1
+Closed:/186 [Check   48/480] ⏰ 0h47m elapsed | 📊 Iter:6 | ✅ Beads:1
+Closed:/186 [Check   49/480] ⏰ 0h48m elapsed | 📊 Iter:6 | ✅ Beads:1
+Closed:/186 [H[2J[3J━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🤖 Ralph Babysitter - Check 50 / 480
+./babysit-ralph.sh: line 47: bc: command not found
+⏰ Elapsed: h 49m
+./babysit-ralph.sh: line 48: bc: command not found
+⏱️  Remaining: h 10m
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+[H[2J[3J╔════════════════════════════════════════════════════════════════╗
+║      Ralph Wiggum + Red Queen - Live Progress Monitor         ║
+╚════════════════════════════════════════════════════════════════╝
+
+2026-01-28 22:57:45
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📊 Ralph Loop Status:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+╔══════════════════════════════════════════════════════════════════╗
+║                    Ralph Wiggum Status                           ║
+╚══════════════════════════════════════════════════════════════════╝
+
+🔄 ACTIVE LOOP
+   Iteration:    6 / 6000
+   Started:      2026-01-29T04:07:13.196Z
+   Elapsed:      50m 32s
+   Promise:      COMPLETE
+   Agent:        OpenCode
+   Tasks Mode:   ENABLED
+   Task Promise: READY_FOR_NEXT_TASK
+   Prompt:       # NUOC - All 186 Beads with TDD15 + Red Queen Self-Healing
+
+...
+
+📋 CURRENT TASKS:
+   1. ✅ nuoc-9w6 - [Awk-01] Create awakeables table schema
+   2. ✅ nuoc-l4d - [Awk-02] Implement awakeable ID generation
+   3. ✅ nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing
+   4. ✅ nuoc-7wmq - [Awk-04] Implement awakeable creation in ctx.awakeable
+   5. 🔄 nuoc-f2pc - [Awk-05] Implement task suspension on awakeable await
+   6. ⏸️ nuoc-a7ti - [Awk-06] Implement resolve-awakeable command
+   7. ⏸️ nuoc-n686 - [Awk-07] Implement HTTP endpoint for awakeable resolution
+   8. ⏸️ nuoc-szrs - [Awk-08] Implement task wake on awakeable resolution
+   9. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+   10. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+   11. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+   12. ⏸️ nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
+   13. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+   14. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+   15. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+
+   Progress: 4/15 complete, 1 in progress
+
+📊 HISTORY (5 iterations)
+   Total time:   44m 43s
+
+   Recent iterations:
+   🔄 #1: 19m 3s | Bash:86 Edit:25 Read:11
+   🔄 #2: 5m 59s | Bash:34 Read:15 Grep:6
+   🔄 #3: 3m 32s | Bash:31 Read:4 Edit:3
+   🔄 #4: 4m 31s | Bash:26 Edit:7 Read:6
+   🔄 #5: 11m 36s | Bash:48 Read:11 Edit:10
+
+⚠️  STRUGGLE INDICATORS:
+   - Same error 5x: "Failed: 0..."
+   - Same error 4x: "error: unexpected argument '--filter' found..."
+   - Same error 4x: "Error: nu::shell::external_command..."
+
+   💡 Consider using: ralph --add-context "your hint here"
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Ralph Tasks:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Current tasks:
+1. ✅ nuoc-9w6 - [Awk-01] Create awakeables table schema
+2. ✅ nuoc-l4d - [Awk-02] Implement awakeable ID generation
+3. ✅ nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing
+4. ✅ nuoc-7wmq - [Awk-04] Implement awakeable creation in ctx.awakeable
+5. 🔄 nuoc-f2pc - [Awk-05] Implement task suspension on awakeable await
+6. ⏸️ nuoc-a7ti - [Awk-06] Implement resolve-awakeable command
+7. ⏸️ nuoc-n686 - [Awk-07] Implement HTTP endpoint for awakeable resolution
+8. ⏸️ nuoc-szrs - [Awk-08] Implement task wake on awakeable resolution
+9. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+10. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+11. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+12. ⏸️ nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
+13. ⏸️ nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
+14. ⏸️ nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
+15. ⏸️ nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 Beads Overall Progress:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 Issue Database Status
+
+Summary:
+  Total Issues:           186
+  Open:                   182
+  In Progress:            3
+  Blocked:                146
+  Closed:                 1
+  Ready to Work:          39
+
+Extended:
+  Avg Lead Time:          15.3 hours
+
+Recent Activity (last 24 hours):
+  Commits:                15
+  Total Changes:          564
+  Issues Created:         564
+  Issues Closed:          0
+  Issues Reopened:        0
+  Issues Updated:         0
+
+For more details, use 'bd list' to see individual issues.
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔄 Currently In Progress:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+◐ nuoc-f2pc [● P0] [task] - [Awk-05] Implement task suspension on awakeable await
+◐ nuoc-7wmq [● P0] [task] - [Awk-04] Implement awakeable creation in ctx.awakeable
+◐ nuoc-pvb2 [● P0] [task] - [Awk-03] Implement awakeable ID parsing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Recently Completed (last 5):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ nuoc-9w6 [P0] [task] - [Awk-01] Create awakeables table schema
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⏭️  Next Ready Beads (top 5):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 Ready work (10 issues with no blockers):
+
+1. [● P0] [bug] nuoc-0zq: Parameterize all SQL queries to eliminate injection surface
+2. [● P0] [bug] nuoc-3cd: Wire phase-prompt dispatcher into run-task so TDD15 prompts are actually used
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 Recent Git Activity (last 10 commits):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+0a73996 (HEAD -> main) Ralph iteration 5: work in progress
+7833590 (origin/main) RQ-COMPLETE: nuoc-7wmq - survived 2 generations (basic edge cases + boundary conditions)
+093ab18 TDD15-COMPLETE: nuoc-7wmq - ready for Red Queen
+86c1d25 VERIFY: nuoc-7wmq - all acceptance criteria met
+4c9d892 REFACTOR: nuoc-7wmq - code review complete, follows best practices
+e987d1e GREEN: nuoc-7wmq - ctx.awakeable implementation passes tests
+09f6252 RED: nuoc-7wmq - failing tests for ctx.awakeable
+927509f Ralph iteration 4: work in progress
+1b5e758 Update ralph-tasks: mark nuoc-pvb2 complete
+2cc3247 TDD15-COMPLETE: nuoc-pvb2 - ready for Red Queen
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧬 Workflow Phase Distribution (last 50 commits):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  TDD15 Phases:
+    RED:      2 commits
+    GREEN:    4 commits
+    REFACTOR: 2 commits
+    VERIFY:   3 commits
+
+  Red Queen Evolution:
+    RQ-FIX:      0
+0 commits (defenses hardened)
+    RQ-COMPLETE: 2 commits (evolution complete)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📈 Progress Estimate:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+./monitor-ralph-full.sh: line 100: 1
+Closed: * 100 / TOTAL_BEADS : arithmetic syntax error in expression (error token is "Closed: * 100 / TOTAL_BEADS ")
+  Total Beads:    186
+  Completed:      1
+Closed: (%)
+  Remaining:      182
+
+  Progress: [��������������������������������������������������./monitor-ralph-full.sh: line 114: printf: : invalid number
+] 0%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💡 Useful Commands:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  watch -n 10 ./monitor-ralph-full.sh  # Auto-refresh every 10s
+  tail -f ralph-full-*.log             # Watch live log
+  ralph --add-context 'hint'           # Add guidance
+  bd show <bead_id>                    # View bead details
+  git log --grep='RQ-FIX' -10          # See recent Red Queen fixes
+  kill $(pgrep -f ralph)                # Stop Ralph gracefully
+
+
+⚠️  Detected struggle indicators - adding context hint
+✅ Context added for next iteration
+   File: /home/lewis/src/nuoc/.ralph/ralph-context.md
+   Will be picked up in iteration 7
+[Check   50/480] ⏰ 0h49m elapsed | 📊 Iter:6 | ✅ Beads:1
+Closed:/186 [Check   51/480] ⏰ 0h50m elapsed | 📊 Iter:6 | ✅ Beads:1
 Closed:/186 

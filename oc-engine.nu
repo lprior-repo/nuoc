@@ -990,6 +990,25 @@ export def ctx-awakeable [job_id: string, task_name: string, attempt: int]: noth
   { id: $awakeable_id }
 }
 
+# Await an awakeable, suspending the task until it's resolved
+# Precondition: job_id, task_name are validated identifiers, execution context initialized, awakeable_id exists
+# Postcondition: task status set to suspended, suspension point journaled
+# Invariant: suspension is replayable on resume
+export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int, awakeable_id: string]: nothing -> record {
+  let jid = (validate-ident $job_id "ctx-await-awakeable.job_id")
+  let tname = (validate-ident $task_name "ctx-await-awakeable.task_name")
+  let aw_id = (validate-ident $awakeable_id "ctx-await-awakeable.awakeable_id")
+
+  let entry_index = (next-entry-index $jid $tname $attempt)
+
+  sql-exec $"UPDATE tasks SET status = 'suspended' WHERE job_id = '($jid)' AND name = '($tname)'"
+  emit-event $jid $tname "task.StateChange" "running" "suspended" $"awaiting awakeable ($aw_id)"
+
+  journal-write $jid $tname $attempt $entry_index "awakeable-await" { awakeable_id: $aw_id } {}
+
+  { suspended: true, awakeable_id: $aw_id }
+}
+
 # ── Task Output Retrieval ────────────────────────────────────────────────────
 
 # Retrieve cached output by var name (Tork's {{ tasks.X }})
