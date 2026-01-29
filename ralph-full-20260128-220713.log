@@ -9308,3 +9308,111 @@ Running RED phase tests for reject-awakeable...
 RED phase complete - all tests should fail
 
 ⏳ working... elapsed 3:20 · last activity 0:14 ago
+| Tools    Bash 5 • Read 4 • Grep 4 • Edit 3 • Glob 2 • Write 1
+
+[main c6b5dad] GREEN: nuoc-xm7h - reject-awakeable implementation passes tests
+ 8 files changed, 281 insertions(+), 5 deletions(-)
+ create mode 100644 tests/test-reject-awakeable.nu
+
+| Tools    Bash 6 • Read 4 • Grep 4 • Edit 3 • Glob 2 • Write 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+▪▪▪▪ nuoc:test
+Failed: 0
+▪▪▪▪ nuoc:test (92ms)
+
+Tasks: 1 completed
+ Time: 92ms
+
+
+| Tools    Bash 7 • Read 4 • Grep 4 • Edit 3 • Glob 2 • Write 1
+
+Running RED phase tests for reject-awakeable...
+  [ok] Awakeable marked as REJECTED
+  [ok] Error stored in payload
+  [ok] resolved_at timestamp set
+  [ok] Task suspended before rejection
+  [ok] Task woken on rejection
+  [ok] Task receives error on rejection
+RED phase complete - all tests should fail
+
+| Tools    Bash 8 • Read 4 • Grep 4 • Edit 3 • Glob 2 • Write 1
+
+Running quick validation...
+Checking Nushell files...
+  [ok] oc-agent.nu
+  [ok] oc-engine.nu
+  [ok] oc-orchestrate.nu
+  [ok] oc-tdd15.nu
+
+Passed: 4
+Failed: 0
+Skipped: 0
+▪▪▪▪ nuoc:quick
+▪▪▪▪ nuoc:quick (75ms)
+
+Tasks: 1 completed
+ Time: 76ms
+
+Running quick validation...
+Checking Nushell files...
+  [ok] oc-agent.nu
+  [ok] oc-engine.nu
+  [ok] oc-orchestrate.nu
+  [ok] oc-tdd15.nu
+
+Passed: 4
+Failed: 0
+Skipped: 0
+▪▪▪▪ nuoc:check
+▪▪▪▪ nuoc:check (73ms)
+
+Tasks: 1 completed
+ Time: 73ms
+
+
