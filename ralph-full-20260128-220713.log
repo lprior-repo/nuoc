@@ -3685,3 +3685,66 @@ Tasks: 1 completed
 
 All ctx.awakeable tests passed!
 
+| Tools    Bash 23 • Read 6 • Edit 4 • Glob 2 • Grep 2
+
+[main e987d1e] GREEN: nuoc-7wmq - ctx.awakeable implementation passes tests
+ 5 files changed, 98 insertions(+), 3 deletions(-)
+
+Now **Phase 8-12: REFACTOR** - review and clean code. Let me check if the implementation follows best practices:
+| Tools    Bash 23 • Read 7 • Edit 4 • Glob 2 • Grep 2
+| Tools    Bash 24 • Read 7 • Edit 4 • Glob 2 • Grep 2
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+▪▪▪▪ nuoc:test
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (96ms)
+
+Tasks: 1 completed
+ Time: 97ms
+
+
