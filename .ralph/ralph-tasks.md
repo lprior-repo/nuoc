@@ -1,7 +1,7 @@
 # Ralph Tasks
 
 Add your tasks here:
-- [/] nuoc-9w6 - [Awk-01] Create awakeables table schema
+- [x] nuoc-9w6 - [Awk-01] Create awakeables table schema
 - [ ] nuoc-l4d - [Awk-02] Implement awakeable ID generation
 - [ ] nuoc-pvb2 - [Awk-03] Implement awakeable ID parsing
 - [ ] nuoc-7wmq - [Awk-04] Implement awakeable creation in ctx.awakeable
