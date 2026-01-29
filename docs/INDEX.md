@@ -22,21 +22,17 @@
 - **[zjj Deep Dive](../zjj-deep-dive.md)** - Complete zjj command reference and workflow
 - **[zjj Merge Strategy](../zjj-merge-strategy.md)** - How to safely merge parallel work
 
-### Nushell Documentation
-- **[Nushell Core Concepts](./nushell-core-concepts.md)** - Comprehensive Nushell guide
-  - Section 1: Paradigm shift (text to data)
-  - Section 2: Data types and structures
-  - Section 3: Pipeline manipulation
-  - Section 4: System integration
-  - Section 5: Customization and extensibility
+### Nushell Documentation (Progressive Disclosure)
 
-- **[Production-Ready Nushell Guide](./nushell-production-guide.md)** - Production patterns, functional programming, type safety, testing
-  - **Foundation Path**: Core philosophy → Essential syntax → Data manipulation
-  - **Functional Patterns**: Higher-order functions → Composition → Streaming
-  - **Type System & Testing**: Runtime checking → Unit tests → Property testing
-  - **Production Patterns**: Error handling → Performance → Monitoring → Deployment
-  - **Real-World Examples**: API clients, data pipelines, build systems
-  - **Production Checklist**: Complete quality gates checklist
+**Quick Start:**
+- **[Nushell Production Guide - Index](./nushell/INDEX.md)** - Progressive disclosure guide
+  - Foundation: Core philosophy, syntax, data manipulation
+  - Functional Patterns: Map/filter/reduce, composition, streaming
+  - Type System: Type signatures, runtime checking, testing
+  - Error Handling: Safe navigation, validation, try/catch
+  - Performance: Streaming, parallel processing, optimization
+  - Production Patterns: Health checks, logging, deployment
+  - Reference: Style guide, anti-patterns, real-world examples
 
 ### Ralph Prompts
 - **[Ralph/ralph-prompt-zjj-opus-full-rq.md](../Ralph/ralph-prompt-zjj-opus-full-rq.md)** - Opus + full TDD15 + full Red Queen (10 gen)
