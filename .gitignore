@@ -7,3 +7,4 @@ Ralph/.ralph/
 Ralph/logs/
 ralph-full-*.log
 babysit-log.txt
+/tui/target/
