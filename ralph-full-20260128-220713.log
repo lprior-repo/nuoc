@@ -7285,3 +7285,621 @@ Exit code: 1
 Completion promise: not detected
 
 ⚠️  OpenCode exited with code 1. Continuing to next iteration.
+📝 Auto-committed changes
+
+🔄 Iteration 13 / 6000
+────────────────────────────────────────────────────────────────────
+[hypr-notifier] [2026-01-29T05:55:33.081Z] [INFO] HyprNotifierPlugin initialized {"notifications":true,"timeout":15000}
+⏳ working... elapsed 0:20 · last activity 0:19 ago
+I'll continue working on the current task "nuoc-qodw - [Awk-09] Implement awakeable timeout handling". Let me check the bead details and current implementation.
+| Tools    Read 1
+
+
+○ nuoc-qodw · [Awk-09] Implement awakeable timeout handling   [● P0 · OPEN]
+Owner: Lewis Prior · Type: task
+Created: 2026-01-28 · Updated: 2026-01-28
+
+DESCRIPTION
+## Micro-task
+Fail awakeable if timeout_at passed.
+
+## Acceptance
+- [ ] Scheduler checks timeouts
+- [ ] Status -> TIMEOUT
+- [ ] Task receives timeout error
+
+DEPENDS ON
+  → ✓ nuoc-szrs: [Awk-08] Implement task wake on awakeable resolution ● P0
+
+
+⏳ working... elapsed 0:40 · last activity 0:14 ago
+⏳ working... elapsed 0:50 · last activity 0:24 ago
+⏳ working... elapsed 1:00 · last activity 0:34 ago
+| Tools    Bash 2 • Read 1
+| Tools    Read 2 • Bash 2 • Glob 1
+
+/home/lewis/src/nuoc/tests/.oc-workflow/journal.db
+/home/lewis/src/nuoc/.beads/beads.db
+/home/lewis/src/nuoc/nuoc.db
+/home/lewis/src/nuoc/.oc-workflow/journal.db
+
+⏳ working... elapsed 1:30 · last activity 0:10 ago
+⏳ working... elapsed 1:40 · last activity 0:20 ago
+| Tools    Read 3 • Bash 3 • Glob 1 • Grep 1
+| Tools    Bash 4 • Read 3 • Grep 2 • Glob 1
+
+1020:export def ctx-await-awakeable [job_id: string, task_name: string, attempt: int, awakeable_id: string]: nothing -> record {
+
+⏳ working... elapsed 2:10 · last activity 0:13 ago
+⏳ working... elapsed 2:20 · last activity 0:23 ago
+| Tools    Read 4 • Bash 4 • Grep 3 • Glob 1
+| Tools    Bash 5 • Read 4 • Grep 3 • Glob 1
+
+error: unexpected argument '--filter' found
+
+  tip: to pass '--filter' as a value, use '-- --filter'
+
+Usage: moon run <TARGETS>... [-- <PASSTHROUGH>...]
+
+For more information, try '--help'.
+
+⏳ working... elapsed 2:50 · last activity 0:11 ago
+⏳ working... elapsed 3:00 · last activity 0:21 ago
+| Tools    Bash 6 • Read 4 • Grep 3 • Glob 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+▪▪▪▪ nuoc:test
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (93ms)
+
+Tasks: 1 completed
+ Time: 94ms
+
+
+| Tools    Bash 7 • Read 4 • Grep 3 • Glob 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+    Awakeable ID: prom_1dGVzdC1qb2ItdGltZW91dC0xOjA
+Error: unable to open database "/tmp/test-awakeable-timeout-1-($env.PID)/journal.db": unable to open database file
+Error: nu::shell::incompatible_path_access
+
+  x Data cannot be accessed with a cell path
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:38:144]
+ 37 |     # Verify awakeable is PENDING
+ 38 |     let awakeable_before = (sqlite3 -json $test_db_path $"SELECT status, timeout_at FROM awakeables WHERE id = '($awakeable_id)'" | from json).0
+    :                                                                                                                                                |
+    :                                                                                                                                                `-- nothing doesn't support cell paths
+ 39 |     if ($awakeable_before.status == "PENDING") {
+    `----
+
+
+⏳ working... elapsed 3:20 · last activity 0:11 ago
+⏳ working... elapsed 3:30 · last activity 0:21 ago
+⏳ working... elapsed 3:40 · last activity 0:31 ago
+| Tools    Bash 7 • Read 4 • Grep 3 • Glob 1 • Edit 1
+⏳ working... elapsed 4:00 · last activity 0:10 ago
+⏳ working... elapsed 4:10 · last activity 0:20 ago
+⏳ working... elapsed 4:20 · last activity 0:30 ago
+| Tools    Bash 7 • Read 4 • Grep 3 • Edit 2 • Glob 1
+⏳ working... elapsed 4:40 · last activity 0:12 ago
+| Tools    Bash 7 • Read 4 • Grep 3 • Edit 3 • Glob 1
+⏳ working... elapsed 5:00 · last activity 0:12 ago
+⏳ working... elapsed 5:10 · last activity 0:22 ago
+| Tools    Bash 7 • Read 4 • Edit 4 • Grep 3 • Glob 1
+| Tools    Bash 8 • Read 4 • Edit 4 • Grep 3 • Glob 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+Error: nu::shell::column_not_found
+
+  x Cannot find column 'PID'
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:10:54]
+  9 | def test-awakeable-timeout-expires [] {
+ 10 |   let test_db_dir = $"/tmp/test-awakeable-timeout-1-($env.PID)"
+    :                                                      ^^^^|^^^|
+    :                                                          |   `-- value originates here
+    :                                                          `-- cannot find column 'PID'
+ 11 |   let test_db_path = $"($test_db_dir)/journal.db"
+    `----
+
+
+| Tools    Bash 8 • Edit 5 • Read 4 • Grep 3 • Glob 1
+| Tools    Bash 8 • Edit 6 • Read 4 • Grep 3 • Glob 1
+| Tools    Bash 8 • Edit 7 • Read 4 • Grep 3 • Glob 1
+⏳ working... elapsed 6:00 · last activity 0:19 ago
+| Tools    Bash 8 • Edit 8 • Read 4 • Grep 3 • Glob 1
+| Tools    Bash 9 • Edit 8 • Read 4 • Grep 3 • Glob 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+| Tools    Bash 10 • Edit 8 • Read 4 • Grep 3 • Glob 1
+
+997:export def ctx-awakeable-timeout [job_id: string, task_name: string, attempt: int, timeout_sec: int]: nothing -> record {
+
+| Tools    Bash 10 • Edit 8 • Read 5 • Grep 4 • Glob 1
+⏳ working... elapsed 6:40 · last activity 0:19 ago
+⏳ working... elapsed 6:50 · last activity 0:29 ago
+| Tools    Bash 10 • Edit 9 • Read 5 • Grep 4 • Glob 1
+| Tools    Bash 11 • Edit 9 • Read 5 • Grep 4 • Glob 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+Error: stepping, UNIQUE constraint failed: awakeables.id (19)
+
+⏳ working... elapsed 7:10 · last activity 0:10 ago
+⏳ working... elapsed 7:20 · last activity 0:20 ago
+| Tools    Bash 12 • Edit 9 • Read 5 • Grep 4 • Glob 1
+
+379:export def awakeable-id-generate [job_id: string, entry_index: int]: nothing -> string {
+
+⏳ working... elapsed 7:40 · last activity 0:15 ago
+⏳ working... elapsed 7:50 · last activity 0:25 ago
+| Tools    Bash 12 • Edit 9 • Read 6 • Grep 4 • Glob 1
+⏳ working... elapsed 8:10 · last activity 0:18 ago
+⏳ working... elapsed 8:20 · last activity 0:28 ago
+⏳ working... elapsed 8:30 · last activity 0:38 ago
+⏳ working... elapsed 8:40 · last activity 0:48 ago
+⏳ working... elapsed 8:50 · last activity 0:58 ago
+⏳ working... elapsed 9:00 · last activity 1:08 ago
+⏳ working... elapsed 9:10 · last activity 1:18 ago
+| Tools    Bash 13 • Edit 9 • Read 6 • Grep 4 • Glob 1
+
+prom_1am9iLTE6MA
+prom_1am9iLTE6MQ
+
+⏳ working... elapsed 9:30 · last activity 0:14 ago
+⏳ working... elapsed 9:40 · last activity 0:24 ago
+⏳ working... elapsed 9:50 · last activity 0:34 ago
+⏳ working... elapsed 10:00 · last activity 0:44 ago
+⏳ working... elapsed 10:10 · last activity 0:54 ago
+⏳ working... elapsed 10:20 · last activity 1:04 ago
+⏳ working... elapsed 10:30 · last activity 1:14 ago
+⏳ working... elapsed 10:40 · last activity 1:24 ago
+⏳ working... elapsed 10:50 · last activity 1:34 ago
+| Tools    Bash 14 • Edit 9 • Read 6 • Grep 4 • Glob 1
+
+5:export const DB_DIR = ".oc-workflow"
+6:export const DB_PATH = $"($DB_DIR)/journal.db"
+22:  mkdir $DB_DIR
+23:  sqlite3 $DB_PATH "
+461:  sqlite3 -json $DB_PATH $query | from json
+465:  sqlite3 $DB_PATH $query
+
+| Tools    Bash 15 • Edit 9 • Read 6 • Grep 4 • Glob 1
+
+21:export def db-init [] {
+
+| Tools    Bash 15 • Edit 9 • Read 7 • Grep 4 • Glob 1
+⏳ working... elapsed 11:30 · last activity 0:19 ago
+⏳ working... elapsed 11:40 · last activity 0:29 ago
+| Tools    Bash 16 • Edit 9 • Read 7 • Grep 4 • Glob 1
+⏳ working... elapsed 12:00 · last activity 0:16 ago
+⏳ working... elapsed 12:10 · last activity 0:26 ago
+⏳ working... elapsed 12:20 · last activity 0:36 ago
+⏳ working... elapsed 12:30 · last activity 0:46 ago
+| Tools    Bash 17 • Edit 9 • Read 7 • Grep 4 • Glob 1
+
+15:    $env.NUOC_DB_DIR = $test_db_dir
+16:    db-init
+76:    $env.NUOC_DB_DIR = $test_db_dir
+77:    db-init
+120:    $env.NUOC_DB_DIR = $test_db_dir
+121:    db-init
+
+⏳ working... elapsed 12:50 · last activity 0:13 ago
+| Tools    Bash 17 • Edit 9 • Read 8 • Grep 4 • Glob 1
+| Tools    Bash 18 • Edit 9 • Read 8 • Grep 4 • Glob 1
+
+#!/usr/bin/env nu
+# test-task-wake-and-resume.nu - Test complete task wake and resume flow
+
+use ../oc-engine.nu *
+
+def test-task-can-resume-after-wake [] {
+  rm -rf $DB_DIR
+
+  db-init
+
+  let job_id = "test-job-wake"
+  job-create {
+    name: $job_id,
+    inputs: { bead_id: "test-bead" },
+    tasks: [
+      { name: "task-1", var: "result", run_cmd: "echo 'first part'" }
+    ]
+  }
+
+  let task_name = "task-1"
+  let attempt = 1
+  init-execution-context $job_id $task_name $attempt
+
+  # Create and await awakeable
+  let awakeable = (ctx-awakeable $job_id $task_name $attempt)
+  let awakeable_id = $awakeable.id
+
+  ctx-await-awakeable $job_id $task_name $attempt $awakeable_id
+
+  # Task should be suspended
+
+| Tools    Bash 19 • Edit 9 • Read 8 • Grep 4 • Glob 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+▪▪▪▪ nuoc:test
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (95ms)
+
+Tasks: 1 completed
+ Time: 95ms
+
+
+⏳ working... elapsed 13:30 · last activity 0:16 ago
+⏳ working... elapsed 13:40 · last activity 0:26 ago
+⏳ working... elapsed 13:50 · last activity 0:36 ago
+⏳ working... elapsed 14:00 · last activity 0:46 ago
+⏳ working... elapsed 14:10 · last activity 0:56 ago
+⏳ working... elapsed 14:20 · last activity 1:06 ago
+⏳ working... elapsed 14:30 · last activity 1:16 ago
+⏳ working... elapsed 14:40 · last activity 1:26 ago
+⏳ working... elapsed 14:50 · last activity 1:36 ago
+⏳ working... elapsed 15:00 · last activity 1:46 ago
+| Tools    Bash 19 • Edit 10 • Read 8 • Grep 4 • Glob 1
+⏳ working... elapsed 15:20 · last activity 0:19 ago
+⏳ working... elapsed 15:30 · last activity 0:29 ago
+⏳ working... elapsed 15:40 · last activity 0:39 ago
+| Tools    Bash 19 • Edit 11 • Read 8 • Grep 4 • Glob 1
+⏳ working... elapsed 16:00 · last activity 0:13 ago
+⏳ working... elapsed 16:10 · last activity 0:23 ago
+⏳ working... elapsed 16:20 · last activity 0:33 ago
+⏳ working... elapsed 16:30 · last activity 0:43 ago
+⏳ working... elapsed 16:40 · last activity 0:53 ago
+⏳ working... elapsed 16:50 · last activity 1:03 ago
+⏳ working... elapsed 17:00 · last activity 1:13 ago
+⏳ working... elapsed 17:10 · last activity 1:23 ago
+⏳ working... elapsed 17:20 · last activity 1:33 ago
+⏳ working... elapsed 17:30 · last activity 1:43 ago
+| Tools    Bash 19 • Edit 12 • Read 8 • Grep 4 • Glob 1
+⏳ working... elapsed 17:50 · last activity 0:11 ago
+⏳ working... elapsed 18:00 · last activity 0:21 ago
+⏳ working... elapsed 18:10 · last activity 0:31 ago
+⏳ working... elapsed 18:20 · last activity 0:41 ago
+⏳ working... elapsed 18:30 · last activity 0:51 ago
+⏳ working... elapsed 18:40 · last activity 1:01 ago
+⏳ working... elapsed 18:50 · last activity 1:11 ago
+⏳ working... elapsed 19:00 · last activity 1:21 ago
+| Tools    Bash 19 • Edit 13 • Read 8 • Grep 4 • Glob 1
+| Tools    Bash 19 • Edit 14 • Read 8 • Grep 4 • Glob 1
+⏳ working... elapsed 19:30 · last activity 0:13 ago
+⏳ working... elapsed 19:40 · last activity 0:23 ago
+⏳ working... elapsed 19:50 · last activity 0:33 ago
+⏳ working... elapsed 20:00 · last activity 0:43 ago
+⏳ working... elapsed 20:10 · last activity 0:53 ago
+| Tools    Bash 20 • Edit 14 • Read 8 • Grep 4 • Glob 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+    Awakeable ID: prom_1dGVzdC1qb2ItdGltZW91dC0xOjA
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:32:27]
+ 31 |   # Verify awakeable is PENDING
+ 32 |   let awakeable_before = (sql $"SELECT status, timeout_at FROM awakeables WHERE id = '($awakeable_id)'")
+    :                           ^|^
+    :                            `-- Command `sql` not found
+ 33 |   if (not ($awakeable_before | is-empty)) {
+    `----
+  help: Did you mean `join`?
+
+
+| Tools    Bash 21 • Edit 14 • Read 8 • Grep 4 • Glob 1
+
+460:def sql [query: string] {
+
+⏳ working... elapsed 20:30 · last activity 0:12 ago
+⏳ working... elapsed 20:40 · last activity 0:22 ago
+⏳ working... elapsed 20:50 · last activity 0:32 ago
+⏳ working... elapsed 21:00 · last activity 0:42 ago
+⏳ working... elapsed 21:10 · last activity 0:52 ago
+⏳ working... elapsed 21:20 · last activity 1:02 ago
+⏳ working... elapsed 21:30 · last activity 1:12 ago
+⏳ working... elapsed 21:40 · last activity 1:22 ago
+⏳ working... elapsed 21:50 · last activity 1:32 ago
+| Tools    Bash 21 • Edit 14 • Read 9 • Grep 4 • Glob 1
+⏳ working... elapsed 22:10 · last activity 0:13 ago
+⏳ working... elapsed 22:20 · last activity 0:23 ago
+⏳ working... elapsed 22:30 · last activity 0:33 ago
+⏳ working... elapsed 22:40 · last activity 0:43 ago
+| Tools    Bash 22 • Edit 14 • Read 9 • Grep 4 • Glob 1
+
+31:  let task_status_before = (sqlite3 -json $DB_PATH $"SELECT status FROM tasks WHERE job_id = '($job_id)' AND name = '($task_name)'" | from json)
+40:  let task_status_after = (sqlite3 -json $DB_PATH $"SELECT status FROM tasks WHERE job_id = '($job_id)' AND name = '($task_name)'" | from json)
+
+⏳ working... elapsed 23:00 · last activity 0:16 ago
+⏳ working... elapsed 23:10 · last activity 0:26 ago
+⏳ working... elapsed 23:20 · last activity 0:36 ago
+| Tools    Bash 22 • Edit 15 • Read 9 • Grep 4 • Glob 1
+⏳ working... elapsed 23:40 · last activity 0:13 ago
+| Tools    Bash 22 • Edit 16 • Read 9 • Grep 4 • Glob 1
+| Tools    Bash 22 • Edit 17 • Read 9 • Grep 4 • Glob 1
+| Tools    Bash 23 • Edit 17 • Read 9 • Grep 4 • Glob 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+    Awakeable ID: prom_1dGVzdC1qb2ItdGltZW91dC0xOjA
+    [ok] Awakeable status is PENDING before timeout
+    Waiting for timeout...
+    [ok] Awakeable marked as TIMEOUT
+  [ok] awakeable-timeout-expires
+Error: nu::shell::external_command
+
+  x External command failed
+    ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:95:3]
+ 94 | 
+ 95 |   assert not ($result.error | is-empty)
+    :   ^^^|^^
+    :      `-- Command `assert` not found
+ 96 |   print $"    [ok] ctx-await-awakeable returns error for TIMEOUT awakeable: ($result.error)"
+    `----
+  help: Did you mean `ast`?
+
+
+| Tools    Bash 24 • Edit 17 • Read 9 • Grep 4 • Glob 1
+
+#!/usr/bin/env nu
+# test-task-wake-and-resume.nu - Test complete task wake and resume flow
+
+use ../oc-engine.nu *
+
+
+| Tools    Bash 25 • Edit 17 • Read 9 • Grep 4 • Glob 1
+| Tools    Bash 25 • Edit 17 • Read 10 • Grep 4 • Glob 1
+⏳ working... elapsed 24:40 · last activity 0:19 ago
+⏳ working... elapsed 24:50 · last activity 0:29 ago
+⏳ working... elapsed 25:00 · last activity 0:39 ago
+⏳ working... elapsed 25:10 · last activity 0:49 ago
+⏳ working... elapsed 25:20 · last activity 0:59 ago
+⏳ working... elapsed 25:30 · last activity 1:09 ago
+⏳ working... elapsed 25:40 · last activity 1:19 ago
+| Tools    Bash 25 • Edit 18 • Read 10 • Grep 4 • Glob 1
+⏳ working... elapsed 26:00 · last activity 0:15 ago
+| Tools    Bash 26 • Edit 18 • Read 10 • Grep 4 • Glob 1
+
+Error: nu::parser::unbalanced_delimiter
+
+  x Unbalanced delimiter.
+     ,-[/home/lewis/src/nuoc/tests/test-awakeable-timeout.nu:243:1]
+ 242 |   print "  [ok] awakeable-timeout-expires"
+ 243 | }
+     : |
+     : `-- unbalanced { and }
+ 244 | 
+     `----
+
+
+| Tools    Bash 26 • Edit 18 • Read 11 • Grep 4 • Glob 1
+| Tools    Bash 27 • Edit 18 • Read 11 • Grep 4 • Glob 1
+
+8:def test-awakeable-timeout-expires [] {
+62:}
+65:def test-await-timeout-awakeable-error [] {
+104:}
+107:def test-awakeable-no-timeout [] {
+145:}
+148:def test-awakeable-resolved-before-timeout [] {
+189:}
+191:def main [] {
+200:}
+243:}
+245:def test-await-timeout-awakeable-error [] {
+279:}
+281:def test-awakeable-no-timeout [] {
+314:}
+316:def test-awakeable-resolved-before-timeout [] {
+352:}
+354:def main [] {
+363:}
+
+| Tools    Bash 28 • Edit 18 • Read 11 • Grep 4 • Glob 1
+
+363 /home/lewis/src/nuoc/tests/test-awakeable-timeout.nu
+
+⏳ working... elapsed 26:30 · last activity 0:12 ago
+⏳ working... elapsed 26:40 · last activity 0:22 ago
+⏳ working... elapsed 26:50 · last activity 0:32 ago
+| Tools    Bash 28 • Edit 18 • Read 11 • Grep 4 • Glob 1 • Write 1
+| Tools    Bash 29 • Edit 18 • Read 11 • Grep 4 • Glob 1 • Write 1
+
+
+=== Awakeable Timeout Handling Tests (RED Phase) ===
+
+    Awakeable ID: prom_1dGVzdC1qb2ItdGltZW91dC0xOjA
+    [ok] Awakeable status is PENDING before timeout
+    Waiting for timeout...
+    [ok] Awakeable marked as TIMEOUT
+  [ok] awakeable-timeout-expires
+    [ok] ctx-await-awakeable returns error for TIMEOUT awakeable: awakeable timed out: prom_1dGVzdC1qb2ItdGltZW91dC0yOjA
+  [ok] await-timeout-awakeable-error
+    [ok] Awakeable without timeout remains PENDING
+  [ok] awakeable-no-timeout
+    [ok] Resolved awakeable doesn't time out
+  [ok] awakeable-resolved-before-timeout
+
+=== All RED Tests Complete ===
+
+
+⏳ working... elapsed 27:20 · last activity 0:11 ago
+⏳ working... elapsed 27:30 · last activity 0:21 ago
+⏳ working... elapsed 27:40 · last activity 0:31 ago
+⏳ working... elapsed 27:50 · last activity 0:41 ago
+⏳ working... elapsed 28:00 · last activity 0:51 ago
+⏳ working... elapsed 28:10 · last activity 1:01 ago
+| Tools    Bash 29 • Edit 19 • Read 11 • Grep 4 • Glob 1 • Write 1
+| Tools    Bash 30 • Edit 19 • Read 11 • Grep 4 • Glob 1 • Write 1
+
+Running OpenCode Workflow Engine Tests...
+
+--- Testing oc-agent.nu ---
+  [ok] base-url with default port
+  [ok] base-url with custom port
+  [ok] DEFAULT_PORT constant
+  [ok] DEFAULT_HOST constant
+
+--- Testing oc-engine.nu ---
+  [ok] DB_DIR constant
+  [ok] DB_PATH constant
+  [ok] sql-escape-text basic
+  [ok] sql-escape-text single quote
+  [ok] sql-escape-text empty
+  [ok] validate-ident valid
+  [ok] validate-ident rejects SQL injection
+  [ok] validate-ident rejects empty
+  [ok] validate-ident-opt allows empty
+  [ok] job-create rejects SQL injection
+  [ok] 8-state lifecycle constants
+  [ok] status values lowercase
+  [ok] awakeables table created
+  [ok] awakeables table has all columns
+  [ok] awakeables id is PRIMARY KEY
+  [ok] awakeables status defaults to PENDING
+  [ok] awakeables has index on (job_id, task_name)
+
+--- Testing oc-tdd15.nu ---
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+▪▪▪▪ nuoc:test
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test (93ms)
+
+Tasks: 1 completed
+ Time: 93ms
+
+
+⏳ working... elapsed 28:30 · last activity 0:14 ago
+<promise>READY_FOR_NEXT_TASK</promise>
+| Tools    Bash 30 • Edit 19 • Read 11 • Grep 4 • Glob 1 • Write 1
+
+Iteration Summary
+────────────────────────────────────────────────────────────────────
+Iteration: 13
+Elapsed:   28:37
+Tools:     Bash 30 • Edit 19 • Read 11 • Grep 4 • Glob 1 • Write 1
+Exit code: 0
+Completion promise: not detected
+
+🔄 Task completion detected: <promise>READY_FOR_NEXT_TASK</promise>
+   Moving to next task in iteration 14...

@@ -10,7 +10,6 @@ Add your tasks here:
 - [x] nuoc-n686 - [Awk-07] Implement HTTP endpoint for awakeable resolution
 - [x] nuoc-szrs - [Awk-08] Implement task wake on awakeable resolution
 - [x] nuoc-bfxa - [Awk-10] Implement duplicate resolution rejection
-- [/] nuoc-qodw - [Awk-09] Implement awakeable timeout handling
+- [x] nuoc-qodw - [Awk-09] Implement awakeable timeout handling
 - [ ] nuoc-wpi9 - [Awk-11] Implement awakeable cleanup on job completion
 - [ ] nuoc-xm7h - [Awk-12] Implement ctx.rejectAwakeable
-- [ ] nuoc-qodw - [Awk-09] Implement awakeable timeout handling
