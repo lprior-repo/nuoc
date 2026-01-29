@@ -770,6 +770,13 @@ export def task-execute [job_id: string, task_name: string]: nothing -> record {
 # Run a task — dispatch to agent or inline execution
 # Note: job_id is already validated by task-execute, task record comes from DB
 def run-task [job_id: string, task: record]: nothing -> record {
+  # Load journal entries at task start for replay support
+  let journal = (journal-read $job_id $task.name $task.attempt)
+  let known_entries = ($journal | length)
+  $env.KNOWN_ENTRIES = $known_entries
+  $env.REPLAY_MODE = ($known_entries > 0)
+  $env.CURRENT_ENTRY_INDEX = 0
+
   # Gather prior task outputs for context
   let prior_outputs = (gather-task-outputs $job_id)
 

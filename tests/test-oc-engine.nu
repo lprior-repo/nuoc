@@ -501,6 +501,123 @@ def test-ctx-awakeable-uses-current-entry-index [] {
   rm -rf $test_db_dir
 }
 
+# ── Journal Loading Tests (nuoc-bsx) ─────────────────────────────────────────────
+
+# Test: run-task loads journal at start when journal entries exist
+def test-run-task-loads-journal-on-start [] {
+  let test_db_dir = "/tmp/test-run-task-journal-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    # Create a job and task
+    let job_id = "test-job-journal-load"
+    let task_name = "test-task"
+    let attempt = 1
+
+    # Insert some journal entries to simulate previous execution
+    sql $"INSERT INTO journal (job_id, task_name, attempt, entry_index, op_type, input, output) VALUES '('($job_id)', '($task_name)', ($attempt), 0, 'run', '{}', 'test-output-1'')"
+    sql $"INSERT INTO journal (job_id, task_name, attempt, entry_index, op_type, input, output) VALUES '('($job_id)', '($task_name)', ($attempt), 1, 'run', '{}', 'test-output-2'')"
+    sql $"INSERT INTO journal (job_id, task_name, attempt, entry_index, op_type, input, output) VALUES '('($job_id)', '($task_name)', ($attempt), 2, 'run', '{}', 'test-output-3'')"
+
+    # Create a minimal task record
+    let task = {
+      id: "test-task-id"
+      job_id: $job_id
+      name: $task_name
+      status: "pending"
+      attempt: $attempt
+    }
+
+    # Call run-task and verify environment is set
+    # NOTE: This test will fail initially because run-task doesn't load journal yet
+    let result = (run-task $job_id $task)
+
+    # Verify KNOWN_ENTRIES is set correctly
+    assert equal $env.KNOWN_ENTRIES 3
+
+    # Verify REPLAY_MODE is true when entries exist
+    assert equal $env.REPLAY_MODE true
+
+    # Verify CURRENT_ENTRY_INDEX starts at 0
+    assert equal $env.CURRENT_ENTRY_INDEX 0
+  }
+
+  rm -rf $test_db_dir
+}
+
+# Test: run-task sets REPLAY_MODE to false when no journal entries exist
+def test-run-task-replay-mode-false-no-entries [] {
+  let test_db_dir = "/tmp/test-run-task-no-journal-($env.PID)"
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    # Create a job and task with no prior journal entries
+    let job_id = "test-job-no-journal"
+    let task_name = "test-task"
+    let attempt = 1
+
+    let task = {
+      id: "test-task-id"
+      job_id: $job_id
+      name: $task_name
+      status: "pending"
+      attempt: $attempt
+    }
+
+    # Call run-task
+    let result = (run-task $job_id $task)
+
+    # Verify KNOWN_ENTRIES is 0
+    assert equal $env.KNOWN_ENTRIES 0
+
+    # Verify REPLAY_MODE is false when no entries exist
+    assert equal $env.REPLAY_MODE false
+
+    # Verify CURRENT_ENTRY_INDEX starts at 0
+    assert equal $env.CURRENT_ENTRY_INDEX 0
+  }
+
+  rm -rf $test_db_dir
+}
+
+# Test: journal-read returns correct entries for job/task/attempt
+def test-journal-read-returns-correct-entries [] {
+  let test_db_dir = "/tmp/test-journal-read-($env.PID)"
+  let test_db_path = $"($test_db_dir)/journal.db"
+
+  rm -rf $test_db_dir
+
+  do {
+    $env.NUOC_DB_DIR = $test_db_dir
+    db-init
+
+    # Create journal entries for different jobs/tasks/attempts
+    sql $"INSERT INTO journal (job_id, task_name, attempt, entry_index, op_type, input, output) VALUES '('job-1', 'task-a', 1, 0, 'run', '{}', 'output-1a'')"
+    sql $"INSERT INTO journal (job_id, task_name, attempt, entry_index, op_type, input, output) VALUES '('job-1', 'task-a', 1, 1, 'run', '{}', 'output-2a'')"
+    sql $"INSERT INTO journal (job_id, task_name, attempt, entry_index, op_type, input, output) VALUES '('job-1', 'task-b', 1, 0, 'run', '{}', 'output-1b'')"
+    sql $"INSERT INTO journal (job_id, task_name, attempt, entry_index, op_type, input, output) VALUES '('job-1', 'task-a', 2, 0, 'run', '{}', 'output-1a-attempt2'')"
+
+    # Read journal for job-1, task-a, attempt 1
+    let journal = (journal-read "job-1" "task-a" 1)
+
+    assert equal ($journal | length) 2
+    assert equal $journal.0.op_type "run"
+    assert equal $journal.0.output "output-1a"
+    assert equal $journal.1.output "output-2a"
+  }
+
+  rm -rf $test_db_dir
+}
+
 # Run awakeables tests
 test test-awakeables-table-created
 test test-awakeables-table-schema
@@ -524,5 +641,10 @@ test test-ctx-awakeable-returns-id
 test test-ctx-awakeable-inserts-record
 test test-ctx-awakeable-journals-operation
 test test-ctx-awakeable-uses-current-entry-index
+
+# Run journal loading tests
+test test-run-task-loads-journal-on-start
+test test-run-task-replay-mode-false-no-entries
+test test-journal-read-returns-correct-entries
 
 print "[ok] oc-engine.nu tests completed"
