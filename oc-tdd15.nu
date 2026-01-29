@@ -244,8 +244,8 @@ export def prompt-red [bead_id: string, context: string]: nothing -> string {
 ($context)
 
 ## Task
-Write test(s) that define the expected behavior for this bead.
-Tests MUST fail when run (they test functionality not yet implemented).
+Write tests that define the expected behavior for this bead.
+Tests MUST fail when run - they test functionality not yet implemented.
 
 Rules:
 - Use the project's existing test patterns

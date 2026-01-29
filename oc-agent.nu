@@ -2,10 +2,10 @@
 # oc-agent.nu — OpenCode HTTP API Client
 # Wraps opencode server REST API for session management and prompting
 
-const DEFAULT_PORT = 4096
-const DEFAULT_HOST = "http://localhost"
+export const DEFAULT_PORT = 4096
+export const DEFAULT_HOST = "http://localhost"
 
-def base-url [--port: int = 4096]: nothing -> string {
+export def base-url [--port: int = 4096]: nothing -> string {
   $"($DEFAULT_HOST):($port)"
 }
 

@@ -2,8 +2,8 @@
 # oc-engine.nu — Tork-Inspired DAG Workflow Engine
 # Pure nushell + SQLite journal for durable execution with replay + regression
 
-const DB_DIR = ".oc-workflow"
-const DB_PATH = $"($DB_DIR)/journal.db"
+export const DB_DIR = ".oc-workflow"
+export const DB_PATH = $"($DB_DIR)/journal.db"
 
 # ── Database Initialization ──────────────────────────────────────────────────
 
@@ -91,13 +91,13 @@ export def db-init [] {
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
 # Identifier validation regex: alphanumeric, underscore, hyphen, dot only
-const IDENT_PATTERN = '^[a-zA-Z0-9_.-]+$'
+export const IDENT_PATTERN = '^[a-zA-Z0-9_.-]+$'
 
 # Validate an identifier (job_id, task_name, var name, bead_id) before SQL use
 # Precondition: value is non-empty
 # Postcondition: value matches IDENT_PATTERN or error is raised
 # Invariant: No SQL metacharacters can pass through
-def validate-ident [value: string, context: string]: nothing -> string {
+export def validate-ident [value: string, context: string]: nothing -> string {
   if ($value | is-empty) {
     error make { msg: $"($context): identifier cannot be empty" }
   }
@@ -108,7 +108,7 @@ def validate-ident [value: string, context: string]: nothing -> string {
 }
 
 # Validate an optional identifier — returns empty string if empty, else validates
-def validate-ident-opt [value: string, context: string]: nothing -> string {
+export def validate-ident-opt [value: string, context: string]: nothing -> string {
   if ($value | is-empty) { "" } else { validate-ident $value $context }
 }
 
@@ -122,7 +122,7 @@ def sql-exec [query: string] {
 
 # Escape a value for SQL string literals (use ONLY for free-form text, never for identifiers)
 # WARNING: This does NOT make identifiers safe — use validate-ident for IDs
-def sql-escape-text [val: string]: nothing -> string {
+export def sql-escape-text [val: string]: nothing -> string {
   $val | str replace --all "'" "''"
 }
 
