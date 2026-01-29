@@ -1584,3 +1584,31 @@ Exporting beads to JSONL...
 error: cannot pull with rebase: You have unstaged changes.
 error: Please commit or stash them.
 
+| Tools    Bash 80 • Edit 25 • Read 11 • Write 7
+
+Exporting beads to JSONL...
+✓ Exported 0 issues
+✓ /home/lewis/src/nuoc/.beads/issues.jsonl updated
+error: cannot pull with rebase: Your index contains uncommitted changes.
+error: Please commit or stash them.
+
+
+[main 4182c75] Ralph: update task list - mark nuoc-9w6 complete, start nuoc-l4d
+ 3 files changed, 26 insertions(+), 4 deletions(-)
+
+| Tools    Bash 82 • Edit 25 • Read 11 • Write 7
+
+On branch main
+Your branch is ahead of 'origin/main' by 6 commits.
+  (use "git push" to publish your local commits)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   .beads/export-state/8e20e730c5403ecd.json
+	modified:   ralph-full-20260128-220713.log
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+⏳ working... elapsed 18:20 · last activity 0:17 ago
+⏳ working... elapsed 18:30 · last activity 0:27 ago
