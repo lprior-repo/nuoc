@@ -5350,3 +5350,86 @@ Tasks: 1 completed
  Time: 85ms
 
 
+| Tools    Bash 32 • Edit 11 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+[main e196942] REFACTOR: nuoc-a7ti - removed unnecessary awakeable-id-parse call
+ 6 files changed, 256 insertions(+), 12 deletions(-)
+
+⏳ working... elapsed 7:40 · last activity 0:17 ago
+Now let me add a comprehensive test to verify all acceptance criteria (VERIFY phase).
+| Tools    Bash 32 • Edit 12 • Read 6 • Glob 3 • Grep 1 • Write 1
+| Tools    Bash 32 • Edit 13 • Read 6 • Glob 3 • Grep 1 • Write 1
+⏳ working... elapsed 8:10 · last activity 0:14 ago
+| Tools    Bash 33 • Edit 13 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+Running VERIFY phase tests for resolve-awakeable...
+  [ok] Awakeable marked as RESOLVED
+  [ok] Payload stored
+  [ok] resolved_at timestamp set
+Error: stepping, UNIQUE constraint failed: journal.job_id, journal.task_name, journal.attempt, journal.entry_index (19)
+  [error] test-resolve-awakeable-wakes-task failed: External command had a non-zero exit code
+All VERIFY tests passed ✓
+
+⏳ working... elapsed 8:30 · last activity 0:17 ago
+⏳ working... elapsed 8:40 · last activity 0:27 ago
+| Tools    Bash 34 • Edit 13 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+Error: stepping, UNIQUE constraint failed: journal.job_id, journal.task_name, journal.attempt, journal.entry_index (19)
+
+⏳ working... elapsed 9:00 · last activity 0:12 ago
+⏳ working... elapsed 9:10 · last activity 0:22 ago
+⏳ working... elapsed 9:20 · last activity 0:32 ago
+⏳ working... elapsed 9:30 · last activity 0:42 ago
+⏳ working... elapsed 9:40 · last activity 0:52 ago
+⏳ working... elapsed 9:50 · last activity 1:02 ago
+⏳ working... elapsed 10:00 · last activity 1:12 ago
+⏳ working... elapsed 10:10 · last activity 1:22 ago
+⏳ working... elapsed 10:20 · last activity 1:32 ago
+⏳ working... elapsed 10:30 · last activity 1:42 ago
+⏳ working... elapsed 10:40 · last activity 1:52 ago
+⏳ working... elapsed 10:50 · last activity 2:02 ago
+I found the bug! `ctx-awakeable` doesn't increment entry_index, causing a collision with `ctx-await-awakeable`. Let me fix it.
+| Tools    Bash 34 • Edit 14 • Read 6 • Glob 3 • Grep 1 • Write 1
+⏳ working... elapsed 11:10 · last activity 0:10 ago
+| Tools    Bash 35 • Edit 14 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+Success
+
+| Tools    Bash 36 • Edit 14 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+Running VERIFY phase tests for resolve-awakeable...
+  [ok] Awakeable marked as RESOLVED
+  [ok] Payload stored
+  [ok] resolved_at timestamp set
+  [ok] Task suspended before resolution
+  [ok] Task woken on resolution
+All VERIFY tests passed ✓
+
+| Tools    Bash 37 • Edit 14 • Read 6 • Glob 3 • Grep 1 • Write 1
+
+  [ok] phase-prompt RED phase
+  [ok] phase-prompt GREEN phase with prior output
+  [ok] phase-prompt unknown phase
+  [ok] phase-prompt triage with bead info
+  [ok] PHASES_COMPLEX length
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (88ms)
+
+Tasks: 1 completed
+ Time: 89ms
+
+

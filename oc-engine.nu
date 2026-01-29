@@ -979,7 +979,7 @@ export def ctx-awakeable [job_id: string, task_name: string, attempt: int]: noth
   let jid = (validate-ident $job_id "ctx-awakeable.job_id")
   let tname = (validate-ident $task_name "ctx-awakeable.task_name")
 
-  let entry_index = (get-entry-index $jid $tname $attempt)
+  let entry_index = (next-entry-index $jid $tname $attempt)
 
   let awakeable_id = (awakeable-id-generate $jid $entry_index)
 
