@@ -110,6 +110,15 @@ export def db-init [] {
     );
     CREATE INDEX idx_journal_replay ON journal(job_id, task_name, attempt);
 
+    CREATE TABLE IF NOT EXISTS execution_context (
+      job_id TEXT NOT NULL,
+      task_name TEXT NOT NULL,
+      attempt INTEGER NOT NULL,
+      entry_index INTEGER NOT NULL DEFAULT 0,
+      replay_mode INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY (job_id, task_name, attempt)
+    );
+
     CREATE TABLE IF NOT EXISTS webhooks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       job_id TEXT NOT NULL,
@@ -209,6 +218,67 @@ export def check-replay [
       }
     }
   }
+}
+
+# ── Execution Context (Entry Index Tracking) ─────────────────────────────────
+
+# Initialize execution context for a task attempt
+# Precondition: job_id and task_name are validated identifiers
+# Postcondition: entry_index reset to 0, ready for journaling
+# Invariant: Must be called at task execution start
+export def init-execution-context [
+  job_id: string,
+  task_name: string,
+  attempt: int,
+  --replay-mode
+]: nothing -> nothing {
+  let jid = (validate-ident $job_id "init-execution-context.job_id")
+  let tname = (validate-ident $task_name "init-execution-context.task_name")
+  let replay = (if $replay_mode { 1 } else { 0 })
+
+  sql-exec $"INSERT OR REPLACE INTO execution_context \(job_id, task_name, attempt, entry_index, replay_mode\) VALUES \('($jid)', '($tname)', ($attempt), 0, ($replay)\)"
+}
+
+# Get current entry index
+# Precondition: execution context initialized
+# Postcondition: returns current entry_index
+export def get-entry-index [
+  job_id: string,
+  task_name: string,
+  attempt: int
+]: nothing -> int {
+  let jid = (validate-ident $job_id "get-entry-index.job_id")
+  let tname = (validate-ident $task_name "get-entry-index.task_name")
+
+  let result = (sql $"SELECT entry_index FROM execution_context WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)")
+  if ($result | is-empty) {
+    0
+  } else {
+    $result.0.entry_index
+  }
+}
+
+# Get next entry index (increment and return)
+# Precondition: execution context initialized
+# Postcondition: entry_index incremented, new value returned
+# Invariant: Sequential entry_index for deterministic replay
+export def next-entry-index [
+  job_id: string,
+  task_name: string,
+  attempt: int
+]: nothing -> int {
+  let jid = (validate-ident $job_id "next-entry-index.job_id")
+  let tname = (validate-ident $task_name "next-entry-index.task_name")
+
+  # Get current value
+  let current = (get-entry-index $jid $tname $attempt)
+  let next = $current + 1
+
+  # Update to next value
+  sql-exec $"UPDATE execution_context SET entry_index = ($next) WHERE job_id='($jid)' AND task_name='($tname)' AND attempt=($attempt)"
+
+  # Return current value (before increment was persisted, this is the index to use)
+  $current
 }
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
@@ -484,6 +554,12 @@ export def task-execute [job_id: string, task_name: string]: nothing -> record {
   # Mark running
   sql-exec $"UPDATE tasks SET status = 'running', started_at = datetime\('now'\), attempt = attempt + 1 WHERE job_id = '($jid)' AND name = '($tname)'"
   emit-event $jid $tname "task.StateChange" $task.status "running" ""
+
+  # Get updated attempt number
+  let current_attempt = (sql $"SELECT attempt FROM tasks WHERE job_id = '($jid)' AND name = '($tname)'").0.attempt
+
+  # Initialize execution context (entry_index = 0, replay detection)
+  init-execution-context $jid $tname $current_attempt
 
   # Execute with retry loop
   let max = ($task.max_attempts | into int)
