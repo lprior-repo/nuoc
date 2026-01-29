@@ -4572,3 +4572,31 @@ All RED tests complete - expected to fail without implementation
  create mode 100644 .ralph/ralph-context.md
  create mode 100644 tests/test-awakeable-suspension.nu
 
+| Tools    Bash 24 • Edit 7 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+[main f024c84] GREEN: nuoc-f2pc - implement ctx-await-awakeable for task suspension
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+| Tools    Bash 25 • Edit 7 • Read 5 • Glob 3 • Write 2 • Grep 1
+
+  [ok] PHASES_MEDIUM
+  [ok] PHASES_SIMPLE
+  [ok] tdd15-route complex
+  [ok] tdd15-route simple
+  [ok] tdd15-route unknown defaults to simple
+  [ok] tdd15-job name
+  [ok] tdd15-job position
+  [ok] tdd15-job inputs
+  [ok] tdd15-job has tasks
+
+== Test Summary ==
+Total test suites: 3
+Passed: 3
+Failed: 0
+▪▪▪▪ nuoc:test
+▪▪▪▪ nuoc:test (89ms)
+
+Tasks: 1 completed
+ Time: 90ms
+
+
